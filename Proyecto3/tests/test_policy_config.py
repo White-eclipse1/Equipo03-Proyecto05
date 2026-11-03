@@ -55,6 +55,9 @@ def _con(ruta: tuple[str, ...], valor: object) -> dict:
         (("geometria", "banda_riesgo_y_min"), 1.0, "banda_riesgo_y_min"),
         (("geometria", "area_min"), -0.1, "area_min"),
         (("geometria", "cobertura_min_zona"), 0, "cobertura_min_zona"),
+        # > 0.5 dejaria sin zona una caja repartida entre dos zonas (revision PR #19).
+        (("geometria", "cobertura_min_zona"), 0.6, "cobertura_min_zona"),
+        (("geometria", "cobertura_min_zona"), 1.0, "cobertura_min_zona"),
         (("confianza", "umbral_alto"), 1.5, "umbral_alto"),
         (("confianza", "umbral_bajo"), 0.6, "confianza"),  # bajo >= alto
         (("temporal", "cuadros_para_bloquear"), 0, "cuadros_para_bloquear"),

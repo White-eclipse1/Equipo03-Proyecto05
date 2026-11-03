@@ -252,6 +252,41 @@ def test_ninguna_caja_dentro_del_cuadro_queda_sin_zona(ancho: int) -> None:
         assert d.detecciones[0].zonas, f"caja x {x1}-{x1 + ancho} sin zona"
 
 
+def _con_cobertura(valor: float, base: ConfigPolitica = CONFIG) -> ConfigPolitica:
+    """Config con `cobertura_min_zona` arbitraria SIN pasar por la validacion: simula
+    una config que se salto el limite, para probar la asignacion de respaldo."""
+    geometria = base.geometria.model_copy(update={"cobertura_min_zona": valor})
+    return base.model_copy(update={"geometria": geometria})
+
+
+@pytest.mark.parametrize("cobertura", [0.5, 0.8, 1.0])
+def test_con_cobertura_alta_la_caja_en_el_limite_no_queda_sin_zona(cobertura: float) -> None:
+    # x 0.300-0.400: 100% de la caja repartida entre izquierda y centro, ~50% en cada una.
+    limite = (192, 200, 256, 460)
+    d = correr([*CALENTAR, (det(limite),)], _con_cobertura(cobertura))[-1]
+    assert d.detecciones[0].zonas, "la caja quedo sin zona"
+    assert "centro" in d.detecciones[0].zonas
+
+
+@pytest.mark.parametrize("cobertura", [0.5, 0.8, 1.0])
+def test_con_cobertura_alta_la_politica_no_avanza_ante_la_caja_en_el_limite(
+    cobertura: float,
+) -> None:
+    limite = (192, 200, 256, 460)
+    decisiones = correr([*CALENTAR, *[(det(limite),)] * 4], _con_cobertura(cobertura))
+    assert all(d.accion != "FORWARD" for d in decisiones[3:])
+    assert decisiones[-1].zonas["centro"].estado == "OCUPADA"
+
+
+@pytest.mark.parametrize("cobertura", [0.5, 1.0])
+@pytest.mark.parametrize("ancho", [4, 26, 64, 200, 400])
+def test_con_cualquier_cobertura_ninguna_caja_queda_sin_zona(cobertura: float, ancho: int) -> None:
+    politica = PoliticaDecision(_con_cobertura(cobertura), config_sha256=SHA)
+    for i, x1 in enumerate(range(0, 641 - ancho, 3), start=1):
+        d = politica.decidir(cuadro(i, det((x1, 200, x1 + ancho, 460), conf=0.1)))
+        assert d.detecciones[0].zonas, f"caja x {x1}-{x1 + ancho} sin zona"
+
+
 def test_c5_no_evade_hacia_un_lateral_con_deteccion_debil_reciente() -> None:
     escena = (det(CENTRO), det(DER, conf=0.4), det(IZQ, conf=0.4))
     d = correr([*CALENTAR, escena, escena])[-1]
