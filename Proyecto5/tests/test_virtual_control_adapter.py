@@ -1,5 +1,7 @@
 import logging
 
+import pytest
+
 from p5.control.adapter import VirtualControlAdapter
 from p5.control.models import Action, ControlDecision
 
@@ -97,20 +99,46 @@ def test_stop_cancels_previous_motion_command():
     assert adapter.last_command.direction == "stop"
 
 
-def test_negative_speed_is_never_sent():
+@pytest.mark.parametrize(
+    "invalid_speed",
+    [
+        -0.1,
+        1.1,
+        float("nan"),
+        float("inf"),
+        float("-inf"),
+    ],
+)
+def test_invalid_motion_speed_is_rejected(invalid_speed):
+    adapter = VirtualControlAdapter()
+
     decision = ControlDecision(
         action=Action.FORWARD,
-        requested_speed=-1.0,
-        frame_id="frame-007",
-        decision_id="decision-007",
+        requested_speed=invalid_speed,
+        frame_id="frame-invalid",
+        decision_id="decision-invalid",
         reason_code="invalid_speed",
     )
 
+    with pytest.raises(ValueError, match="requested_speed"):
+        adapter.apply(decision)
+
+
+@pytest.mark.parametrize("valid_speed", [0.0, 1.0])
+def test_speed_boundaries_are_valid(valid_speed):
     adapter = VirtualControlAdapter()
 
-    command = adapter.apply(decision)
+    command = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=valid_speed,
+            frame_id="frame-boundary",
+            decision_id="decision-boundary",
+            reason_code="valid_speed",
+        )
+    )
 
-    assert command.speed == 0.0
+    assert command.speed == valid_speed
 
 
 def test_commands_are_recorded_in_history():

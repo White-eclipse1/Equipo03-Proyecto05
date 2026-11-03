@@ -29,7 +29,7 @@ Cada salida contiene speed, direction, steering, timestamp, frame_id, decision_i
 
 STOP siempre produce speed = 0.0, direction = stop y steering = 0.0.
 Un STOP reemplaza el último comando activo.
-Una velocidad negativa nunca se transmite y se limita a 0.0.
+Las velocidades de movimiento deben ser finitas y estar dentro del rango 0.0 a 1.0. Los valores inválidos son rechazados.
 
 ## Motores físicos
 
@@ -53,4 +53,11 @@ python -m pytest
 python -m ruff check .
 python -m ruff format --check .
 
-Resultado actual: 9 pruebas automatizadas pasando.
+## Pendiente
+
+La integración del adaptador con la salida real de la política B1 todavía está pendiente.
+Este avance implementa y valida la base del adaptador virtual.
+
+Resultado actual: 15 pruebas automatizadas pasando.
+
+

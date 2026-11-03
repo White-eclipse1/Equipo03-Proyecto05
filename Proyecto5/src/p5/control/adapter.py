@@ -1,4 +1,5 @@
 import logging
+from math import isfinite
 from time import time
 
 from p5.control.models import Action, ControlCommand, ControlDecision
@@ -34,8 +35,10 @@ class VirtualControlAdapter:
             )
             return self._record(command)
 
+        self._validate_speed(decision.requested_speed)
+
         command = ControlCommand(
-            speed=max(0.0, decision.requested_speed),
+            speed=decision.requested_speed,
             direction=decision.action.value,
             steering=self._steering_for(decision.action),
             timestamp=time(),
@@ -62,6 +65,11 @@ class VirtualControlAdapter:
         )
 
         return command
+
+    @staticmethod
+    def _validate_speed(speed: float) -> None:
+        if not isfinite(speed) or not 0.0 <= speed <= 1.0:
+            raise ValueError("requested_speed must be finite and between 0.0 and 1.0")
 
     @staticmethod
     def _steering_for(action: Action) -> float:
