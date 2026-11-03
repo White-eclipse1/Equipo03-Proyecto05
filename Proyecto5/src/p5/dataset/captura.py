@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 CAPTURES_FILE = "capturas.jsonl"
 SEQUENCES_DIR = "secuencias"
 DEFAULT_INTERVAL_MS = 500
+# Los primeros cuadros del OV2640 salen con tinte verde y cortes hasta que se ajusta el sensor.
+DEFAULT_WARMUP_MS = 2000
 _TIMEOUT_S = 10
 _MAX_HEADER_LINE = 1024
 _SEQUENCE_ID = re.compile(r"[a-z0-9][a-z0-9_-]*")
@@ -92,16 +94,18 @@ def capture_sequence(
     *,
     frames: int,
     interval_ms: int = DEFAULT_INTERVAL_MS,
+    warmup_ms: int = 0,
     clock: Callable[[], float] = time.monotonic,
 ) -> list[FrameRecord]:
     """Guarda `frames` cuadros distintos, separados al menos `interval_ms`.
 
-    Una secuencia ya existente no se sobrescribe: el dataset solo crece con secuencias nuevas.
+    Descarta lo que llega durante los primeros `warmup_ms` del stream. Una secuencia ya
+    existente no se sobrescribe: el dataset solo crece con secuencias nuevas.
     """
     if not _SEQUENCE_ID.fullmatch(sequence_id):
         raise CaptureError(f"invalid sequence id: {sequence_id!r}")
-    if frames < 1 or interval_ms < 0:
-        raise CaptureError("frames must be positive and interval_ms not negative")
+    if frames < 1 or interval_ms < 0 or warmup_ms < 0:
+        raise CaptureError("frames must be positive; interval_ms and warmup_ms not negative")
 
     directory = dataset / SEQUENCES_DIR / sequence_id
     try:
@@ -111,10 +115,13 @@ def capture_sequence(
 
     records: list[FrameRecord] = []
     seen: set[str] = set()
-    start = last = None
+    stream_start = start = last = None
     with (directory / CAPTURES_FILE).open("w", encoding="utf-8", newline="\n") as captures:
         for data in iter_stream_parts(stream):
             now = clock()
+            stream_start = now if stream_start is None else stream_start
+            if (now - stream_start) * 1000 < warmup_ms:
+                continue
             if last is not None and (now - last) * 1000 < interval_ms:
                 continue
             size = jpeg_size(data)
@@ -161,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sequence", required=True, help="ID nuevo de secuencia. Ej. seq01")
     parser.add_argument("--frames", required=True, type=int, help="Cuadros distintos a guardar.")
     parser.add_argument("--interval-ms", type=int, default=DEFAULT_INTERVAL_MS)
+    parser.add_argument("--warmup-ms", type=int, default=DEFAULT_WARMUP_MS)
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, stream=sys.stderr)
@@ -173,6 +181,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.dataset,
                 frames=args.frames,
                 interval_ms=args.interval_ms,
+                warmup_ms=args.warmup_ms,
             )
     except (CaptureError, OSError) as error:
         print(f"captura fallida: {error}", file=sys.stderr)

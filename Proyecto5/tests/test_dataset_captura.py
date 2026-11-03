@@ -76,6 +76,24 @@ def test_capture_skips_duplicates_and_invalid_frames(tmp_path):
     assert (tmp_path / "secuencias" / "seq01" / "seq01-0002.jpg").read_bytes() == make_jpeg(2)
 
 
+def test_capture_discards_the_warmup_frames(tmp_path):
+    parts = [make_jpeg(i) for i in range(5)]
+
+    records = capture_sequence(
+        io.BytesIO(stream_bytes(parts)),
+        "seq01",
+        tmp_path,
+        frames=2,
+        interval_ms=0,
+        warmup_ms=500,
+        clock=ticking_clock(),
+    )
+
+    # A 200 ms entre partes, las de 0, 200 y 400 ms caen dentro del calentamiento.
+    assert [record.t_capture_ms for record in records] == [0, 200]
+    assert (tmp_path / "secuencias" / "seq01" / "seq01-0001.jpg").read_bytes() == make_jpeg(3)
+
+
 def test_capture_never_overwrites_an_existing_sequence(tmp_path):
     (tmp_path / "secuencias" / "seq01").mkdir(parents=True)
 
@@ -118,6 +136,8 @@ def test_cli_only_requests_the_given_stream_url(tmp_path, monkeypatch, capsys):
             "--frames",
             "2",
             "--interval-ms",
+            "0",
+            "--warmup-ms",
             "0",
         ]
     )

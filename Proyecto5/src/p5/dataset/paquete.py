@@ -127,10 +127,34 @@ def load_annotations(dataset: Path) -> dict[str, dict[str, Any]]:
     return {row["frame_id"]: row for row in rows}
 
 
+def _read_freeze_record(dataset: Path) -> dict[str, Any]:
+    path = dataset / FREEZE_FILE
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as error:
+        raise ValueError(f"{FREEZE_FILE} no existe: el manifiesto no esta congelado") from error
+    except ValueError as error:
+        raise ValueError(f"{FREEZE_FILE} no es JSON valido") from error
+    if not isinstance(record, dict) or not isinstance(record.get("manifest_sha256"), str):
+        raise ValueError(f"{FREEZE_FILE} no tiene manifest_sha256")
+    return record
+
+
+def _check_frozen_manifest(content: bytes, dataset: Path) -> None:
+    digest = hashlib.sha256(content).hexdigest()
+    if digest != _read_freeze_record(dataset)["manifest_sha256"]:
+        raise ValueError(f"{MANIFEST_FILE} no coincide con el SHA-256 de {FREEZE_FILE}")
+
+
 def load_manifest(path: Path) -> list[dict[str, Any]]:
-    """Carga un manifiesto. Las etiquetas son para evaluar: el detector solo debe usar `image`."""
-    with path.open(encoding="utf-8") as lines:
-        return [json.loads(line) for line in lines if line.strip()]
+    """Carga un manifiesto congelado; falla si no coincide con el hash de su congelamiento.
+
+    Las etiquetas son para evaluar: el detector solo debe usar `image`.
+    """
+    # El hash y las filas salen de los mismos bytes, leidos una sola vez.
+    content = path.read_bytes()
+    _check_frozen_manifest(content, path.parent)
+    return [json.loads(line) for line in content.decode("ascii").splitlines() if line.strip()]
 
 
 def serialize_manifest(rows: list[dict[str, Any]]) -> bytes:
@@ -254,6 +278,36 @@ def build_report(dataset: Path) -> Report:
     return report
 
 
+def _changed_after_freezing(record: dict[str, Any]) -> str:
+    return (
+        f"{record.get('version')} ya esta congelada con otro contenido: "
+        "crea un dataset con una version nueva"
+    )
+
+
+def validate_package(dataset: Path) -> Report:
+    """Como `build_report`, y si ya se congelo, comprueba que nada haya cambiado desde entonces."""
+    report = build_report(dataset)
+    manifest = dataset / MANIFEST_FILE
+    if not manifest.exists() and not (dataset / FREEZE_FILE).exists():
+        return report
+
+    try:
+        record = _read_freeze_record(dataset)
+        if not manifest.exists():
+            raise ValueError(f"{MANIFEST_FILE} no existe, pero {FREEZE_FILE} si")
+        _check_frozen_manifest(manifest.read_bytes(), dataset)
+    except ValueError as error:
+        report.errors.append(str(error))
+        return report
+
+    # Con errores faltan filas: el hash no diria nada nuevo sobre lo que ya se reporto.
+    rebuilt = hashlib.sha256(serialize_manifest(report.rows)).hexdigest()
+    if not report.errors and rebuilt != record["manifest_sha256"]:
+        report.errors.append(_changed_after_freezing(record))
+    return report
+
+
 def freeze(dataset: Path, version: str, *, commit: str | None = None) -> dict[str, Any]:
     """Escribe el manifiesto y registra su hash. Un cambio posterior exige otra version."""
     report = build_report(dataset)
@@ -264,12 +318,10 @@ def freeze(dataset: Path, version: str, *, commit: str | None = None) -> dict[st
     digest = hashlib.sha256(content).hexdigest()
     freeze_path = dataset / FREEZE_FILE
     if freeze_path.exists():
-        previous = json.loads(freeze_path.read_text(encoding="utf-8"))
+        previous = _read_freeze_record(dataset)
         if previous["manifest_sha256"] != digest:
-            raise ValueError(
-                f"{previous['version']} ya esta congelada con otro contenido: "
-                "crea un dataset con una version nueva"
-            )
+            raise ValueError(_changed_after_freezing(previous))
+        _check_frozen_manifest((dataset / MANIFEST_FILE).read_bytes(), dataset)
         return previous
 
     (dataset / MANIFEST_FILE).write_bytes(content)
@@ -310,7 +362,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("freeze requires --version")
 
     try:
-        report = build_report(args.dataset)
+        report = validate_package(args.dataset)
         for error in report.errors:
             print(f"ERROR {error}", file=sys.stderr)
         if args.command == "validate":

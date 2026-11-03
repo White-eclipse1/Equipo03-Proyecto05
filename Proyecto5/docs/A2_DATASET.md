@@ -69,7 +69,7 @@ El carro no necesita moverse: basta con que el objeto cambie de posición entre 
 python -m p5.dataset.captura --url http://172.20.10.13:81/stream --dataset data/p5-eval-v1 --sequence seq01 --frames 15
 ```
 
-`--interval-ms` vale 500 por defecto. Una secuencia existente no se sobrescribe: si sale mal, captura otra con un ID nuevo o borra su carpeta.
+`--interval-ms` vale 500 por defecto. `--warmup-ms` vale 2000 y descarta los primeros cuadros, que el sensor entrega con tinte verde y cortes. Una secuencia existente no se sobrescribe: si sale mal, captura otra con un ID nuevo o borra su carpeta.
 
 Evita personas u objetos de esas clases en el fondo: hay que etiquetarlos todos, y uno sin etiquetar cuenta como falso positivo. El repositorio es público, así que pide permiso a quien aparezca.
 
@@ -127,9 +127,11 @@ python -m p5.dataset.paquete freeze --dataset data/p5-eval-v1 --version v1
 
 Escribe `manifiesto.jsonl` y `congelamiento.json`, con el SHA-256 del manifiesto, la fecha y el commit base. Si el contenido cambia después, `freeze` lo rechaza: cualquier corrección va en un dataset con una versión nueva.
 
+Después de congelar, `validate` también falla si `manifiesto.jsonl` ya no coincide con el SHA-256 registrado, si falta alguno de los dos archivos, o si los cuadros o las anotaciones cambiaron.
+
 ## Formato para A3 y B3
 
-`load_manifest` de `paquete.py` lee el manifiesto, con una fila JSON por cuadro:
+`load_manifest` de `paquete.py` lee el manifiesto, con una fila JSON por cuadro. Lanza `ValueError` si el archivo no coincide con el SHA-256 de `congelamiento.json`, o si ese registro falta o no es válido. Usa esta función en lugar de leer el JSONL directamente:
 
 ```json
 {

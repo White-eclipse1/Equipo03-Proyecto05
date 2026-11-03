@@ -19,6 +19,7 @@ from p5.dataset.paquete import (
     freeze,
     load_manifest,
     occupied_zones,
+    validate_package,
 )
 
 
@@ -242,6 +243,86 @@ def test_freeze_refuses_an_invalid_dataset(dataset):
         freeze(dataset, "v1")
 
     assert not (dataset / "congelamiento.json").exists()
+
+
+def change_one_label(content: bytes) -> bytes:
+    lines = content.decode("ascii").splitlines()
+    row = json.loads(lines[0])
+    row["road_state"] = "centro"
+    lines[0] = json.dumps(row, sort_keys=True)
+    return "".join(f"{line}\n" for line in lines).encode("ascii")
+
+
+@pytest.mark.parametrize(
+    "alter",
+    [change_one_label, lambda content: content + b"\n"],
+    ids=["changed-line", "extra-blank-line"],
+)
+def test_load_manifest_rejects_a_manifest_altered_after_freezing(dataset, alter):
+    freeze(dataset, "v1")
+    path = dataset / "manifiesto.jsonl"
+    path.write_bytes(alter(path.read_bytes()))
+
+    with pytest.raises(ValueError, match="no coincide"):
+        load_manifest(path)
+
+
+def test_load_manifest_rejects_a_manifest_without_its_freeze_record(dataset):
+    freeze(dataset, "v1")
+    (dataset / "congelamiento.json").unlink()
+
+    with pytest.raises(ValueError, match=r"congelamiento\.json"):
+        load_manifest(dataset / "manifiesto.jsonl")
+
+
+@pytest.mark.parametrize("record", ["{}", '{"manifest_sha256": null}', "no es json", "[]"])
+def test_load_manifest_rejects_an_invalid_freeze_record(dataset, record):
+    freeze(dataset, "v1")
+    (dataset / "congelamiento.json").write_text(record, encoding="utf-8")
+
+    with pytest.raises(ValueError, match=r"congelamiento\.json"):
+        load_manifest(dataset / "manifiesto.jsonl")
+
+
+def test_validate_passes_on_an_untouched_frozen_dataset(dataset):
+    freeze(dataset, "v1")
+
+    assert validate_package(dataset).errors == []
+
+
+def test_validate_fails_when_the_manifest_was_altered(dataset, capsys):
+    freeze(dataset, "v1")
+    path = dataset / "manifiesto.jsonl"
+    path.write_bytes(change_one_label(path.read_bytes()))
+
+    assert any("no coincide" in error for error in validate_package(dataset).errors)
+    assert paquete.main(["validate", "--dataset", str(dataset)]) == 1
+    assert "no coincide" in capsys.readouterr().err
+
+
+def test_validate_fails_when_the_manifest_is_missing_after_freezing(dataset):
+    freeze(dataset, "v1")
+    (dataset / "manifiesto.jsonl").unlink()
+
+    assert any("manifiesto.jsonl" in error for error in validate_package(dataset).errors)
+
+
+def test_validate_fails_when_the_labels_changed_after_freezing(dataset):
+    freeze(dataset, "v1")
+    edit_annotations(dataset, "seq02-0004", objects=[person([150.0, 100.0, 250.0, 280.0])])
+
+    errors = validate_package(dataset).errors
+
+    assert any("version nueva" in error for error in errors)
+
+
+def test_freeze_again_detects_an_altered_manifest(dataset):
+    freeze(dataset, "v1")
+    path = dataset / "manifiesto.jsonl"
+    path.write_bytes(change_one_label(path.read_bytes()))
+
+    with pytest.raises(ValueError, match="no coincide"):
+        freeze(dataset, "v1")
 
 
 def test_cli_validate_exit_codes(dataset, capsys):
