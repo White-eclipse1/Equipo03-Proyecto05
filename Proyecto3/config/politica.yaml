@@ -1,0 +1,62 @@
+# Politica de decision del Proyecto 5 (B1-01, B1-02; entregable E4).
+#
+# La valida `p3.policy.config.ConfigPolitica` al arrancar: un campo desconocido,
+# un rango invalido o zonas que no cubren el cuadro se rechazan ANTES de emitir
+# cualquier comando de movimiento (criterio 2.1). La justificacion de cada valor
+# esta en `docs/politica.md`.
+schema_version: 1
+
+# Clases del detector que la politica trata como obstaculo. Cualquier otra clase
+# se registra como `ignorada` y nunca bloquea ni libera la via.
+clases_obstaculo: [person, bicycle, car, motorcycle, bus, truck, cat, dog]
+
+# Zonas en coordenadas normalizadas del cuadro completo: x crece a la derecha
+# (0 = borde izquierdo de la imagen, 1 = borde derecho). Deben ser contiguas y
+# cubrir [0, 1] sin huecos.
+zonas:
+  izquierda: [0.0, 0.35]
+  centro: [0.35, 0.65]
+  derecha: [0.65, 1.0]
+
+geometria:
+  # Banda de riesgo: solo cuentan las cajas cuyo borde inferior (y2) queda por
+  # debajo de esta fraccion de la altura (y crece hacia abajo). Lo que solo
+  # aparece en la parte alta del cuadro esta lejos o fuera de la via.
+  banda_riesgo_y_min: 0.40
+  # Proxy de proximidad: area de la caja / area del cuadro. NO es una distancia
+  # en metros: no hay calibracion de camara.
+  area_min: 0.005
+  # Fraccion del ancho de la zona que una caja debe cubrir para ocuparla.
+  cobertura_min_zona: 0.15
+
+confianza:
+  # Histeresis de confianza: una deteccion >= umbral_alto es firme (puede
+  # ocupar una zona); entre umbral_bajo y umbral_alto es debil (no ocupa una
+  # zona libre, pero sostiene una zona ya ocupada y en el centro baja la
+  # velocidad); por debajo de umbral_bajo se ignora.
+  umbral_alto: 0.50
+  umbral_bajo: 0.30
+
+temporal:
+  # Cuadros consecutivos con obstaculo firme para ocupar una zona.
+  cuadros_para_bloquear: 2
+  # Cuadros consecutivos sin obstaculo (ni firme ni debil) para liberarla.
+  cuadros_para_liberar: 3
+  # Vigencia de cada comando desde t_capture_ms del cuadro que lo origino. El
+  # adaptador (B2) debe tratar un comando vencido como STOP.
+  vigencia_comando_ms: 500
+
+# Comandos que emite la politica. velocidad: fraccion de la velocidad maxima
+# [0, 1]; direccion: [-1, 1], negativo = izquierda, positivo = derecha.
+comandos:
+  velocidad_crucero: 0.60
+  velocidad_precaucion: 0.30
+  velocidad_evasion: 0.20
+  direccion_evasion: 0.50
+
+evasion:
+  # Con el centro bloqueado, gira hacia un lateral solo si esa zona esta libre y
+  # lleva al menos `cuadros_para_liberar` cuadros sin obstaculo. Si no, STOP.
+  habilitada: true
+  # Desempate cuando los dos laterales estan libres.
+  lado_preferido: derecha
