@@ -222,6 +222,36 @@ def test_c5_una_caja_ancha_ocupa_todas_las_zonas_que_cubre() -> None:
     assert d.accion == "EVADE_LEFT"
 
 
+def test_c5_un_obstaculo_pequeno_en_el_limite_ocupa_las_zonas_que_toca() -> None:
+    # x 0.330-0.370: 26 px a caballo entre izquierda y centro. Cubre solo ~6% del
+    # ancho de cada zona, pero cada mitad es ~50% de la caja: debe ocupar ambas.
+    limite = (211, 200, 237, 460)
+    decisiones = correr([*CALENTAR, (det(limite),), (det(limite),)], sin_evasion())
+    assert decisiones[-1].detecciones[0].zonas == ("izquierda", "centro")
+    assert decisiones[-1].zonas["centro"].estado == "OCUPADA"
+    assert decisiones[-1].accion == "STOP"
+
+
+def test_c5_un_obstaculo_pequeno_mayormente_en_un_lado_tambien_cuenta_en_el_otro() -> None:
+    # x 0.336-0.370: 39% de la caja en la izquierda y 61% en el centro.
+    d = correr([*CALENTAR, (det((215, 200, 237, 460)),)])[-1]
+    assert d.detecciones[0].zonas == ("izquierda", "centro")
+
+
+def test_c5_una_caja_lateral_grande_que_roza_el_centro_no_lo_ocupa() -> None:
+    # x 0.156-0.359: solo 0.009 de solape con el centro (5% de la caja, 3% del centro).
+    d = correr([*CALENTAR, (det((100, 200, 230, 460)),)])[-1]
+    assert d.detecciones[0].zonas == ("izquierda",)
+
+
+@pytest.mark.parametrize("ancho", [1, 4, 10, 26, 60, 120, 300, 640])
+def test_ninguna_caja_dentro_del_cuadro_queda_sin_zona(ancho: int) -> None:
+    politica = PoliticaDecision(CONFIG, config_sha256=SHA)
+    for i, x1 in enumerate(range(0, 641 - ancho, 3), start=1):
+        d = politica.decidir(cuadro(i, det((x1, 200, x1 + ancho, 460), conf=0.1)))
+        assert d.detecciones[0].zonas, f"caja x {x1}-{x1 + ancho} sin zona"
+
+
 def test_c5_no_evade_hacia_un_lateral_con_deteccion_debil_reciente() -> None:
     escena = (det(CENTRO), det(DER, conf=0.4), det(IZQ, conf=0.4))
     d = correr([*CALENTAR, escena, escena])[-1]

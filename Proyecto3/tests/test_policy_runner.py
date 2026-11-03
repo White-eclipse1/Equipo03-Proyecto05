@@ -101,6 +101,8 @@ def _valido(i: int) -> dict:
             **_valido(4),
             "detections": [{"class_name": "person", "confidence": 0.9, "bbox_xyxy": [1, 2, 3]}],
         },
+        {k: v for k, v in _valido(4).items() if k != "detections"},  # ok sin detections
+        {**_valido(4), "detections": None},
         {"frame_id": "s1-0004"},
         "no es un cuadro",
     ],

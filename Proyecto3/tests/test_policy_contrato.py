@@ -32,6 +32,25 @@ def test_un_cuadro_sin_objetos_es_una_lista_vacia_valida() -> None:
     assert cuadro.detections == ()
 
 
+def test_un_cuadro_ok_sin_el_campo_detections_se_rechaza() -> None:
+    # Omitir `detections` no es "no hay objetos": la lista vacia tiene que ser explicita.
+    sin_campo = {k: v for k, v in VALIDO.items() if k != "detections"}
+    with pytest.raises(ValidationError) as error:
+        Cuadro.model_validate(sin_campo)
+    assert "detections" in str(error.value)
+
+
+def test_un_cuadro_ok_con_detections_nulo_se_rechaza() -> None:
+    with pytest.raises(ValidationError):
+        Cuadro.model_validate({**VALIDO, "detections": None})
+
+
+def test_un_error_puede_omitir_detections() -> None:
+    sin_campo = {k: v for k, v in VALIDO.items() if k != "detections"}
+    cuadro = Cuadro.model_validate({**sin_campo, "status": "error", "error": "timeout"})
+    assert cuadro.detections == ()
+
+
 def test_un_error_del_detector_es_un_estado_explicito() -> None:
     cuadro = Cuadro.model_validate(
         {**VALIDO, "status": "error", "detections": [], "error": "timeout del detector"}
