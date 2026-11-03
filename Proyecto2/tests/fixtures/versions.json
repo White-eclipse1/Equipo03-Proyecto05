@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "versions": [
+    {
+      "schema_version": 1,
+      "version": "0.1.0",
+      "created_at": "2026-09-11T10:10:00Z",
+      "dataset_fingerprint": "9a3b819caaf5a3b29c8ae3d9c6de12e09ae60c321dee334268a4c34abe07bd0f",
+      "quality_report_fingerprint": "bf6edbad14f2d8475175ef530ea60c2a80f4abd9493ecc6e5df0be4b7a478c0c",
+      "splits_fingerprint": "8ac65cdd1e5127da29dd6420ad2b9ac65f2d57985ef774c91dd05a72347fadbe",
+      "storage_uri": "s3://dataset-releases/0.1.0/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 3,
+        "annotations": 4,
+        "categories": 2
+      },
+      "notes": "primera version publicada tras el Frente 2",
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.0/dataset.tar.zst",
+          "published_at": "2026-09-11T10:10:00Z"
+        },
+        {
+          "remote": "prod",
+          "storage_uri": "s3://dataset-quality-releases-prod-dataset-releases/0.1.0/dataset.tar.zst",
+          "published_at": "2026-09-11T10:10:00Z"
+        }
+      ],
+      "quality_summary": null,
+      "archive_sha256": null
+    }
+  ]
+}

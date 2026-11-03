@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# Finales de linea. Esto NO es una preferencia de estilo: es lo que hace que
+# `dvc.lock` sea portable entre el Windows de quien desarrolla y el Linux de CI.
+#
+# El problema concreto que resuelve: los `reports/*.json` son salidas de etapa
+# declaradas con `cache: false`, asi que viajan por Git. Con `core.autocrlf=true`
+# — el valor por defecto en las instalaciones de Git para Windows — el checkout
+# los escribe con CRLF, mientras que en Linux quedan con LF. DVC hashea BYTES,
+# no contenido: el mismo reporte da dos md5 distintos segun la plataforma. Un
+# `dvc repro` hecho en Windows graba en `dvc.lock` los hashes CRLF, y entonces
+# en CI las cuatro etapas salen como "modified" y el pipeline se reejecuta
+# entero — el sintoma que rompio el job `versionado`.
+#
+# `eol=lf` fija LF en el arbol de trabajo en TODAS las plataformas, y el
+# `newline="\n"` de los escritores del pipeline (ver `tiers/gate.write_report`)
+# cierra la otra mitad: lo que Git deja en disco y lo que el pipeline produce
+# son ahora los mismos bytes en cualquier maquina.
+#
+# Tras cambiar este archivo hay que renormalizar una vez:
+#     git add --renormalize .
+# ---------------------------------------------------------------------------
+
+# Por defecto: Git decide que es texto y lo deja con LF en el disco.
+* text=auto eol=lf
+
+# Los artefactos del pipeline, explicitos por ser el caso que importa.
+Proyecto2/reports/*.json text eol=lf
+Proyecto2/dvc.lock       text eol=lf
+Proyecto2/dvc.yaml       text eol=lf
+Proyecto2/quality.yaml   text eol=lf
+Proyecto2/data/*.dvc     text eol=lf
+
+# Scripts que se ejecutan dentro de contenedores Linux: un CRLF los rompe con
+# el clasico `bad interpreter: /bin/sh^M`.
+*.sh text eol=lf
+
+# Binarios: que Git no intente normalizar nada.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.zip  binary
+*.zst  binary
+*.tar  binary
+*.exe  binary
+*.ico  binary

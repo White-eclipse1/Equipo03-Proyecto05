@@ -1,0 +1,74 @@
+{
+  "test_size": 145,
+  "accuracy": 0.9793103448275862,
+  "passes_threshold": true,
+  "threshold": 0.85,
+  "f1_macro": 0.9743519475145314,
+  "per_class": [
+    {
+      "class": "cat",
+      "precision": 1.0,
+      "recall": 0.9375,
+      "f1": 0.967741935483871,
+      "support": 32
+    },
+    {
+      "class": "dog",
+      "precision": 0.926829268292683,
+      "recall": 1.0,
+      "f1": 0.9620253164556963,
+      "support": 38
+    },
+    {
+      "class": "person",
+      "precision": 1.0,
+      "recall": 0.9866666666666667,
+      "f1": 0.9932885906040269,
+      "support": 75
+    }
+  ],
+  "confusion_matrix": {
+    "labels": [
+      "cat",
+      "dog",
+      "person"
+    ],
+    "rows_true_cols_pred": [
+      [
+        30,
+        2,
+        0
+      ],
+      [
+        0,
+        38,
+        0
+      ],
+      [
+        0,
+        1,
+        74
+      ]
+    ]
+  },
+  "majority_baseline": {
+    "class": "person",
+    "accuracy": 0.5172413793103449
+  },
+  "most_confused": {
+    "true": "cat",
+    "predicted": "dog",
+    "count": 2
+  },
+  "run_id": "9f9b62c202f0446a8a4b411a10321eff",
+  "manifest_id": "m-0.1.3-s42-1",
+  "manifest_hash": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+  "checkpoint_sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+  "selection_sha256": "cbed68cf1bdb7ac04cf855a0f586f4ce7c51bec7c10450e4f03c2cbce3852080",
+  "selected_at": "2026-09-27T03:39:45Z",
+  "evaluated_at": "2026-09-28T02:25:07Z",
+  "predictions_sha256": "575da62412e7d68e04c7a55ee3ec574e2813607a1a2e3c08c2e5ab51e8a6f492",
+  "code_commit": "a7ec1dc730594d45f3deb0ec7bd7befcdb00d765",
+  "selection_commit": "6bd910173d978f7c60a1418e5fbdf0bf7ae76fe9 2026-09-26T21:40:01-06:00",
+  "crops_jsonl_sha256": "d3d61f35a3efb60e665ac16c95a18f1602df44f3df7c22b86e1c949fadbe1bed"
+}

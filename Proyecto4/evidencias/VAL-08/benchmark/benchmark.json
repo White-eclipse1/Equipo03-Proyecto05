@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-05 (#17)",
+  "fecha": "2026-10-16T01:07:48.347274-06:00",
+  "comando": "python app/benchmark.py",
+  "hardware": {
+    "modelo_dispositivo": "Raspberry Pi 4 Model B Rev 1.5",
+    "cpuinfo": {
+      "CPU part": "0xd08",
+      "Revision": "a03115",
+      "Model": "Raspberry Pi 4 Model B Rev 1.5"
+    },
+    "nucleos": 4,
+    "memoria_total": "927380 kB",
+    "sistema_operativo": "Debian GNU/Linux 13 (trixie)",
+    "kernel": "6.18.50+rpt-rpi-v8",
+    "arquitectura": "aarch64"
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "onnxruntime": "1.31.0",
+    "providers_disponibles": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "numpy": "2.5.4",
+    "pillow": "12.3.0"
+  },
+  "entrada": {
+    "forma": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "tipo": "float32",
+    "orden": "NCHW, RGB"
+  },
+  "medicion": {
+    "incluye": "decodificar JPEG + modelo/preprocesar.py + sesion.run + softmax",
+    "excluye": "lectura del archivo, captura HTTP de la camara, carga del modelo (ms_carga aparte) y envio a AWS: el benchmark no hace llamadas de red",
+    "reloj": "time.perf_counter_ns, en milisegundos",
+    "calentamientos": 10,
+    "repeticiones": 200,
+    "orden_modelos": [
+      "int8",
+      "fp32"
+    ],
+    "pausa_entre_modelos_s": 60,
+    "proceso_por_modelo": true
+  },
+  "codigo": {
+    "benchmark.py": "ed31ef43a536940cd3af1e76808afc60006f83cc4921b7febe0e30923f0b73c1",
+    "preprocesar.py": "8fa139aa89f74d80d35febfcbd8c342b2c49395753332aa2ea97979c0550171d",
+    "preprocesar_ruta": "/home/pi/edge01/modelo/preprocesar.py"
+  },
+  "imagenes": [
+    {
+      "nombre": "cat/edge01-9495b250a4e44d8d8e7aafed2ef76fbd.jpg",
+      "sha256": "ebf86ed1aad20f61304ff98e93ab3a3d7b6523f29511b8f13ea3f086881e5f3a",
+      "bytes": 139422,
+      "tamano": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "nombre": "dog/edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0.jpg",
+      "sha256": "26ce1bae320f514a6e060a67302732940d3bed40e0438700e03d7a873052040c",
+      "bytes": 141947,
+      "tamano": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "nombre": "person/edge01-9ca0684f7544466d864c8b253fb9e2b7.jpg",
+      "sha256": "127833ab051de28bfae5f788b4c3152479ea8bbb3888f5fd40b6c3d0033171cc",
+      "bytes": 133881,
+      "tamano": [
+        1920,
+        1080
+      ]
+    }
+  ],
+  "condiciones_inicio": {
+    "instante": "2026-10-16T01:05:41.879162-06:00",
+    "temperatura_c": 49.173,
+    "cpufreq": {
+      "cpu0": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu1": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu2": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu3": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      }
+    },
+    "loadavg": "0.13 0.09 0.02 1/334 5570",
+    "vcgencmd_temp": "temp=50.6'C",
+    "vcgencmd_clock_arm": "frequency(48)=1800457088",
+    "vcgencmd_throttled": "throttled=0x0"
+  },
+  "condiciones_fin": {
+    "instante": "2026-10-16T01:07:48.446797-06:00",
+    "temperatura_c": 74.984,
+    "cpufreq": {
+      "cpu0": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu1": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu2": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      },
+      "cpu3": {
+        "scaling_governor": "ondemand",
+        "scaling_cur_freq": "1800000",
+        "scaling_min_freq": "600000",
+        "scaling_max_freq": "1800000",
+        "cpuinfo_max_freq": "1800000"
+      }
+    },
+    "loadavg": "2.22 0.79 0.28 1/332 5621",
+    "vcgencmd_temp": "temp=75.0'C",
+    "vcgencmd_clock_arm": "frequency(48)=1800457088",
+    "vcgencmd_throttled": "throttled=0x0"
+  },
+  "modelos": {
+    "int8": {
+      "archivo": "/home/pi/edge01/modelo/model_int8.onnx",
+      "version": "1.0.0-int8-e05.1",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "precision": "INT8: cuantizacion estatica QDQ, pesos INT8 por canal, activaciones UINT8",
+      "bytes": 11295280,
+      "ms_carga": 151.964905,
+      "sesion": {
+        "providers": [
+          "CPUExecutionProvider"
+        ],
+        "entrada": {
+          "nombre": "entrada",
+          "forma": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "tipo": "tensor(float)"
+        },
+        "salida": {
+          "nombre": "logits",
+          "forma": [
+            1,
+            3
+          ]
+        },
+        "intra_op_num_threads": 0,
+        "inter_op_num_threads": 0,
+        "graph_optimization_level": "GraphOptimizationLevel.ORT_ENABLE_ALL",
+        "nota": "opciones por defecto, como edge/inferencia.py (0 hilos = automatico)"
+      },
+      "condiciones_inicio": {
+        "instante": "2026-10-16T01:05:42.600691-06:00",
+        "temperatura_c": 51.121,
+        "cpufreq": {
+          "cpu0": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu1": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu2": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu3": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          }
+        },
+        "loadavg": "0.13 0.09 0.02 1/342 5581",
+        "vcgencmd_temp": "temp=51.1'C",
+        "vcgencmd_clock_arm": "frequency(48)=1800457088",
+        "vcgencmd_throttled": "throttled=0x0"
+      },
+      "condiciones_fin": {
+        "instante": "2026-10-16T01:06:06.569716-06:00",
+        "temperatura_c": 74.01,
+        "cpufreq": {
+          "cpu0": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu1": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu2": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu3": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          }
+        },
+        "loadavg": "1.45 0.40 0.13 4/340 5593",
+        "vcgencmd_temp": "temp=74.0'C",
+        "vcgencmd_clock_arm": "frequency(48)=1800457088",
+        "vcgencmd_throttled": "throttled=0x0"
+      },
+      "pico_memoria_mb": 114.4453125,
+      "estado": "ok",
+      "codigo_salida": 0,
+      "resumen": {
+        "estado": "ok",
+        "calentamientos": 10,
+        "mediciones": 200,
+        "mediciones_validas": 200,
+        "cumple_minimos": true,
+        "clases_predichas_por_imagen": [
+          "cat/edge01-9495b250a4e44d8d8e7aafed2ef76fbd.jpg -> cat",
+          "dog/edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0.jpg -> dog",
+          "person/edge01-9ca0684f7544466d864c8b253fb9e2b7.jpg -> person"
+        ]
+      }
+    },
+    "fp32": {
+      "archivo": "/home/pi/edge01/modelo/model_fp32.onnx",
+      "version": "1.0.0 (original del P3 exportado a ONNX FP32, sin cuantizar)",
+      "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+      "precision": "FP32",
+      "bytes": 44702717,
+      "ms_carga": 311.607083,
+      "sesion": {
+        "providers": [
+          "CPUExecutionProvider"
+        ],
+        "entrada": {
+          "nombre": "entrada",
+          "forma": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "tipo": "tensor(float)"
+        },
+        "salida": {
+          "nombre": "logits",
+          "forma": [
+            1,
+            3
+          ]
+        },
+        "intra_op_num_threads": 0,
+        "inter_op_num_threads": 0,
+        "graph_optimization_level": "GraphOptimizationLevel.ORT_ENABLE_ALL",
+        "nota": "opciones por defecto, como edge/inferencia.py (0 hilos = automatico)"
+      },
+      "condiciones_inicio": {
+        "instante": "2026-10-16T01:07:07.951652-06:00",
+        "temperatura_c": 53.556,
+        "cpufreq": {
+          "cpu0": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu1": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu2": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu3": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          }
+        },
+        "loadavg": "0.53 0.33 0.12 1/339 5604",
+        "vcgencmd_temp": "temp=52.5'C",
+        "vcgencmd_clock_arm": "frequency(48)=1800457088",
+        "vcgencmd_throttled": "throttled=0x0"
+      },
+      "condiciones_fin": {
+        "instante": "2026-10-16T01:07:48.140104-06:00",
+        "temperatura_c": 77.906,
+        "cpufreq": {
+          "cpu0": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu1": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu2": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          },
+          "cpu3": {
+            "scaling_governor": "ondemand",
+            "scaling_cur_freq": "1800000",
+            "scaling_min_freq": "600000",
+            "scaling_max_freq": "1800000",
+            "cpuinfo_max_freq": "1800000"
+          }
+        },
+        "loadavg": "2.22 0.79 0.28 4/339 5617",
+        "vcgencmd_temp": "temp=77.9'C",
+        "vcgencmd_clock_arm": "frequency(48)=1800404352",
+        "vcgencmd_throttled": "throttled=0x0"
+      },
+      "pico_memoria_mb": 184.16796875,
+      "estado": "ok",
+      "codigo_salida": 0,
+      "resumen": {
+        "estado": "ok",
+        "calentamientos": 10,
+        "mediciones": 200,
+        "mediciones_validas": 200,
+        "cumple_minimos": true,
+        "clases_predichas_por_imagen": [
+          "cat/edge01-9495b250a4e44d8d8e7aafed2ef76fbd.jpg -> cat",
+          "dog/edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0.jpg -> dog",
+          "person/edge01-9ca0684f7544466d864c8b253fb9e2b7.jpg -> person"
+        ]
+      }
+    }
+  },
+  "tiempos": {
+    "archivo": "tiempos.csv",
+    "sha256": "1c2b3766c2f6700ab9dc6938eaca89172e23edf64a101a9ace4fd310db1942c1",
+    "filas": 420
+  },
+  "nota": "p50/p95 y comparacion entre modelos: VAL-06 (#18)"
+}

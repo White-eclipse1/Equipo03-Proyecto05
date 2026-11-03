@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-08 (#24)",
+  "original": {
+    "descripcion": "modelo publicado 1.0.0 del Proyecto 3 (PyTorch)",
+    "version": "1.0.0",
+    "run_id": "9f9b62c202f0446a8a4b411a10321eff",
+    "mlflow": "mlflow-artifacts:/3/9f9b62c202f0446a8a4b411a10321eff/artifacts/checkpoint/model.pt",
+    "archivo": "model.pt",
+    "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+    "bytes": 44783563,
+    "publicado_por_p3": "s3://dataset-quality-releases-750702272375/models/clasificador/1.0.0/model.pt",
+    "s3": "s3://p4-capturas-474665692638/modelos/clasificador-p3/1.0.0/model.pt",
+    "version_id": "VZ9XZWXFgue21n2uPf8t4HSpIIjNGmxV"
+  },
+  "optimizado": {
+    "descripcion": "variante INT8 del edge",
+    "version": "1.0.0-int8-e05.1",
+    "archivo": "model_int8.onnx",
+    "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+    "bytes": 11295280,
+    "tecnica": {
+      "tecnica": "static_post_training_quantization",
+      "formato": "QDQ",
+      "por_canal": true,
+      "pesos": "QInt8",
+      "activaciones": "QUInt8",
+      "metodo_calibracion": "MinMax"
+    },
+    "s3": "s3://p4-capturas-474665692638/modelos/clasificador-edge/1.0.0-int8-e05.1/model_int8.onnx",
+    "version_id": "b6mYULAWBVpbLcHvZ2qGG5gGtXZK3zeS"
+  },
+  "fp32_onnx": {
+    "descripcion": "el original exportado a ONNX FP32: el 'original' medido en el edge",
+    "archivo": "model_fp32.onnx",
+    "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+    "bytes": 44702717,
+    "s3": "s3://p4-capturas-474665692638/modelos/clasificador-edge/1.0.0-int8-e05.1/model_fp32.onnx",
+    "version_id": "p6aJRFUytlrCTi4WauBbJc_xzdl_kpjR"
+  },
+  "clases": {
+    "0": "cat",
+    "1": "dog",
+    "2": "person"
+  },
+  "preprocesamiento": {
+    "image_size": 224,
+    "resize": "resize_to_square",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "reduccion_tamano_pct": 74.77806756912129,
+  "reduccion_tamano_pct_fraccion": "12357300/165253",
+  "conversion": {
+    "script": "modelo/convertir.py",
+    "configuracion": "modelo/conversion.yaml",
+    "registro": "modelo/registros/registro_conversion.json",
+    "registro_sha256": "d467aef73c40bdaa7afdb513a69b837dfa5417479036f73b91196a24603d7f3b"
+  }
+}

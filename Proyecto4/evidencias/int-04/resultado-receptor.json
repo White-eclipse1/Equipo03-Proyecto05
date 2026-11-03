@@ -1,0 +1,120 @@
+{
+  "url": "https://54-80-197-58.sslip.io/api/p4/capturas",
+  "capture_id": "prueba-int-20261016T005939-0001",
+  "enviado_en": "2026-10-16T00:59:39.266251-06:00",
+  "todo_ok": true,
+  "casos": [
+    {
+      "caso": "1. evento valido",
+      "esperado": [
+        201,
+        "creado"
+      ],
+      "obtenido": [
+        201,
+        "creado"
+      ],
+      "ok": true,
+      "respuesta": {
+        "estado": "creado",
+        "capture_id": "prueba-int-20261016T005939-0001",
+        "image_key": "edge-capturas/fotos/prueba-int-20261016T005939-0001.jpg",
+        "record_key": "edge-capturas/eventos/prueba-int-20261016T005939-0001.json",
+        "received_at": "2026-10-16T06:59:43.941+00:00"
+      }
+    },
+    {
+      "caso": "2. mismo evento (reintento)",
+      "esperado": [
+        200,
+        "duplicado"
+      ],
+      "obtenido": [
+        200,
+        "duplicado"
+      ],
+      "ok": true,
+      "respuesta": {
+        "estado": "duplicado",
+        "capture_id": "prueba-int-20261016T005939-0001",
+        "image_key": "edge-capturas/fotos/prueba-int-20261016T005939-0001.jpg",
+        "record_key": "edge-capturas/eventos/prueba-int-20261016T005939-0001.json",
+        "received_at": "2026-10-16T06:59:43.941+00:00"
+      }
+    },
+    {
+      "caso": "3. mismo ID, otra clase",
+      "esperado": [
+        409,
+        "conflicto_capture_id"
+      ],
+      "obtenido": [
+        409,
+        "conflicto_capture_id"
+      ],
+      "ok": true,
+      "respuesta": {
+        "error": "conflicto_capture_id",
+        "detail": "El capture_id ya existe con otros datos; no se sobrescribe",
+        "detalles": [
+          {
+            "campo": "predicted_class",
+            "guardado": "dog",
+            "recibido": "cat"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "4. captured_at sin zona",
+      "esperado": [
+        422,
+        "evento_invalido"
+      ],
+      "obtenido": [
+        422,
+        "evento_invalido"
+      ],
+      "ok": true,
+      "respuesta": {
+        "error": "evento_invalido",
+        "detail": "captured_at: debe incluir zona horaria (ej. -06:00 o Z)",
+        "detalles": [
+          {
+            "campo": "captured_at",
+            "problema": "debe incluir zona horaria (ej. -06:00 o Z)"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "5. sin token",
+      "esperado": [
+        401,
+        "no_autorizado"
+      ],
+      "obtenido": [
+        401,
+        "no_autorizado"
+      ],
+      "ok": true,
+      "respuesta": {
+        "error": "no_autorizado",
+        "detail": "Falta el token del dispositivo o no es valido",
+        "detalles": []
+      }
+    },
+    {
+      "caso": "6. el reintento conserva received_at",
+      "esperado": [
+        "received_at del caso 1",
+        "2026-10-16T06:59:43.941+00:00"
+      ],
+      "obtenido": [
+        "received_at del caso 2",
+        "2026-10-16T06:59:43.941+00:00"
+      ],
+      "ok": true
+    }
+  ]
+}

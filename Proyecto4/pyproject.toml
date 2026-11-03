@@ -1,0 +1,17 @@
+# Pruebas y estilo del codigo de Proyecto 4 (`src/p4`).
+# No es un paquete instalable: el portal de Proyecto2 agrega `Proyecto4/src` a su
+# PYTHONPATH igual que hace con `Proyecto3/src`. Las dependencias (FastAPI,
+# boto3, Pillow, pydantic-settings) son las del lockfile de Proyecto2.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-q"

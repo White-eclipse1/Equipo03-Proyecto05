@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "capture_id": "edge01-20261015T103000-0001",
+  "captured_at": "2026-10-15T10:30:00-06:00",
+  "predicted_class": "dog",
+  "confidence": 0.9312,
+  "device_id": "edge01",
+  "model_version": "<version del modelo optimizado>",
+  "model_sha256": "<sha256 del archivo del modelo cargado, 64 hex en minusculas>",
+  "image_sha256": "<sha256 de los bytes del JPEG enviado>",
+  "image_ref": "capturas/edge01-20261015T103000-0001.jpg",
+  "region": null
+}

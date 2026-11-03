@@ -1,0 +1,25 @@
+# Barrido de F5 (T13) sobre el manifiesto congelado m-0.1.3-s42-1.
+#
+# 12 corridas (margen sobre las 10 que exige 3.1). Cada uno de los 7 parametros
+# toma al menos 2 valores; patience, min_delta y monitor quedan en los defaults
+# de TrainingConfig (5, 0.001, val_accuracy) y la semilla es la misma para que
+# las diferencias salgan de los parametros. Cada entrada se valida con
+# `p3.train.config.TrainingConfig` antes de encolarla.
+#
+# Duracion estimada con la medicion de F4 T32 (decisiones.md §7): ~13 s por
+# epoca en la RTX 4060 -> <= 300 epocas en total, ~70 min sin early stopping.
+manifest_id: m-0.1.3-s42-1
+seed: 42
+runs:
+  - {name: r01, optimizer: adamw, batch_size: 32, max_epochs: 30, learning_rate: 0.0003, image_size: 224, hidden_layers: [256], dropout: 0.3}
+  - {name: r02, optimizer: adamw, batch_size: 64, max_epochs: 30, learning_rate: 0.001, image_size: 224, hidden_layers: [512, 128], dropout: 0.5}
+  - {name: r03, optimizer: adam, batch_size: 32, max_epochs: 15, learning_rate: 0.0001, image_size: 224, hidden_layers: [256], dropout: 0.2}
+  - {name: r04, optimizer: adam, batch_size: 64, max_epochs: 30, learning_rate: 0.0003, image_size: 128, hidden_layers: [], dropout: 0.2}
+  - {name: r05, optimizer: sgd, batch_size: 32, max_epochs: 30, learning_rate: 0.01, image_size: 224, hidden_layers: [256], dropout: 0.5}
+  - {name: r06, optimizer: sgd, batch_size: 64, max_epochs: 15, learning_rate: 0.003, image_size: 128, hidden_layers: [512, 128], dropout: 0.2}
+  - {name: r07, optimizer: adamw, batch_size: 32, max_epochs: 15, learning_rate: 0.0003, image_size: 128, hidden_layers: [512, 128], dropout: 0.5}
+  - {name: r08, optimizer: sgd, batch_size: 32, max_epochs: 30, learning_rate: 0.001, image_size: 224, hidden_layers: [], dropout: 0.3}
+  - {name: r09, optimizer: adam, batch_size: 32, max_epochs: 30, learning_rate: 0.001, image_size: 224, hidden_layers: [512, 128], dropout: 0.3}
+  - {name: r10, optimizer: adamw, batch_size: 64, max_epochs: 15, learning_rate: 0.0001, image_size: 224, hidden_layers: [], dropout: 0.5}
+  - {name: r11, optimizer: sgd, batch_size: 64, max_epochs: 30, learning_rate: 0.01, image_size: 128, hidden_layers: [256], dropout: 0.3}
+  - {name: r12, optimizer: adamw, batch_size: 32, max_epochs: 30, learning_rate: 0.0001, image_size: 160, hidden_layers: [256], dropout: 0.2}

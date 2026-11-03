@@ -1,0 +1,802 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f5f9;
+  --surface: #ffffff;
+  --surface-2: #eff1f6;
+  --ink: #1b1f2e;
+  --ink-2: #4a5165;
+  --muted: #737a8f;
+  --line: #e2e5ee;
+  --line-2: #cfd4e2;
+  --accent: #4f46c8;
+  --accent-soft: #e9e8fa;
+  --pass: #17805a;
+  --pass-soft: #e0f2ea;
+  --warn: #9c6b10;
+  --warn-soft: #faf0d8;
+  --fail: #bf3a3a;
+  --fail-soft: #fbe7e6;
+  --c1: #7c6ce8;
+  --c2: #46ae8c;
+  --c3: #dc9a35;
+  --c4: #4f9dd8;
+  --c5: #cf6f9e;
+  --c6: #5fb8c0;
+  --c7: #bf7f52;
+  --c8: #8e96b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    14px/1.55 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------ layout ------------------------------ */
+.shell {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  height: 100%;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+}
+
+.brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--accent), var(--c6));
+  flex: none;
+}
+
+.brand-name {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav button {
+  appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--ink-2);
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.nav button:hover {
+  background: var(--surface-2);
+}
+
+.nav button[aria-current='page'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav .glyph {
+  width: 15px;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.sidebar-foot {
+  margin-top: auto;
+  padding: 0 8px;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.main {
+  overflow-y: auto;
+  padding: 24px 30px 60px;
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 3px;
+}
+
+.page-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 78ch;
+}
+
+/* ---------------------------- primitivas ---------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.card h2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+
+.card .hint {
+  margin: 0 0 16px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.cols-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 1040px) {
+  .cols-2 {
+    grid-template-columns: 1fr;
+  }
+  .shell {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+  .brand-name,
+  .nav .label,
+  .sidebar-foot {
+    display: none;
+  }
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.tile {
+  border-radius: 12px;
+  padding: 15px 17px;
+}
+
+.tile .value {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.tile .label {
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+
+.tile-a {
+  background: var(--accent-soft);
+}
+.tile-b {
+  background: var(--pass-soft);
+}
+.tile-c {
+  background: var(--warn-soft);
+}
+.tile-d {
+  background: #e3edf7;
+}
+.tile-fail {
+  background: var(--fail-soft);
+}
+
+.pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pill.pass {
+  background: var(--pass-soft);
+  color: var(--pass);
+}
+.pill.warn,
+.pill.warning {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.pill.fail,
+.pill.error {
+  background: var(--fail-soft);
+  color: var(--fail);
+}
+.pill.skipped,
+.pill.muted {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+.pill.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+.dot.pass {
+  background: var(--pass);
+}
+.dot.fail {
+  background: var(--fail);
+}
+.dot.skipped {
+  background: var(--line-2);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row-main {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.mono {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+}
+
+/* Barra proporcional dentro de una fila. Va en CSS y no en SVG porque no
+   necesita ejes: la cifra exacta se lee al lado, la barra solo ordena. */
+.track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.banner {
+  margin-top: 14px;
+  padding: 10px 13px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.banner.fail {
+  background: var(--fail-soft);
+  color: var(--fail);
+}
+.banner.pass {
+  background: var(--pass-soft);
+  color: var(--pass);
+}
+.banner.warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.tabs {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.tabs button {
+  appearance: none;
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink-2);
+  padding: 5px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tabs button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.state {
+  padding: 34px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.state code {
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+/* ------------------------------ copilot ----------------------------- */
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-height: 320px;
+}
+
+.bubble {
+  max-width: 76%;
+  padding: 11px 14px;
+  border-radius: 13px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: var(--accent-soft);
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.bot {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border-bottom-left-radius: 4px;
+}
+
+.toolcalls,
+.citations {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.toolcall {
+  border: 1px solid var(--line-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 11px;
+}
+
+.toolcall.failed,
+.toolcall.rejected {
+  border-left-color: var(--fail);
+}
+
+.toolcall summary {
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.toolcall summary span:last-child {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+.toolcall-detail {
+  display: grid;
+  gap: 5px;
+  border-top: 1px solid var(--line-2);
+  padding: 7px 8px;
+  overflow-wrap: anywhere;
+}
+
+.citation {
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.tool-error {
+  color: var(--fail);
+}
+
+.composer {
+  display: flex;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.composer input {
+  flex: 1;
+  font: inherit;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.composer button {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  padding: 0 20px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.composer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.suggestions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.suggestions button {
+  appearance: none;
+  font: inherit;
+  font-size: 12.5px;
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink-2);
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* Controles del editor de la política. Llevan clase propia para no pisar los
+   estilos del compositor del chat, que también vive dentro de una tarjeta. */
+.campo {
+  font: inherit;
+  font-size: 13px;
+  padding: 5px 9px;
+  border: 1px solid var(--line-2);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* Formulario de configuración de entrenamiento (P3 · Training). */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field > span {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-family: var(--mono, monospace);
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--fail);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Encabezado de columna ordenable: el botón hereda el estilo del <th>. */
+.sort-th button {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.sort-th button:hover {
+  color: var(--ink);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+svg text {
+  font-family: inherit;
+}
+
+/* Botones de acción. `danger` es para lo que modifica el dataset: debe
+   distinguirse a simple vista de cualquier control de navegación. */
+button.danger,
+button.ghost {
+  appearance: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button.danger {
+  border: 1px solid var(--fail);
+  background: var(--fail);
+  color: #fff;
+}
+
+button.danger:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+
+button.ghost {
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+button.ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+button.danger:disabled,
+button.ghost:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+details summary::-webkit-details-marker {
+  color: var(--muted);
+}
+
+/* Galería de evaluación (4.4): miniatura por ejemplo y resaltado de errores. */
+.crop-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+.crop-error .crop-thumb {
+  border-color: var(--fail);
+  box-shadow: 0 0 0 2px var(--fail-soft);
+}
+.crop-missing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  border: 1px dashed var(--line-2);
+  color: var(--muted);
+  font-size: 9px;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* --------------------------- Capturas Edge (P4) --------------------------- */
+.cap-acciones {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.cap-auto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-2);
+}
+
+.cap-tenue {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.cap-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* La caja toma la proporción de la foto: el recorte se dibuja en % exactos. */
+.cap-foto {
+  position: relative;
+  overflow: hidden; /* el sombreado del recorte no sale de la foto */
+  background: var(--surface-2);
+}
+
+.cap-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cap-sin-foto {
+  margin: 0;
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cap-region {
+  position: absolute;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 9999px rgb(0 0 0 / 0.25);
+  pointer-events: none;
+}
+
+.cap-datos {
+  padding: 10px 12px 12px;
+}
+
+.cap-clase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.cap-datos dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.cap-datos dt {
+  color: var(--muted);
+}
+
+.cap-datos dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

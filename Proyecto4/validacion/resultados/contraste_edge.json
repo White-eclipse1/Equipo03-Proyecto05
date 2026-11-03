@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-07 (#19)",
+  "generado_en": "2026-10-17T00:55:38+00:00",
+  "comando": "python validacion/contrastar_edge.py",
+  "corridas": {
+    "edge": {
+      "maquina": "raspberry",
+      "fecha": "2026-10-16T18:31:22.424792-06:00",
+      "dispositivo": "Raspberry Pi 4 Model B Rev 1.5",
+      "arquitectura": "aarch64",
+      "runtime": {
+        "python": "3.13.5",
+        "onnxruntime": "1.31.0",
+        "providers_disponibles": [
+          "AzureExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "numpy": "2.5.4",
+        "pillow": "12.3.0"
+      },
+      "resultados_sha256": "9743e14466a2cbf9d8bac31f30dd492dc473b428cc0b9d1e79ebdc63d65b3615"
+    },
+    "laptop": {
+      "maquina": "laptop",
+      "fecha": "2026-10-16T13:41:18.383597-06:00",
+      "dispositivo": "Windows-11-10.0.26300-SP0",
+      "arquitectura": "AMD64",
+      "runtime": {
+        "python": "3.13.15",
+        "onnxruntime": "1.31.0",
+        "providers_disponibles": [
+          "AzureExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "numpy": "2.5.3",
+        "pillow": "12.3.0"
+      },
+      "resultados_sha256": "a2adca394b30bec47e7d09093bbfd46472db6249b27a3c5c8415942b516f6b49"
+    }
+  },
+  "ok": true,
+  "comprobaciones": [
+    {
+      "id": "edge.resultados_sha256",
+      "ok": true,
+      "detalle": "resultados.csv de raspberry es el que registra su JSON"
+    },
+    {
+      "id": "edge.preprocesamiento_sintetico",
+      "ok": true,
+      "detalle": "raspberry: tensor.forma_tipo=ok, normalizacion.exacta=ok, rgb.orden_y_orientacion=ok, resize.sin_recorte=ok, escala.cero_uno=ok, rgb.conversion=ok"
+    },
+    {
+      "id": "laptop.resultados_sha256",
+      "ok": true,
+      "detalle": "resultados.csv de laptop es el que registra su JSON"
+    },
+    {
+      "id": "laptop.preprocesamiento_sintetico",
+      "ok": true,
+      "detalle": "laptop: tensor.forma_tipo=ok, normalizacion.exacta=ok, rgb.orden_y_orientacion=ok, resize.sin_recorte=ok, escala.cero_uno=ok, rgb.conversion=ok"
+    },
+    {
+      "id": "edge.dispositivo",
+      "ok": true,
+      "detalle": "Raspberry Pi 4 Model B Rev 1.5 (aarch64), onnxruntime 1.31.0"
+    },
+    {
+      "id": "identidad",
+      "ok": true,
+      "detalle": "mismos modelos, mismo indice de entradas y preprocesar.py del repositorio en los dos lados"
+    },
+    {
+      "id": "sintetico.bit_a_bit",
+      "ok": true,
+      "detalle": "tensores sinteticos identicos en los dos lados; distintos: []"
+    },
+    {
+      "id": "entradas.mismas",
+      "ok": true,
+      "detalle": "295 entradas en el edge y 295 offline; sin pareja: []"
+    },
+    {
+      "id": "tensor.bit_a_bit",
+      "ok": true,
+      "detalle": "295/295 tensores preprocesados identicos (SHA-256); distintos: []"
+    },
+    {
+      "id": "tensor.forma_tipo",
+      "ok": true,
+      "detalle": "formas y tipos del tensor en el edge: {('1x3x224x224', 'float32'): 295}"
+    },
+    {
+      "id": "clases.mapeo",
+      "ok": true,
+      "detalle": "en val cada clase se predice sobre todo como si misma (int8, int8_referencia, fp32); camara (presentada -> int8): [('cat', 'cat'), ('dog', 'dog'), ('person', 'person')]"
+    }
+  ],
+  "mapeo_clases_edge": {
+    "int8": {
+      "cat": {
+        "cat": 66,
+        "dog": 1,
+        "person": 0
+      },
+      "dog": {
+        "cat": 1,
+        "dog": 77,
+        "person": 0
+      },
+      "person": {
+        "cat": 0,
+        "dog": 0,
+        "person": 147
+      }
+    },
+    "int8_referencia": {
+      "cat": {
+        "cat": 66,
+        "dog": 1,
+        "person": 0
+      },
+      "dog": {
+        "cat": 1,
+        "dog": 77,
+        "person": 0
+      },
+      "person": {
+        "cat": 0,
+        "dog": 0,
+        "person": 147
+      }
+    },
+    "fp32": {
+      "cat": {
+        "cat": 66,
+        "dog": 1,
+        "person": 0
+      },
+      "dog": {
+        "cat": 0,
+        "dog": 78,
+        "person": 0
+      },
+      "person": {
+        "cat": 0,
+        "dog": 0,
+        "person": 147
+      }
+    }
+  },
+  "predicciones": {
+    "int8": {
+      "edge_aciertos_val": 290,
+      "laptop_aciertos_val": 288,
+      "muestras_val": 292,
+      "coinciden_edge_laptop": 291,
+      "distintas_edge_laptop": [
+        {
+          "id": "0.1.3:a1647",
+          "edge": "cat",
+          "laptop": "person"
+        },
+        {
+          "id": "0.1.3:a322",
+          "edge": "dog",
+          "laptop": "cat"
+        },
+        {
+          "id": "0.1.3:a448",
+          "edge": "cat",
+          "laptop": "person"
+        },
+        {
+          "id": "0.1.3:a554",
+          "edge": "dog",
+          "laptop": "person"
+        }
+      ],
+      "max_dif_logit_edge_laptop": 6.702493786811829
+    },
+    "int8_referencia": {
+      "edge_aciertos_val": 290,
+      "laptop_aciertos_val": 290,
+      "muestras_val": 292,
+      "coinciden_edge_laptop": 295,
+      "distintas_edge_laptop": [],
+      "max_dif_logit_edge_laptop": 0.06702494621276855
+    },
+    "fp32": {
+      "edge_aciertos_val": 291,
+      "laptop_aciertos_val": 291,
+      "muestras_val": 292,
+      "coinciden_edge_laptop": 295,
+      "distintas_edge_laptop": [],
+      "max_dif_logit_edge_laptop": 5.9604644775390625e-06
+    }
+  },
+  "int8_igual_a_referencia": {
+    "edge": 295,
+    "laptop": 291,
+    "entradas": 295
+  },
+  "tabla_entradas_conocidas": {
+    "archivo": "entradas_conocidas.csv",
+    "sha256": "182a699df00d1dec540f633efaa873aaafc5888fb8e6adc150c6e29d80f81a95"
+  }
+}

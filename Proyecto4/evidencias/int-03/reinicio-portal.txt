@@ -1,0 +1,15 @@
+# Prueba de reinicio del portal (INT-03), ejecutada por Session Manager en la EC2 i-06a5651301e9b6c39.
+# Se recrea el contenedor de la app (docker compose up -d --no-deps --force-recreate app) y se compara la captura antes y despues.
+== ANTES 2026-10-16T06:01:44Z
+contenedor: 36232cb10f14 2026-10-15T22:44:23.859278932Z
+listado: 1 ['prueba-int-20261015T164022-0001']
+== REINICIO (recrear el contenedor de la app)
+ Container dq_app Starting 
+ Container dq_app Started 
+app: healthy
+== DESPUES 2026-10-16T06:01:54Z
+contenedor: c2b199cae24b 2026-10-16T06:01:48.155217069Z
+listado: 1 ['prueba-int-20261015T164022-0001']
+foto: 229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a
+registro identico antes y despues: si
+registro: {"schema_version":1,"capture_id":"prueba-int-20261015T164022-0001","captured_at":"2026-10-15T16:40:22-06:00","predicted_class":"dog","confidence":0.5,"device_id":"prueba-int","model_version":"1.0.0-int8-e05.1","model_sha256":"ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12","image_sha256":"229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a","image_ref":"capturas/pruebas/prueba-int-20261015T164022-0001/foto.jpg","region":null,"received_at":"2026-10-15T22:40:25.035+00:00","image_key":"edge-capturas/fotos/prueba-int-20261015T164022-0001.jpg","image_bytes":18285,"image_width":640,"image_height":480}

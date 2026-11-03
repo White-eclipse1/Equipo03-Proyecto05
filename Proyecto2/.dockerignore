@@ -1,0 +1,22 @@
+.env
+.env.*
+.git
+.gitignore
+.github
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.dvc/cache
+data
+dist
+node_modules
+# El build de la web que pueda tener el host: la imagen compila el suyo y lo
+# deja en /opt/dq/static (ver DQ_STATIC_DIR). Copiarlo aqui dentro solo mete
+# en la imagen una copia vieja que nadie lee.
+src/dataset_quality/static
+htmlcov
+.coverage

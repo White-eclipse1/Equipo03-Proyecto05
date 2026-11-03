@@ -1,0 +1,23 @@
+2026-10-16T01:28:45-06:00
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+wlan0            UP             192.168.1.92/24 fe80::e65f:1ff:fe8e:f8dc/64 
+usb0             UNKNOWN        10.60.188.190/24 fe80::6cb5:4ff:feef:9414/64 
+default via 192.168.1.254 dev wlan0 proto dhcp src 192.168.1.92 metric 600 
+10.60.188.0/24 dev usb0 proto kernel scope link src 10.60.188.190 metric 100 
+192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.92 metric 600 
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+HTTP/2 200 
+date: Fri, 16 Oct 2026 07:28:46 GMT
+content-type: text/html; charset=utf-8
+server: cloudflare
+last-modified: Tue, 13 Oct 2026 22:05:48 GMT
+allow: GET, HEAD
+accept-ranges: bytes
+age: 10
+cf-cache-status: HIT
+cf-ray: a4b5593fff906ca9-LAX
+alt-svc: h3=":443"; ma=86400
+

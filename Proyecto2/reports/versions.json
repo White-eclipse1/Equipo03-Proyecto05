@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "versions": [
+    {
+      "schema_version": 1,
+      "version": "0.1.0",
+      "created_at": "2026-09-14T23:49:12.533291Z",
+      "dataset_fingerprint": "d994dd1a298efb8f899739fb2b5cbc59a3f70ecde9c6ea02876fc36da2f261b3",
+      "quality_report_fingerprint": "3a0c3a2f42b13c9b9ba356feaa3fb373aa579bb641efcde97af1882d09a0adec",
+      "splits_fingerprint": "729729a90d30cc8f5aa29734250f75ae1f19d47ad17c5c0a495c52771a65e35c",
+      "storage_uri": "s3://dataset-releases/0.1.0/dataset.tar.zst",
+      "quality_status": "fail",
+      "counts": {
+        "images": 877,
+        "annotations": 943,
+        "categories": 5
+      },
+      "notes": null,
+      "quality_summary": null,
+      "archive_sha256": null,
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.0/dataset.tar.zst",
+          "published_at": "2026-09-14T23:49:12.533291Z"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "version": "0.1.1",
+      "created_at": "2026-09-15T01:14:15.883464Z",
+      "dataset_fingerprint": "295f4257328ee413ca6d7b8e9446bae50f7db80b2777bb8b93eb3f1dbc3dbdf2",
+      "quality_report_fingerprint": "d2cd9e197f4e8870d99aa923d849e220cb5b5c4317ef31db25695d7533af3432",
+      "splits_fingerprint": "5b0a9d30b5bfd0afa1fd4dff57da6e1375d48ed52b867def67c06b08c82349af",
+      "storage_uri": "s3://dataset-releases/0.1.1/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 838,
+        "annotations": 887,
+        "categories": 5
+      },
+      "notes": "Ensayo del camino completo con umbral temporal en 150; 838 imagenes tras deduplicar.",
+      "quality_summary": {
+        "distinct_images_per_class": {
+          "car": 149,
+          "person": 280,
+          "dog": 206,
+          "cat": 170,
+          "bicycle": 64
+        },
+        "small_objects_ratio": 0.015783540022547914
+      },
+      "archive_sha256": null,
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.1/dataset.tar.zst",
+          "published_at": "2026-09-15T01:14:15.883464Z"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "version": "0.1.2",
+      "created_at": "2026-09-18T04:14:00.007796Z",
+      "dataset_fingerprint": "2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84",
+      "quality_report_fingerprint": "512fc1c3460ef905b3d73270ce206679c5ac0aab243cf1236ab8fff5c208fe09",
+      "splits_fingerprint": "0d474ca830c23f01b015816849a8daeb9720f96f123a9a928b4023396ed29e94",
+      "storage_uri": "s3://dataset-releases/0.1.2/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 2045,
+        "annotations": 2120,
+        "categories": 5
+      },
+      "notes": null,
+      "quality_summary": {
+        "distinct_images_per_class": {
+          "car": 247,
+          "person": 441,
+          "dog": 348,
+          "cat": 312,
+          "bicycle": 240
+        },
+        "small_objects_ratio": 0.1089622641509434
+      },
+      "archive_sha256": "130998b0c1303a35634417aad5376bd691e34657ced4d55351d547b680912f60",
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.2/dataset.tar.zst",
+          "published_at": "2026-09-18T04:14:00.077237Z"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "version": "0.1.3",
+      "created_at": "2026-09-18T04:17:13.923255Z",
+      "dataset_fingerprint": "2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84",
+      "quality_report_fingerprint": "4d6e64aa13c6f66b15801811c4bb84ebc265b07f538ae27982f79628b170631a",
+      "splits_fingerprint": "9a87e0de3fb3069f06686065f149d64787593c04d90265a3e0f667a170d66279",
+      "storage_uri": "s3://dataset-releases/0.1.3/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 2045,
+        "annotations": 2120,
+        "categories": 5
+      },
+      "notes": null,
+      "quality_summary": {
+        "distinct_images_per_class": {
+          "car": 247,
+          "person": 441,
+          "dog": 348,
+          "cat": 312,
+          "bicycle": 240
+        },
+        "small_objects_ratio": 0.1089622641509434
+      },
+      "archive_sha256": "787742988af1df41d9a58573b81b5c9b4fe7ab24a647b25f2e71d3eb323838b5",
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.3/dataset.tar.zst",
+          "published_at": "2026-09-18T04:17:14.004218Z"
+        },
+        {
+          "remote": "prod",
+          "storage_uri": "s3://dataset-quality-releases-prod/0.1.3/dataset.tar.zst",
+          "published_at": "2026-09-18T04:31:46.137017Z"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "version": "0.1.4",
+      "created_at": "2026-09-18T18:36:06.758691Z",
+      "dataset_fingerprint": "2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84",
+      "quality_report_fingerprint": "d0458ddd53be5ce248ba81d6c87af1be5bee57c4dc973bc914120eeda78b63ef",
+      "splits_fingerprint": "90ed17f724bb8baa24e498bf6438b268684f11df83b9b27e0e5092ced8295ee4",
+      "storage_uri": "s3://dataset-releases/0.1.4/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 2045,
+        "annotations": 2120,
+        "categories": 5
+      },
+      "notes": null,
+      "quality_summary": {
+        "distinct_images_per_class": {
+          "car": 247,
+          "person": 441,
+          "dog": 348,
+          "cat": 312,
+          "bicycle": 240
+        },
+        "small_objects_ratio": 0.1089622641509434
+      },
+      "archive_sha256": "ed5e6402ca6b2f13acdcfc84d17da95d9e7b2fbe878caf4063822183eefccd89",
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.4/dataset.tar.zst",
+          "published_at": "2026-09-18T18:36:07.710533Z"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "version": "0.1.5",
+      "created_at": "2026-09-18T19:22:55.445196Z",
+      "dataset_fingerprint": "2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84",
+      "quality_report_fingerprint": "8bcb999b93caf6288882c22f5cf8cffd851b8eec985a64221748c9556e91e457",
+      "splits_fingerprint": "570dc5dc47c6072af857bd9ac9e61fccbe51634e9137aff43eca2e043cc83ad1",
+      "storage_uri": "s3://dataset-releases/0.1.5/dataset.tar.zst",
+      "quality_status": "pass",
+      "counts": {
+        "images": 2045,
+        "annotations": 2120,
+        "categories": 5
+      },
+      "notes": null,
+      "quality_summary": {
+        "distinct_images_per_class": {
+          "car": 247,
+          "person": 441,
+          "dog": 348,
+          "cat": 312,
+          "bicycle": 240
+        },
+        "small_objects_ratio": 0.1089622641509434
+      },
+      "archive_sha256": "198746596d7c711d29db69c58c8f7182c00b8293b8a8f4bac03ab8d9e335e1bf",
+      "published_in": [
+        {
+          "remote": "dev",
+          "storage_uri": "s3://dataset-releases/0.1.5/dataset.tar.zst",
+          "published_at": "2026-09-18T19:22:55.777622Z"
+        }
+      ]
+    }
+  ]
+}

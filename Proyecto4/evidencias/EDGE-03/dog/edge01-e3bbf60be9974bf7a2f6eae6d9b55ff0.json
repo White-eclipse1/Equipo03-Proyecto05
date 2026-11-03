@@ -1,0 +1,11 @@
+{
+  "estado": "capturada",
+  "capture_id": "edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0",
+  "captured_at": "2026-10-16T00:04:38.063969-06:00",
+  "device_id": "edge01",
+  "image_ref": "/home/pi/edge01/evidencias/EDGE-03/dog/edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0.jpg",
+  "image_sha256": "26ce1bae320f514a6e060a67302732940d3bed40e0438700e03d7a873052040c",
+  "width": 1920,
+  "height": 1080,
+  "image_bytes": 141947
+}

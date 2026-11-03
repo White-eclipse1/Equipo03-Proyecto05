@@ -1,0 +1,18 @@
+# GPU NVIDIA para el worker de entrenamiento de Proyecto 3 (opcional).
+#
+# `python scripts/up.py` lo agrega solo si el host tiene `nvidia-smi` (o si
+# `P3_GPU=1`); sin GPU el stack arranca igual y el worker entrena en CPU.
+# Requiere Docker Desktop con WSL2 (Windows) o NVIDIA Container Toolkit (Linux).
+services:
+  p3-worker:
+    # torch con CUDA (el lockfile tal cual); sin este archivo la imagen es de CPU.
+    build:
+      args:
+        TORCH_VARIANT: cuda
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

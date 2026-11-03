@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "capture_id": "edge01-4f9cc269f3e144909973d6584f138b84",
+  "captured_at": "2026-10-16T18:56:28.446630-06:00",
+  "predicted_class": "person",
+  "confidence": 0.9757886528968811,
+  "device_id": "edge01",
+  "model_version": "1.0.0-int8-e05.1",
+  "model_sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+  "image_sha256": "5f4f6582e9f1695cff79366d2d69c03cf90bcbf2acd2f398c807d1761c2f24ca",
+  "image_ref": "/home/pi/edge01/evidencias/EDGE-07/sesiones/25c10a75e5d94c95b3c5ec3c1dd412cc/capturas/edge01-4f9cc269f3e144909973d6584f138b84.jpg",
+  "region": null
+}

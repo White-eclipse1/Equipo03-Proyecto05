@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "version": "0.1.5",
+  "steps": {
+    "validate": "success",
+    "auth": "success",
+    "restore": "success",
+    "match": "failure",
+    "publish": "skipped",
+    "promotion": "skipped"
+  },
+  "workflow_url": "https://github.com/stephy0410/ruta-al-dataset-v1/actions/runs/35402887649",
+  "aws_account": "310649434894",
+  "aws_identity": "arn:aws:sts::310649434894:assumed-role/dataset-quality-prod-github-actions-role/GitHubActions"
+}

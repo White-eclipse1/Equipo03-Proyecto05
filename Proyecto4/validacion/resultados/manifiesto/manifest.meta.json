@@ -1,0 +1,3398 @@
+{
+  "schema_version": 1,
+  "manifest_id": "m-0.1.3-s42-1",
+  "manifest_hash": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+  "created_at": "2026-09-26T23:39:48Z",
+  "code_commit": "c2002f66935089e074fa7a53606fd68dc8f7fe66",
+  "release": {
+    "release_id": "0.1.3",
+    "dataset_fingerprint": "2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84",
+    "quality_status": "pass",
+    "quality_report_fingerprint": "4d6e64aa13c6f66b15801811c4bb84ebc265b07f538ae27982f79628b170631a",
+    "archive_sha256": "787742988af1df41d9a58573b81b5c9b4fe7ab24a647b25f2e71d3eb323838b5",
+    "p2_splits_fingerprint": "9a87e0de3fb3069f06686065f149d64787593c04d90265a3e0f667a170d66279",
+    "dvc_pointer": {
+      "path": "Proyecto2/data/raw.dvc",
+      "md5": "ca56420c9992f8b75fdb10f2ece81704.dir",
+      "nfiles": 2046,
+      "size": 634490876
+    }
+  },
+  "seed": 42,
+  "ratios": {
+    "train": 0.7,
+    "val": 0.2,
+    "test": 0.1
+  },
+  "tolerance_pp": 5,
+  "classes": [
+    {
+      "class_index": 0,
+      "category_id": 4,
+      "category_name": "cat"
+    },
+    {
+      "class_index": 1,
+      "category_id": 3,
+      "category_name": "dog"
+    },
+    {
+      "class_index": 2,
+      "category_id": 2,
+      "category_name": "person"
+    }
+  ],
+  "excluded_categories": [
+    {
+      "category_id": 5,
+      "category_name": "bicycle"
+    },
+    {
+      "category_id": 1,
+      "category_name": "car"
+    }
+  ],
+  "exclusions": [
+    {
+      "annotation_id": 1,
+      "source_image_id": 1,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 7,
+      "source_image_id": 2,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 8,
+      "source_image_id": 3,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 10,
+      "source_image_id": 4,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 13,
+      "source_image_id": 6,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 15,
+      "source_image_id": 6,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 19,
+      "source_image_id": 12,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 20,
+      "source_image_id": 13,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 21,
+      "source_image_id": 14,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 23,
+      "source_image_id": 16,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 25,
+      "source_image_id": 18,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 27,
+      "source_image_id": 20,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 29,
+      "source_image_id": 22,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 30,
+      "source_image_id": 22,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 35,
+      "source_image_id": 24,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 36,
+      "source_image_id": 25,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 38,
+      "source_image_id": 26,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 42,
+      "source_image_id": 28,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 46,
+      "source_image_id": 30,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 50,
+      "source_image_id": 32,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 52,
+      "source_image_id": 34,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 54,
+      "source_image_id": 36,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 56,
+      "source_image_id": 38,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 58,
+      "source_image_id": 39,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 60,
+      "source_image_id": 40,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 62,
+      "source_image_id": 41,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 64,
+      "source_image_id": 43,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 66,
+      "source_image_id": 45,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 68,
+      "source_image_id": 47,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 70,
+      "source_image_id": 49,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 72,
+      "source_image_id": 51,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 74,
+      "source_image_id": 53,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 76,
+      "source_image_id": 55,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 78,
+      "source_image_id": 57,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 80,
+      "source_image_id": 59,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 85,
+      "source_image_id": 61,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 86,
+      "source_image_id": 62,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 87,
+      "source_image_id": 62,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 90,
+      "source_image_id": 64,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 92,
+      "source_image_id": 66,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 93,
+      "source_image_id": 66,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 96,
+      "source_image_id": 68,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 98,
+      "source_image_id": 70,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 102,
+      "source_image_id": 72,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 104,
+      "source_image_id": 74,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 106,
+      "source_image_id": 76,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 107,
+      "source_image_id": 76,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 110,
+      "source_image_id": 78,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 112,
+      "source_image_id": 80,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 120,
+      "source_image_id": 82,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 122,
+      "source_image_id": 84,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 124,
+      "source_image_id": 86,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 128,
+      "source_image_id": 88,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 129,
+      "source_image_id": 89,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 130,
+      "source_image_id": 90,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 131,
+      "source_image_id": 90,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 132,
+      "source_image_id": 91,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 133,
+      "source_image_id": 92,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 134,
+      "source_image_id": 93,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 139,
+      "source_image_id": 94,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 140,
+      "source_image_id": 94,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 146,
+      "source_image_id": 96,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 150,
+      "source_image_id": 97,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 153,
+      "source_image_id": 98,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 154,
+      "source_image_id": 99,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 158,
+      "source_image_id": 100,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 160,
+      "source_image_id": 101,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 161,
+      "source_image_id": 102,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 165,
+      "source_image_id": 103,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 167,
+      "source_image_id": 104,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 169,
+      "source_image_id": 105,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 170,
+      "source_image_id": 106,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 172,
+      "source_image_id": 108,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 174,
+      "source_image_id": 110,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 176,
+      "source_image_id": 112,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 177,
+      "source_image_id": 113,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 178,
+      "source_image_id": 114,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 179,
+      "source_image_id": 115,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 180,
+      "source_image_id": 116,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 181,
+      "source_image_id": 117,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 182,
+      "source_image_id": 118,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 183,
+      "source_image_id": 119,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 184,
+      "source_image_id": 120,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 185,
+      "source_image_id": 121,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 186,
+      "source_image_id": 122,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 187,
+      "source_image_id": 123,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 188,
+      "source_image_id": 124,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 189,
+      "source_image_id": 125,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 190,
+      "source_image_id": 126,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 191,
+      "source_image_id": 127,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 192,
+      "source_image_id": 128,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 193,
+      "source_image_id": 129,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 194,
+      "source_image_id": 130,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 195,
+      "source_image_id": 131,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 196,
+      "source_image_id": 132,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 197,
+      "source_image_id": 133,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 198,
+      "source_image_id": 134,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 199,
+      "source_image_id": 135,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 200,
+      "source_image_id": 136,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 201,
+      "source_image_id": 137,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 202,
+      "source_image_id": 138,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 203,
+      "source_image_id": 139,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 204,
+      "source_image_id": 140,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 205,
+      "source_image_id": 141,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 206,
+      "source_image_id": 142,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 207,
+      "source_image_id": 143,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 208,
+      "source_image_id": 144,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 209,
+      "source_image_id": 145,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 210,
+      "source_image_id": 146,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 211,
+      "source_image_id": 147,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 212,
+      "source_image_id": 148,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 213,
+      "source_image_id": 149,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 214,
+      "source_image_id": 150,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 215,
+      "source_image_id": 151,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 216,
+      "source_image_id": 152,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 217,
+      "source_image_id": 153,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 218,
+      "source_image_id": 154,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 219,
+      "source_image_id": 155,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 220,
+      "source_image_id": 156,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 221,
+      "source_image_id": 157,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 222,
+      "source_image_id": 158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 223,
+      "source_image_id": 159,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 224,
+      "source_image_id": 160,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 225,
+      "source_image_id": 161,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 226,
+      "source_image_id": 162,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 227,
+      "source_image_id": 163,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 228,
+      "source_image_id": 164,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 229,
+      "source_image_id": 165,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 231,
+      "source_image_id": 167,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 232,
+      "source_image_id": 168,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 233,
+      "source_image_id": 169,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 234,
+      "source_image_id": 170,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 235,
+      "source_image_id": 171,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 236,
+      "source_image_id": 172,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 237,
+      "source_image_id": 173,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 238,
+      "source_image_id": 174,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 239,
+      "source_image_id": 175,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 240,
+      "source_image_id": 176,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 241,
+      "source_image_id": 177,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 242,
+      "source_image_id": 178,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 243,
+      "source_image_id": 179,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 244,
+      "source_image_id": 180,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 245,
+      "source_image_id": 181,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 246,
+      "source_image_id": 182,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 247,
+      "source_image_id": 183,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 248,
+      "source_image_id": 184,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 249,
+      "source_image_id": 185,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 250,
+      "source_image_id": 186,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 251,
+      "source_image_id": 187,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 252,
+      "source_image_id": 188,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 253,
+      "source_image_id": 189,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 254,
+      "source_image_id": 190,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 255,
+      "source_image_id": 191,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 256,
+      "source_image_id": 192,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 257,
+      "source_image_id": 193,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 258,
+      "source_image_id": 194,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 259,
+      "source_image_id": 195,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 260,
+      "source_image_id": 196,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 261,
+      "source_image_id": 197,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 262,
+      "source_image_id": 198,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 263,
+      "source_image_id": 199,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 264,
+      "source_image_id": 200,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 265,
+      "source_image_id": 201,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 266,
+      "source_image_id": 202,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 267,
+      "source_image_id": 203,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 268,
+      "source_image_id": 204,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 269,
+      "source_image_id": 205,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 270,
+      "source_image_id": 206,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 271,
+      "source_image_id": 207,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 272,
+      "source_image_id": 208,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 273,
+      "source_image_id": 209,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 274,
+      "source_image_id": 210,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 275,
+      "source_image_id": 211,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 276,
+      "source_image_id": 212,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 277,
+      "source_image_id": 213,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 278,
+      "source_image_id": 214,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 279,
+      "source_image_id": 215,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 280,
+      "source_image_id": 216,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 281,
+      "source_image_id": 217,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 282,
+      "source_image_id": 218,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 283,
+      "source_image_id": 219,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 284,
+      "source_image_id": 220,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 285,
+      "source_image_id": 221,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 286,
+      "source_image_id": 222,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 287,
+      "source_image_id": 223,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 288,
+      "source_image_id": 224,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 289,
+      "source_image_id": 225,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 290,
+      "source_image_id": 226,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 291,
+      "source_image_id": 227,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 292,
+      "source_image_id": 228,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 293,
+      "source_image_id": 229,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 294,
+      "source_image_id": 230,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 295,
+      "source_image_id": 231,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 296,
+      "source_image_id": 232,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 297,
+      "source_image_id": 233,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 298,
+      "source_image_id": 234,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 299,
+      "source_image_id": 235,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 300,
+      "source_image_id": 236,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 301,
+      "source_image_id": 237,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 302,
+      "source_image_id": 238,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 303,
+      "source_image_id": 239,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 304,
+      "source_image_id": 240,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 305,
+      "source_image_id": 241,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 306,
+      "source_image_id": 242,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 307,
+      "source_image_id": 243,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 308,
+      "source_image_id": 244,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 309,
+      "source_image_id": 245,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 310,
+      "source_image_id": 246,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 311,
+      "source_image_id": 247,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 312,
+      "source_image_id": 248,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 313,
+      "source_image_id": 249,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 314,
+      "source_image_id": 250,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 315,
+      "source_image_id": 251,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 316,
+      "source_image_id": 252,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 317,
+      "source_image_id": 253,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 318,
+      "source_image_id": 254,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 319,
+      "source_image_id": 255,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 320,
+      "source_image_id": 256,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 978,
+      "source_image_id": 887,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 994,
+      "source_image_id": 893,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 995,
+      "source_image_id": 893,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 996,
+      "source_image_id": 893,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1021,
+      "source_image_id": 907,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1037,
+      "source_image_id": 917,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1054,
+      "source_image_id": 923,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1059,
+      "source_image_id": 926,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1069,
+      "source_image_id": 930,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1133,
+      "source_image_id": 946,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1134,
+      "source_image_id": 947,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1163,
+      "source_image_id": 955,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1164,
+      "source_image_id": 956,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1186,
+      "source_image_id": 967,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1226,
+      "source_image_id": 983,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1227,
+      "source_image_id": 983,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1233,
+      "source_image_id": 1020,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1234,
+      "source_image_id": 1020,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1235,
+      "source_image_id": 1020,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1236,
+      "source_image_id": 1020,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1284,
+      "source_image_id": 1046,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1285,
+      "source_image_id": 1046,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1327,
+      "source_image_id": 995,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1344,
+      "source_image_id": 1002,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1345,
+      "source_image_id": 1006,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1346,
+      "source_image_id": 1060,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1347,
+      "source_image_id": 1110,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1348,
+      "source_image_id": 1112,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1349,
+      "source_image_id": 1119,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1350,
+      "source_image_id": 1130,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1351,
+      "source_image_id": 1136,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1352,
+      "source_image_id": 1137,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1353,
+      "source_image_id": 1137,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1354,
+      "source_image_id": 1148,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1355,
+      "source_image_id": 1148,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1356,
+      "source_image_id": 1158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1357,
+      "source_image_id": 1158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1358,
+      "source_image_id": 1158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1359,
+      "source_image_id": 1158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1360,
+      "source_image_id": 1158,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1362,
+      "source_image_id": 1161,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1364,
+      "source_image_id": 1178,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1449,
+      "source_image_id": 1255,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1450,
+      "source_image_id": 1255,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1451,
+      "source_image_id": 1255,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1579,
+      "source_image_id": 1531,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1687,
+      "source_image_id": 1681,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1688,
+      "source_image_id": 1682,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1689,
+      "source_image_id": 1685,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1690,
+      "source_image_id": 1687,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1691,
+      "source_image_id": 1688,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1692,
+      "source_image_id": 1689,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1693,
+      "source_image_id": 1689,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1694,
+      "source_image_id": 1690,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1695,
+      "source_image_id": 1690,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1696,
+      "source_image_id": 1692,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1697,
+      "source_image_id": 1693,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1698,
+      "source_image_id": 1693,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1699,
+      "source_image_id": 1694,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1700,
+      "source_image_id": 1694,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1701,
+      "source_image_id": 1695,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1702,
+      "source_image_id": 1696,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1703,
+      "source_image_id": 1696,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1704,
+      "source_image_id": 1697,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1705,
+      "source_image_id": 1698,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1706,
+      "source_image_id": 1700,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1707,
+      "source_image_id": 1700,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1708,
+      "source_image_id": 1700,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1712,
+      "source_image_id": 1701,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1713,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1714,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1715,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1716,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1717,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1718,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1719,
+      "source_image_id": 1702,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1720,
+      "source_image_id": 1703,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1721,
+      "source_image_id": 1704,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1722,
+      "source_image_id": 1704,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1723,
+      "source_image_id": 1705,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1724,
+      "source_image_id": 1706,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1725,
+      "source_image_id": 1706,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1726,
+      "source_image_id": 1706,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1727,
+      "source_image_id": 1707,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1729,
+      "source_image_id": 1709,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1730,
+      "source_image_id": 1709,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1731,
+      "source_image_id": 1709,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1732,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1733,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1734,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1735,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1736,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1737,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1738,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1739,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1740,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1741,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1742,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1743,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1744,
+      "source_image_id": 1710,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1745,
+      "source_image_id": 1711,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1746,
+      "source_image_id": 1712,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1747,
+      "source_image_id": 1713,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1748,
+      "source_image_id": 1713,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1749,
+      "source_image_id": 1713,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1750,
+      "source_image_id": 1714,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1751,
+      "source_image_id": 1716,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1752,
+      "source_image_id": 1717,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1753,
+      "source_image_id": 1717,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1754,
+      "source_image_id": 1717,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1755,
+      "source_image_id": 1718,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1756,
+      "source_image_id": 1720,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1757,
+      "source_image_id": 1720,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1758,
+      "source_image_id": 1720,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1759,
+      "source_image_id": 1720,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1765,
+      "source_image_id": 1721,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1766,
+      "source_image_id": 1722,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1767,
+      "source_image_id": 1724,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1768,
+      "source_image_id": 1724,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1770,
+      "source_image_id": 1726,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1771,
+      "source_image_id": 1728,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1772,
+      "source_image_id": 1728,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1774,
+      "source_image_id": 1729,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1775,
+      "source_image_id": 1729,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1776,
+      "source_image_id": 1731,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1777,
+      "source_image_id": 1731,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1778,
+      "source_image_id": 1731,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1779,
+      "source_image_id": 1731,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1780,
+      "source_image_id": 1732,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1781,
+      "source_image_id": 1734,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1782,
+      "source_image_id": 1735,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1783,
+      "source_image_id": 1738,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1784,
+      "source_image_id": 1738,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1785,
+      "source_image_id": 1739,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1786,
+      "source_image_id": 1740,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1788,
+      "source_image_id": 1742,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1789,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1790,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1791,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1792,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1793,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1794,
+      "source_image_id": 1743,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1795,
+      "source_image_id": 1744,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1796,
+      "source_image_id": 1745,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1797,
+      "source_image_id": 1745,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1798,
+      "source_image_id": 1746,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1799,
+      "source_image_id": 1747,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1800,
+      "source_image_id": 1747,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1801,
+      "source_image_id": 1747,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1802,
+      "source_image_id": 1748,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1803,
+      "source_image_id": 1749,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1804,
+      "source_image_id": 1750,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1805,
+      "source_image_id": 1750,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1806,
+      "source_image_id": 1751,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1807,
+      "source_image_id": 1753,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1808,
+      "source_image_id": 1753,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1809,
+      "source_image_id": 1758,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1810,
+      "source_image_id": 1759,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1811,
+      "source_image_id": 1759,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1812,
+      "source_image_id": 1760,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1813,
+      "source_image_id": 1760,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1814,
+      "source_image_id": 1760,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1815,
+      "source_image_id": 1761,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1816,
+      "source_image_id": 1761,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1817,
+      "source_image_id": 1761,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1818,
+      "source_image_id": 1762,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1819,
+      "source_image_id": 1763,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1820,
+      "source_image_id": 1886,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1821,
+      "source_image_id": 1886,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1822,
+      "source_image_id": 1889,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1823,
+      "source_image_id": 1890,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1824,
+      "source_image_id": 1891,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1825,
+      "source_image_id": 1891,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1826,
+      "source_image_id": 1892,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1828,
+      "source_image_id": 1894,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1830,
+      "source_image_id": 1895,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1832,
+      "source_image_id": 1896,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1833,
+      "source_image_id": 1897,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1835,
+      "source_image_id": 1898,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1837,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1838,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1839,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1840,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1841,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1842,
+      "source_image_id": 1899,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1843,
+      "source_image_id": 1900,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1845,
+      "source_image_id": 1901,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1846,
+      "source_image_id": 1901,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1855,
+      "source_image_id": 1902,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1857,
+      "source_image_id": 1903,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1858,
+      "source_image_id": 1904,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1859,
+      "source_image_id": 1905,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1860,
+      "source_image_id": 1905,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1861,
+      "source_image_id": 1905,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1865,
+      "source_image_id": 1906,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1867,
+      "source_image_id": 1909,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1869,
+      "source_image_id": 1910,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1870,
+      "source_image_id": 1910,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1871,
+      "source_image_id": 1911,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1872,
+      "source_image_id": 1911,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1873,
+      "source_image_id": 1911,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1877,
+      "source_image_id": 1912,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1878,
+      "source_image_id": 1912,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1881,
+      "source_image_id": 1913,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1883,
+      "source_image_id": 1916,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1885,
+      "source_image_id": 1918,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1886,
+      "source_image_id": 1918,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1887,
+      "source_image_id": 1918,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1888,
+      "source_image_id": 1918,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1889,
+      "source_image_id": 1919,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1890,
+      "source_image_id": 1919,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1894,
+      "source_image_id": 1921,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1895,
+      "source_image_id": 1921,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1896,
+      "source_image_id": 1923,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1897,
+      "source_image_id": 1924,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1898,
+      "source_image_id": 1924,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1901,
+      "source_image_id": 1925,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1902,
+      "source_image_id": 1925,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1903,
+      "source_image_id": 1926,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1905,
+      "source_image_id": 1927,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1907,
+      "source_image_id": 1928,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1908,
+      "source_image_id": 1929,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1909,
+      "source_image_id": 1929,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1910,
+      "source_image_id": 1930,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1911,
+      "source_image_id": 1930,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1914,
+      "source_image_id": 1931,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1915,
+      "source_image_id": 1931,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1918,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1919,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1920,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1921,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1922,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1923,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1924,
+      "source_image_id": 1934,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1925,
+      "source_image_id": 1935,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1927,
+      "source_image_id": 1936,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1928,
+      "source_image_id": 1936,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1929,
+      "source_image_id": 1936,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1930,
+      "source_image_id": 1937,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1932,
+      "source_image_id": 1938,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1934,
+      "source_image_id": 1939,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1936,
+      "source_image_id": 1940,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1940,
+      "source_image_id": 1940,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1941,
+      "source_image_id": 1941,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1943,
+      "source_image_id": 1942,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1944,
+      "source_image_id": 1942,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1945,
+      "source_image_id": 1942,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1946,
+      "source_image_id": 1942,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1947,
+      "source_image_id": 1942,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1951,
+      "source_image_id": 1943,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1953,
+      "source_image_id": 1945,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1954,
+      "source_image_id": 1945,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1955,
+      "source_image_id": 1945,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1956,
+      "source_image_id": 1946,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1958,
+      "source_image_id": 1947,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1959,
+      "source_image_id": 1947,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1960,
+      "source_image_id": 1947,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1964,
+      "source_image_id": 1950,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1965,
+      "source_image_id": 1951,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1966,
+      "source_image_id": 1951,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1973,
+      "source_image_id": 1953,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1974,
+      "source_image_id": 1953,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1975,
+      "source_image_id": 1954,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1976,
+      "source_image_id": 1954,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1977,
+      "source_image_id": 1955,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1979,
+      "source_image_id": 1956,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1981,
+      "source_image_id": 1957,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1983,
+      "source_image_id": 1958,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1985,
+      "source_image_id": 1959,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1986,
+      "source_image_id": 1960,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1987,
+      "source_image_id": 1960,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1988,
+      "source_image_id": 1962,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1989,
+      "source_image_id": 1962,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1990,
+      "source_image_id": 1964,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1992,
+      "source_image_id": 1967,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1993,
+      "source_image_id": 1968,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1995,
+      "source_image_id": 1969,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1996,
+      "source_image_id": 1969,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 1997,
+      "source_image_id": 1969,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2000,
+      "source_image_id": 1971,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2001,
+      "source_image_id": 1972,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2002,
+      "source_image_id": 1973,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2003,
+      "source_image_id": 1974,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2004,
+      "source_image_id": 1975,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2005,
+      "source_image_id": 1976,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2006,
+      "source_image_id": 1977,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2007,
+      "source_image_id": 1978,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2008,
+      "source_image_id": 1978,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2009,
+      "source_image_id": 1979,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2010,
+      "source_image_id": 1979,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2011,
+      "source_image_id": 1980,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2013,
+      "source_image_id": 1981,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2014,
+      "source_image_id": 1981,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2017,
+      "source_image_id": 1983,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2018,
+      "source_image_id": 1983,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2019,
+      "source_image_id": 1984,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2021,
+      "source_image_id": 1987,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2022,
+      "source_image_id": 1989,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2023,
+      "source_image_id": 1990,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2024,
+      "source_image_id": 1990,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2025,
+      "source_image_id": 1994,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2026,
+      "source_image_id": 1995,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2027,
+      "source_image_id": 1996,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2028,
+      "source_image_id": 2000,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2029,
+      "source_image_id": 2001,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2031,
+      "source_image_id": 2002,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2033,
+      "source_image_id": 2003,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2036,
+      "source_image_id": 2004,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2038,
+      "source_image_id": 2005,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2040,
+      "source_image_id": 2006,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2041,
+      "source_image_id": 2006,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2042,
+      "source_image_id": 2006,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2043,
+      "source_image_id": 2007,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2044,
+      "source_image_id": 2008,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2045,
+      "source_image_id": 2008,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2046,
+      "source_image_id": 2008,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2050,
+      "source_image_id": 2009,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2051,
+      "source_image_id": 2010,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2052,
+      "source_image_id": 2011,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2053,
+      "source_image_id": 2013,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2054,
+      "source_image_id": 2013,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2055,
+      "source_image_id": 2014,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2056,
+      "source_image_id": 2016,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2057,
+      "source_image_id": 2016,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2058,
+      "source_image_id": 2017,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2059,
+      "source_image_id": 2019,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2060,
+      "source_image_id": 2019,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2061,
+      "source_image_id": 2021,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2062,
+      "source_image_id": 2022,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2064,
+      "source_image_id": 2023,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2065,
+      "source_image_id": 2023,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2072,
+      "source_image_id": 2024,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2073,
+      "source_image_id": 2025,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2074,
+      "source_image_id": 2025,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2075,
+      "source_image_id": 2026,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2077,
+      "source_image_id": 2028,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2079,
+      "source_image_id": 2029,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2081,
+      "source_image_id": 2030,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2082,
+      "source_image_id": 2031,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2083,
+      "source_image_id": 2031,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2084,
+      "source_image_id": 2031,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2085,
+      "source_image_id": 2031,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2086,
+      "source_image_id": 2032,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2087,
+      "source_image_id": 2033,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2088,
+      "source_image_id": 2033,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2089,
+      "source_image_id": 2033,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2090,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2091,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2092,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2093,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2094,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2095,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2096,
+      "source_image_id": 2034,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2097,
+      "source_image_id": 2035,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2098,
+      "source_image_id": 2035,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2099,
+      "source_image_id": 2035,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2100,
+      "source_image_id": 2035,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2101,
+      "source_image_id": 2035,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2102,
+      "source_image_id": 2036,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2103,
+      "source_image_id": 2037,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2104,
+      "source_image_id": 2038,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2105,
+      "source_image_id": 2039,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2106,
+      "source_image_id": 2040,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2107,
+      "source_image_id": 2041,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2108,
+      "source_image_id": 2042,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2109,
+      "source_image_id": 2043,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2110,
+      "source_image_id": 2045,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2111,
+      "source_image_id": 2046,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2112,
+      "source_image_id": 2046,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2113,
+      "source_image_id": 2046,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2114,
+      "source_image_id": 2047,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2115,
+      "source_image_id": 2047,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2116,
+      "source_image_id": 2048,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2117,
+      "source_image_id": 2049,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2118,
+      "source_image_id": 2051,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2119,
+      "source_image_id": 2052,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2120,
+      "source_image_id": 2052,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2121,
+      "source_image_id": 2053,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2122,
+      "source_image_id": 2053,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2123,
+      "source_image_id": 2055,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2124,
+      "source_image_id": 2055,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2125,
+      "source_image_id": 2056,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2128,
+      "source_image_id": 2057,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2129,
+      "source_image_id": 2058,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2130,
+      "source_image_id": 2059,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2131,
+      "source_image_id": 2060,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2132,
+      "source_image_id": 2061,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2133,
+      "source_image_id": 2062,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2134,
+      "source_image_id": 2062,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2135,
+      "source_image_id": 2062,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2136,
+      "source_image_id": 2063,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2137,
+      "source_image_id": 2064,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2138,
+      "source_image_id": 2065,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2139,
+      "source_image_id": 2065,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2140,
+      "source_image_id": 2065,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2141,
+      "source_image_id": 2065,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2142,
+      "source_image_id": 2066,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2143,
+      "source_image_id": 2068,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2144,
+      "source_image_id": 2070,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2145,
+      "source_image_id": 2072,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2146,
+      "source_image_id": 2072,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2147,
+      "source_image_id": 2073,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2148,
+      "source_image_id": 2074,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2149,
+      "source_image_id": 2075,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2150,
+      "source_image_id": 2075,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2151,
+      "source_image_id": 2075,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2152,
+      "source_image_id": 2075,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2153,
+      "source_image_id": 2076,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2154,
+      "source_image_id": 2077,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2155,
+      "source_image_id": 2079,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2156,
+      "source_image_id": 2079,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2157,
+      "source_image_id": 2080,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2158,
+      "source_image_id": 2081,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2159,
+      "source_image_id": 2082,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2160,
+      "source_image_id": 2082,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2161,
+      "source_image_id": 2082,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2162,
+      "source_image_id": 2084,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2163,
+      "source_image_id": 2085,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2164,
+      "source_image_id": 2089,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2165,
+      "source_image_id": 2089,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2166,
+      "source_image_id": 2089,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2167,
+      "source_image_id": 2090,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2168,
+      "source_image_id": 2090,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2169,
+      "source_image_id": 2090,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2170,
+      "source_image_id": 2091,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2171,
+      "source_image_id": 2091,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2172,
+      "source_image_id": 2091,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2173,
+      "source_image_id": 2093,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2174,
+      "source_image_id": 2094,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2175,
+      "source_image_id": 2095,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2176,
+      "source_image_id": 2098,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2177,
+      "source_image_id": 2099,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2178,
+      "source_image_id": 2100,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2179,
+      "source_image_id": 2101,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2180,
+      "source_image_id": 2102,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2181,
+      "source_image_id": 2109,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2182,
+      "source_image_id": 2111,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2183,
+      "source_image_id": 2112,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2184,
+      "source_image_id": 2114,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2185,
+      "source_image_id": 2114,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2186,
+      "source_image_id": 2114,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2187,
+      "source_image_id": 2117,
+      "reason": "excluded_category"
+    },
+    {
+      "annotation_id": 2189,
+      "source_image_id": 2118,
+      "reason": "excluded_category"
+    }
+  ],
+  "counts": {
+    "crops": {
+      "train": {
+        "cat": 230,
+        "dog": 263,
+        "person": 529
+      },
+      "val": {
+        "cat": 67,
+        "dog": 78,
+        "person": 147
+      },
+      "test": {
+        "cat": 32,
+        "dog": 38,
+        "person": 75
+      }
+    },
+    "originals": {
+      "train": {
+        "cat": 221,
+        "dog": 240,
+        "person": 302
+      },
+      "val": {
+        "cat": 63,
+        "dog": 74,
+        "person": 92
+      },
+      "test": {
+        "cat": 28,
+        "dog": 34,
+        "person": 47
+      }
+    }
+  }
+}

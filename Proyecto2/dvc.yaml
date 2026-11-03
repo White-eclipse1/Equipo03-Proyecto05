@@ -1,0 +1,74 @@
+# Los `reports/*.json` son texto pequeño (kilobytes, no gigabytes): se
+# declaran con `cache: false` para que DVC los siga tratando como salidas de
+# etapa (entran en `dvc.lock`, `dvc repro` detecta si cambiaron) pero sin
+# copiarlos al cache/remote de DVC. Van a Git como cualquier archivo normal,
+# que es donde interesa poder diferenciarlos entre commits. Lo que sí es
+# contenido pesado — `data/raw/` y el `.tar.zst` de cada release — vive
+# exclusivamente en el remote (`dvc push`), nunca en Git.
+stages:
+  analyze:
+    cmd: dq analyze --json reports/stats.json
+    deps:
+      - data/raw/annotations.coco.json
+      - data/raw/images
+      - quality.yaml
+      - src/dataset_quality/analyzers
+      - src/dataset_quality/cli.py
+      - src/dataset_quality/models
+    outs:
+      - reports/stats.json:
+          cache: false
+      - reports/exploration.json:
+          cache: false
+
+  gate:
+    cmd: dq gate
+    deps:
+      - data/raw/annotations.coco.json
+      - data/raw/images
+      - quality.yaml
+      - src/dataset_quality/analyzers
+      - src/dataset_quality/tiers/gate.py
+      - src/dataset_quality/cli.py
+      - src/dataset_quality/models
+    outs:
+      - reports/quality.json:
+          cache: false
+
+  split:
+    cmd: dq split
+    deps:
+      - reports/quality.json
+      - data/raw/annotations.coco.json
+      - data/raw/images
+      - quality.yaml
+      - src/dataset_quality/tiers/splits.py
+      - src/dataset_quality/cli.py
+      - src/dataset_quality/models
+    outs:
+      - reports/splits.json:
+          cache: false
+
+  release:
+    cmd: dq release
+    deps:
+      - reports/quality.json
+      - reports/splits.json
+      - data/raw/annotations.coco.json
+      - src/dataset_quality/tiers/release.py
+      - src/dataset_quality/tiers/gate.py
+      - src/dataset_quality/analyzers/structural.py
+      - src/dataset_quality/cli.py
+      - src/dataset_quality/models
+      - src/dataset_quality/storage.py
+    outs:
+      # `persist: true` es obligatorio aqui y en ningun otro `outs` de este
+      # archivo: `versions.json` es un REGISTRO acumulado entre releases
+      # (`dq release` lee las versiones previas y anade la siguiente), no un
+      # artefacto derivado desde cero en cada corrida. Sin `persist`, DVC
+      # borra el archivo antes de ejecutar la etapa -- que es la semantica
+      # correcta para quality.json/splits.json, pero aqui borraria el
+      # historial de versiones publicadas en cada `dvc repro`.
+      - reports/versions.json:
+          cache: false
+          persist: true

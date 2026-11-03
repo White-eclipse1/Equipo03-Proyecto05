@@ -1,0 +1,4 @@
+Archivo: /home/pi/edge01/evidencias/EDGE-01/camara-nueva.jpg
+Formato: JPEG
+Resolución: (1920, 1080)
+Verificación: imagen legible

@@ -1,0 +1,12 @@
+2026-10-16T20:12:20-06:00
+               Local time: Fri 2026-10-16 20:12:21 CST
+           Universal time: Sat 2026-10-17 02:12:21 UTC
+                 RTC time: n/a
+                Time zone: America/Mexico_City (CST, -0600)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12  modelo/model_int8.onnx
+Python: 3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]
+ONNX Runtime: 1.31.0
+Providers: ['AzureExecutionProvider', 'CPUExecutionProvider']

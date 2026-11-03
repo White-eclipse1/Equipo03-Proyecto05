@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-07 (#19)",
+  "maquina": "raspberry",
+  "fecha": "2026-10-16T18:31:22.424792-06:00",
+  "hardware": {
+    "modelo_dispositivo": "Raspberry Pi 4 Model B Rev 1.5",
+    "cpuinfo": {
+      "CPU part": "0xd08",
+      "Revision": "a03115",
+      "Model": "Raspberry Pi 4 Model B Rev 1.5"
+    },
+    "nucleos": 4,
+    "memoria_total": "927380 kB",
+    "sistema_operativo": "Debian GNU/Linux 13 (trixie)",
+    "kernel": "6.18.50+rpt-rpi-v8",
+    "arquitectura": "aarch64"
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "onnxruntime": "1.31.0",
+    "providers_disponibles": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "numpy": "2.5.4",
+    "pillow": "12.3.0"
+  },
+  "codigo": {
+    "verificar_preprocesamiento.py": "f08c314d0b2e82194c1d536b097cfbc209c0c1031f64fb2cc81eaa6d8fb1b918",
+    "preprocesar.py": "8fa139aa89f74d80d35febfcbd8c342b2c49395753332aa2ea97979c0550171d"
+  },
+  "preprocesamiento": {
+    "entrada_esperada": {
+      "forma": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "tipo": "float32",
+      "orden": "NCHW, RGB"
+    },
+    "media": [
+      0.48500001430511475,
+      0.4560000002384186,
+      0.4059999883174896
+    ],
+    "desviacion": [
+      0.2290000021457672,
+      0.2240000069141388,
+      0.22499999403953552
+    ],
+    "clases": [
+      "cat",
+      "dog",
+      "person"
+    ],
+    "comprobaciones_sinteticas": [
+      {
+        "id": "tensor.forma_tipo",
+        "ok": true,
+        "detalle": "forma [1, 3, 224, 224], tipo float32, NCHW contiguo; TAMANO=224",
+        "tensor_sha256": "842a5cd24bfaeb6f633622dc3af11f08d1e9654231077cb354cae47d1ff6d811"
+      },
+      {
+        "id": "normalizacion.exacta",
+        "ok": true,
+        "detalle": "(255,128,0) -> [2.248908281326294, 0.20518219470977783, -1.804444432258606] en los 224x224 pixeles, igual bit a bit a (x/255 - media [0.48500001430511475, 0.4560000002384186, 0.4059999883174896]) / desviacion [0.2290000021457672, 0.2240000069141388, 0.22499999403953552]",
+        "tensor_sha256": "842a5cd24bfaeb6f633622dc3af11f08d1e9654231077cb354cae47d1ff6d811"
+      },
+      {
+        "id": "rgb.orden_y_orientacion",
+        "ok": true,
+        "detalle": "izquierda roja y derecha azul se conservan: RGB (no BGR), sin espejo ni transposicion",
+        "tensor_sha256": "19597301e8e189a21976eda42af8d544afa1787727a933a230614d48fa718961"
+      },
+      {
+        "id": "resize.sin_recorte",
+        "ok": true,
+        "detalle": "400x100 con franja negra en x<8 -> la franja queda en la columna 0: se estira la imagen completa (resize_to_square), no hay recorte central",
+        "tensor_sha256": "b088d8cbae3f0cfb5e5cf1bd26dbcdd98d9872be41e4b49743d2671cdecfeb31"
+      },
+      {
+        "id": "escala.cero_uno",
+        "ok": true,
+        "detalle": "degradado 0..255 -> [0.0000000, 1.0000000] tras deshacer media y desviacion",
+        "tensor_sha256": "e66aba0f98ac7ae049ddbe2f82c4982ffbba88e8f83eb41e35226f5936b72482"
+      },
+      {
+        "id": "rgb.conversion",
+        "ok": true,
+        "detalle": "gris 77 -> (77,77,77); RGBA (10,20,30,0) -> (10,20,30): alfa descartado"
+      }
+    ]
+  },
+  "modelos": {
+    "int8": {
+      "archivo": "model_int8.onnx",
+      "version": "1.0.0-int8-e05.1",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "optimizaciones": "por defecto",
+      "entrada": {
+        "nombre": "entrada",
+        "forma": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "tipo": "tensor(float)"
+      },
+      "salida": {
+        "nombre": "logits",
+        "forma": [
+          1,
+          3
+        ]
+      }
+    },
+    "int8_referencia": {
+      "archivo": "model_int8.onnx",
+      "version": "1.0.0-int8-e05.1",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "optimizaciones": "ORT_DISABLE_ALL",
+      "entrada": {
+        "nombre": "entrada",
+        "forma": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "tipo": "tensor(float)"
+      },
+      "salida": {
+        "nombre": "logits",
+        "forma": [
+          1,
+          3
+        ]
+      }
+    },
+    "fp32": {
+      "archivo": "model_fp32.onnx",
+      "version": "1.0.0 (original del P3 exportado a ONNX FP32, sin cuantizar)",
+      "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+      "optimizaciones": "por defecto",
+      "entrada": {
+        "nombre": "entrada",
+        "forma": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "tipo": "tensor(float)"
+      },
+      "salida": {
+        "nombre": "logits",
+        "forma": [
+          1,
+          3
+        ]
+      }
+    }
+  },
+  "entradas": {
+    "indice_sha256": "b9fc486ec01481473dc4a16906b5ab9c74bc049531e7c94e85ccf94cd0d26259",
+    "total": 295,
+    "por_tipo": {
+      "val": 292,
+      "camara": 3
+    }
+  },
+  "resultados": {
+    "archivo": "resultados.csv",
+    "sha256": "9743e14466a2cbf9d8bac31f30dd492dc473b428cc0b9d1e79ebdc63d65b3615",
+    "filas": 295
+  }
+}

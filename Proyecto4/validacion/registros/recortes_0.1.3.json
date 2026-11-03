@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-02 (#2)",
+  "generado_en": "2026-10-16T02:01:17+00:00",
+  "fuente": "s3://p4-capturas-474665692638/datos/p3/crops/0.1.3/",
+  "crops_jsonl_sha256": "d3d61f35a3efb60e665ac16c95a18f1602df44f3df7c22b86e1c949fadbe1bed",
+  "manifiesto_sha256": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+  "recortes": 1459,
+  "por_split": {
+    "test": 145,
+    "train": 1022,
+    "val": 292
+  },
+  "etag_igual_a_md5_local": 1459,
+  "inventario": {
+    "archivo": "recortes_0.1.3.jsonl",
+    "sha256": "c223e226694208c20cba37e4ea68f6c8ab0a1cade2ce317a91c9b2d460296612"
+  }
+}

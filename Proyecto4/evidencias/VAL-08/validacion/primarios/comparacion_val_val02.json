@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-02 (#2)",
+  "generado_en": "2026-10-16T03:32:46+00:00",
+  "comando": "modelo/.venv/Scripts/python validacion/comparar_modelos.py",
+  "split": "val",
+  "clases": [
+    "cat",
+    "dog",
+    "person"
+  ],
+  "manifiesto": {
+    "ruta": "Proyecto4/../Proyecto3/data/manifests/m-0.1.3-s42-1/manifest.jsonl",
+    "sha256": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+    "crops_jsonl_sha256": "d3d61f35a3efb60e665ac16c95a18f1602df44f3df7c22b86e1c949fadbe1bed",
+    "filas_val": 292,
+    "recortes_con_dimensiones_de_crops_jsonl": 292,
+    "recortes_con_sha256_del_inventario": 292,
+    "inventario": {
+      "archivo": "recortes_0.1.3.jsonl",
+      "sha256": "c223e226694208c20cba37e4ea68f6c8ab0a1cade2ce317a91c9b2d460296612"
+    }
+  },
+  "modelos": {
+    "original": {
+      "archivo": "model.pt",
+      "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+      "preprocesamiento": "build_eval_transform del P3 (torchvision)"
+    },
+    "fp32": {
+      "archivo": "model_fp32.onnx",
+      "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+      "preprocesamiento": "modelo/preprocesar.py (numpy + Pillow)"
+    },
+    "int8": {
+      "archivo": "model_int8.onnx",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "preprocesamiento": "modelo/preprocesar.py (numpy + Pillow)"
+    }
+  },
+  "columnas_int8": {
+    "int8": "onnxruntime con optimizaciones por defecto (kernels enteros fusionados); puede cambiar con el CPU. Hipotesis sin confirmar: saturacion U8S8 en x86 sin VNNI",
+    "int8_referencia": "mismo model_int8.onnx con ORT_DISABLE_ALL: QDQ ejecutado tal cual, sin kernels enteros fusionados",
+    "optimized_prediction": "igual a int8_prediction"
+  },
+  "calibracion": {
+    "muestras": 300,
+    "por_split_segun_manifiesto": {
+      "train": 300
+    },
+    "fuera_de_train": [],
+    "solo_train": true
+  },
+  "verificacion": {
+    "filas": 292,
+    "ids_unicos": 292,
+    "duplicados": [],
+    "mismos_ids_que_val": true,
+    "mismo_orden_que_manifiesto": true,
+    "etiquetas_iguales_al_manifiesto": true,
+    "faltantes": [],
+    "ok": true
+  },
+  "resumen": {
+    "muestras": 292,
+    "por_clase": {
+      "cat": 67,
+      "dog": 78,
+      "person": 147
+    },
+    "aciertos": {
+      "original": 291,
+      "fp32": 291,
+      "int8": 288,
+      "int8_referencia": 290
+    },
+    "accuracy": {
+      "original": 0.9965753424657534,
+      "fp32": 0.9965753424657534,
+      "int8": 0.9863013698630136,
+      "int8_referencia": 0.9931506849315068
+    },
+    "acuerdo_int8_vs_original": 287,
+    "acuerdo_int8_vs_fp32": 287,
+    "acuerdo_int8_vs_int8_referencia": 288,
+    "nota": "Metricas formales por clase y analisis de errores: VAL-04 (#14).",
+    "clases_presentes": true
+  },
+  "huella_p3": {
+    "run_id": "9f9b62c202f0446a8a4b411a10321eff",
+    "val_accuracy": {
+      "recalculada": 0.9965753424657534,
+      "p3": 0.9965753424657534
+    },
+    "val_loss": {
+      "recalculada": 0.024252544499675406,
+      "p3": 0.024253537750815693,
+      "diferencia": 9.93251140286866e-07,
+      "tolerancia": 1e-05
+    },
+    "ok": true
+  },
+  "csv": {
+    "archivo": "comparacion_val.csv",
+    "sha256": "e3be4f682b56b1f1d6e4fc514567f61b127c6da2c49142ef28a1058549ad8240"
+  },
+  "entorno": {
+    "python": "3.13.15",
+    "sistema": "Windows",
+    "maquina": "AMD64",
+    "procesador": "AMD Ryzen 5 5625U with Radeon Graphics",
+    "torch": "2.14.0+cpu",
+    "onnxruntime": "1.31.0",
+    "numpy": "2.5.3",
+    "proveedor_onnx": "CPUExecutionProvider"
+  }
+}

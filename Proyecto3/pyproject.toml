@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "p3"
+version = "0.1.0"
+description = "Proyecto 3: clasificador de imagenes integrado al portal (worker, entrenamiento e inferencia)."
+requires-python = ">=3.12,<3.13"
+# El router de `p3.worker.api` corre dentro de la app de Proyecto2, asi que las
+# librerias compartidas usan las mismas versiones que `Proyecto2/requirements.lock.txt`.
+dependencies = [
+    "fastapi==0.141.1",
+    "starlette==1.6.0",
+    "pydantic==2.13.5",
+    "pydantic-settings==2.15.0",
+    "sqlalchemy==2.0.54",
+    "pymysql==1.2.3",
+    # Recortes COCO (F2): misma version que `Proyecto2/requirements.lock.txt`.
+    "pillow==12.3.0",
+    # Releases de P2 (`dataset.tar.zst`, F2 T05): misma version que Proyecto2.
+    "zstandard==0.25.0",
+    # config/classes.yaml (F2 T06): misma version que Proyecto2.
+    "pyyaml==6.0.3",
+]
+
+[project.optional-dependencies]
+# Entrenamiento e inferencia (F4). Aparte de `dependencies` porque la app de
+# Proyecto2 monta `p3` para sus routers y no debe arrastrar PyTorch.
+train = [
+    "torch==2.14.0",
+    "torchvision==0.29.0",
+    # Cliente de MLflow (F4 T12): misma version que el servidor del compose.
+    "mlflow-skinny==3.16.1",
+    # Curvas de entrenamiento como artefacto PNG.
+    "matplotlib==3.11.2",
+    # Servicio de inferencia (F4 T24): subida de archivos y descarga del paquete
+    # desde S3. Mismas versiones que Proyecto2.
+    "python-multipart==0.0.32",
+    "boto3==1.43.75",
+]
+dev = [
+    "httpx==0.28.1",
+    "pytest==9.1.1",
+    "ruff==0.16.8",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/p3"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["p3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

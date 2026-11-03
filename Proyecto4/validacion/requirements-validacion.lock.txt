@@ -1,0 +1,16 @@
+# Entorno exacto de validacion (VAL): el de la conversion + acceso a S3.
+# Python 3.13, Windows x86_64. torch y torchvision salen del indice CPU de PyTorch:
+#   pip install -r validacion/requirements-validacion.lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
+#
+# awscrt (boto3[crt]) hace falta si el perfil de AWS se configuro con `aws login`:
+# botocore necesita el CRT para firmar con esas credenciales. Con llaves de acceso
+# no se usa, pero se fija igual para que el entorno sea el mismo en cualquier caso.
+-r ../modelo/requirements-conversion.lock.txt
+awscrt==0.36.0
+boto3==1.43.114
+botocore==1.43.114
+jmespath==1.1.0
+python-dateutil==2.9.0.post0
+s3transfer==0.19.2
+six==1.17.0
+urllib3==2.8.0

@@ -1,0 +1,24 @@
+{
+  "info": {
+    "description": "Fixture minima para pruebas de F2",
+    "version": "1.0"
+  },
+  "licenses": [
+    { "id": 1, "name": "CC-BY-4.0", "url": "https://creativecommons.org/licenses/by/4.0/" }
+  ],
+  "images": [
+    { "id": 1, "file_name": "img_001.jpg", "width": 640, "height": 480 },
+    { "id": 2, "file_name": "img_002.jpg", "width": 800, "height": 600 },
+    { "id": 3, "file_name": "img_003.jpg", "width": 1024, "height": 768 }
+  ],
+  "categories": [
+    { "id": 1, "name": "persona", "supercategory": "ser_vivo" },
+    { "id": 2, "name": "bicicleta", "supercategory": "vehiculo" }
+  ],
+  "annotations": [
+    { "id": 1, "image_id": 1, "category_id": 1, "bbox": [10.0, 20.0, 100.0, 200.0], "area": 20000.0, "iscrowd": 0 },
+    { "id": 2, "image_id": 1, "category_id": 2, "bbox": [50.0, 60.0, 40.0, 30.0], "area": 1200.0, "iscrowd": 0 },
+    { "id": 3, "image_id": 2, "category_id": 1, "bbox": [0.0, 0.0, 200.0, 150.0], "area": 30000.0, "iscrowd": 1 },
+    { "id": 4, "image_id": 3, "category_id": 2, "bbox": [300.0, 200.0, 150.0, 100.0], "area": 15000.0, "iscrowd": 0 }
+  ]
+}

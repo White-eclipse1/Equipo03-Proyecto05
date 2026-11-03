@@ -1,0 +1,33 @@
+1. Consulta como: arn:aws:iam::474665692638:user/p4-lectura
+
+2. Registro s3://p4-capturas-474665692638/edge-capturas/eventos/edge01-211538a088644fe19b3f579367d5b2c8.json
+   VersionId 3suy_iSc4ZEup3D_zdQvUe1AeWIuartI  LastModified 2026-10-16T23:27:00+00:00
+   capture_id       edge01-211538a088644fe19b3f579367d5b2c8
+   captured_at      2026-10-16T16:34:01.219627-06:00
+   received_at      2026-10-16T23:26:59.521+00:00
+   device_id        edge01
+   predicted_class  cat
+   confidence       0.9987449645996094
+   model_version    1.0.0-int8-e05.1
+   model_sha256     ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12
+   image_sha256     2f753f34f2fba7d45dfb4c960914516545531d25889f4d844191a23493ef1250
+   image_ref        /home/pi/edge01/evidencias/EDGE-05/capturas/edge01-211538a088644fe19b3f579367d5b2c8.jpg
+   region           None
+
+3. Foto s3://p4-capturas-474665692638/edge-capturas/fotos/edge01-211538a088644fe19b3f579367d5b2c8.jpg
+   VersionId 2U7ccpVVIcW_1dJCrSSDPaT5X3Hr_vco  138805 bytes
+   SHA-256 en metadatos de S3: 2f753f34f2fba7d45dfb4c960914516545531d25889f4d844191a23493ef1250
+
+4. SHA-256 recalculado:       2f753f34f2fba7d45dfb4c960914516545531d25889f4d844191a23493ef1250
+   igual al de S3:      True
+   igual al del evento: True
+
+5. Versiones (1 = sin sobrescrituras ni duplicados):
+   1  edge-capturas/eventos/edge01-211538a088644fe19b3f579367d5b2c8.json
+   1  edge-capturas/fotos/edge01-211538a088644fe19b3f579367d5b2c8.jpg
+
+6. Contra el registro local del dispositivo:
+   evento (11 campos del contrato) igual: True
+   foto local SHA-256 2f753f34f2fba7d45dfb4c960914516545531d25889f4d844191a23493ef1250, igual a la de S3: True
+
+Resultado: OK

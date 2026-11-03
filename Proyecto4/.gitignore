@@ -1,0 +1,32 @@
+# Secretos y credenciales: nunca en Git
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+.aws/
+
+# Pesos y artefactos de modelo: se distribuyen por enlace con SHA-256
+*.pt
+*.pth
+*.onnx
+*.tflite
+
+# Capturas locales del dispositivo
+# Solo la carpeta de fotos en la raiz; `src/p4/capturas/` es codigo y si se versiona.
+/capturas/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Salida local de modelo/convertir.py (pesos publicados en S3, ver docs/modelo-optimizado.md)
+/modelo/artefactos/
+
+# Paquete de entradas de VAL-07 (recortes del P3; se reconstruye con validacion/preparar_entradas_edge.py)
+/validacion/entradas_edge/
+/validacion/entradas_edge.zip

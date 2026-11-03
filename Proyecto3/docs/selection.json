@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "selected_at": "2026-09-27T03:39:45Z",
+  "manifest_id": "m-0.1.3-s42-1",
+  "manifest_hash": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+  "rule": "max val_accuracy; desempate min val_loss; luego end_time mas temprano",
+  "candidates": 12,
+  "run_id": "9f9b62c202f0446a8a4b411a10321eff",
+  "checkpoint_uri": "mlflow-artifacts:/3/9f9b62c202f0446a8a4b411a10321eff/artifacts/checkpoint/model.pt",
+  "checkpoint_sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+  "crops_jsonl_sha256": "d3d61f35a3efb60e665ac16c95a18f1602df44f3df7c22b86e1c949fadbe1bed",
+  "best_epoch": 6,
+  "val_accuracy": 0.9965753424657534,
+  "val_loss": 0.024253537750815693
+}

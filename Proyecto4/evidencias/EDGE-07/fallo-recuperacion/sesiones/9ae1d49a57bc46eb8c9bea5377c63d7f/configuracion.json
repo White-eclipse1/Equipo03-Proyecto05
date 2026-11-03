@@ -1,0 +1,9 @@
+{
+  "camera_url": "http://10.24.254.135:8080/shot.jpg",
+  "model_path": "/home/pi/edge01/modelo/model_int8.onnx",
+  "model_version": "1.0.0-int8-e05.1",
+  "model_sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+  "device_id": "edge01",
+  "intervalo_s": 90.0,
+  "region": null
+}

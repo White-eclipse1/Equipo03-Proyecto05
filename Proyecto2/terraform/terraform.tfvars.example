@@ -1,0 +1,24 @@
+# =============================================================================
+# Ejemplo de configuración para Terraform (cero secretos, compuerta M2)
+# Para usarlo: copia este archivo como `terraform.tfvars` (ignorado por Git).
+# =============================================================================
+
+aws_region         = "us-east-1"
+environment        = "prod"
+project_name       = "dataset-quality"
+vpc_cidr           = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+s3_bucket_name     = "dataset-quality-dvc-cache-750702272375"  # debe coincidir con .dvc/config
+s3_releases_bucket_name = "dataset-quality-releases-750702272375"
+github_repository  = "sebastian0023/Proyecto-3-Clasificador-de-imagenes"
+
+tags = {
+  Project     = "dataset-quality"
+  Environment = "prod"
+  ManagedBy   = "Terraform"
+}
+
+
+# La cuenta ya tiene el proveedor OIDC de GitHub: se reutiliza, no se crea.
+existing_oidc_provider_arn = "arn:aws:iam::750702272375:oidc-provider/token.actions.githubusercontent.com"
+team_members               = ["sebastian", "diego", "edith", "andres"]

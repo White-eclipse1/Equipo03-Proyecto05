@@ -1,0 +1,1 @@
+ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12  /home/pi/edge01/modelo/model_int8.onnx

@@ -1,0 +1,77 @@
+# ---------------------------------------------------------------------------
+# Secretos: nunca se versionan (compuerta M2 de la rubrica).
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Terraform (el state puede contener secretos en claro)
+*.tfstate
+*.tfstate.*
+.terraform/
+tfplan
+*.tfvars
+!*.tfvars.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node (Frente 7: la app web)
+node_modules/
+dist/
+
+# Dataset crudo: el contenido pesado (las 838 imagenes) vive solo en el
+# remote de DVC, nunca en Git. Lo que SI entra a Git es el puntero
+# `data/raw.dvc`: tres lineas con el hash del directorio, que es lo unico que
+# `dvc pull` necesita para recuperarlo. Antes esto era `/data/` a secas, que
+# tapaba tambien el puntero -- y sin puntero el dataset solo se podia
+# reconstruir levantando el Proyecto 1 y corriendo `scripts/export_from_mp1.py`,
+# que no es una opcion para quien clona el repo.
+#
+# Se ignoran los hijos directos (`/data/*`) y no todo el arbol (`/data/**`):
+# asi `data/raw/` queda fuera con su contenido, pero siguen siendo
+# re-incluibles los dos archivos de texto que DVC si espera en Git -- los
+# punteros `*.dvc` y el `data/.gitignore` que `dvc add` escribe solo.
+/data/*
+!/data/*.dvc
+!/data/.gitignore
+# Los `reports/*.json` (quality.json, splits.json, stats.json, versions.json)
+# SI se versionan: son salidas de `dvc.yaml` con `cache: false` -- texto
+# pequeño que interesa poder diferenciar entre commits. Lo que no se
+# versiona es el contenido pesado de cada release: el `.tar.zst` vive solo
+# en el remote de DVC/S3 (`dq release` lo sube con `dvc push`).
+/reports/releases/
+*.jpg
+*.jpeg
+*.png
+*.zip
+/.dvc/cache/
+/.dvc/tmp/
+
+# Editores / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# App web (Frente 7). El build es artefacto derivado: lo produce
+# `npm run build` en el host y el Dockerfile dentro de la imagen.
+/web/node_modules/
+/src/dataset_quality/static/assets/
+/src/dataset_quality/static/index.html
+
+# Salida cruda de Playwright: trazas y capturas por prueba, que el reporte HTML
+# de `reports/evaluation/playwright/` ya incluye. Se regenera en cada corrida.
+/web/test-results/

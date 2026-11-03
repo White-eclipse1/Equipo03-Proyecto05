@@ -1,0 +1,95 @@
+# ---------------------------------------------------------------------------
+# Umbrales de la compuerta de calidad (Frente 4), validados por
+# `dataset_quality.models.quality.QualityConfig` (Frente 2).
+#
+# `max_ratio` en cada analizador es la fraccion tolerada de anotaciones/
+# imagenes con hallazgos antes de que el check se marque "fail". `severity`
+# decide si un "fail" bloquea la publicacion (`error`) o solo advierte
+# (`warning`); la compuerta del Frente 4 es quien interpreta esa distincion.
+# ---------------------------------------------------------------------------
+
+version: 1
+
+# Volumen minimo (compuerta M3 del curso). NO es un valor de ejemplo: el
+# requisito real son 300 imagenes distintas en al menos 2 clases, y la
+# severidad es `error` porque sin volumen no hay dataset que entregar.
+# Bajarlo para que la compuerta pase invalida el entregable, y hay una prueba
+# (`tests/test_min_images.py`) que pone la suite en rojo si alguien lo intenta.
+#
+# Se cuentan IMAGENES distintas que contienen al menos una caja de la clase,
+# no cajas, y el conteo que vale es el de DESPUES de colapsar casi-duplicados.
+min_images_per_class:
+  enabled: true
+  severity: error
+  min_images: 300
+  min_classes: 2
+
+# Objetos pequenos: anotaciones diminutas suelen ser ruido de anotacion o
+# casos que el modelo no podra aprender bien. Se miden por dos criterios y
+# basta incumplir uno para quedar marcada.
+#
+# El reporte trae el desglose por clase (`small_objects.boxes_by_class`), que
+# es lo que distingue un problema de anotacion en una clase concreta de un
+# dataset entero de baja resolucion.
+small_objects:
+  enabled: true
+  severity: warning
+  area_ratio_threshold: 0.02 # relativo: area/annotation < 2% del area de su imagen
+  # Absoluto: la convencion de COCO, 32x32 px. Atrapa lo que el relativo deja
+  # pasar — una caja de 20x20 en una foto de 200x200 es el 1% del area, suena
+  # tolerable, y son 400 px de objeto. `0` apaga este criterio.
+  min_area_px: 1024
+  max_ratio: 0.10 # tolera hasta 10% de las anotaciones marcadas
+
+# Desbalance de clases: relacion entre la clase mas frecuente y la menos
+# frecuente. Por encima de este ratio, entrenar sin remuestreo es arriesgado.
+class_imbalance:
+  enabled: true
+  severity: warning
+  max_ratio_max_min: 20.0
+
+# Duplicados por pHash: imagenes casi identicas (distancia de Hamming baja)
+# inflan artificialmente una clase y filtran datos entre splits si no se
+# detectan antes de F5.
+duplicates:
+  enabled: true
+  severity: error
+  phash_hamming_distance: 5 # <=5 bits de diferencia se considera duplicado
+  max_ratio: 0.01 # tolera hasta 1% de imagenes duplicadas
+
+# Cajas degeneradas: area nula o negativa. Nunca deberian pasar la validacion
+# de CocoAnnotation, pero la compuerta las vuelve a comprobar como defensa.
+degenerate_boxes:
+  enabled: true
+  severity: error
+  max_ratio: 0.0 # cero tolerancia
+
+# Sesgo espacial: concentracion anomala de anotaciones en una zona de la
+# imagen (p. ej. siempre en la esquina) sugiere un sesgo del pipeline de
+# captura, no del contenido real.
+spatial_bias:
+  enabled: true
+  severity: warning
+  grid_size: 3 # cuadricula 3x3 sobre cada imagen
+  max_cell_share: 0.60 # ninguna celda debe concentrar mas del 60%
+
+# Splits estratificados (Frente 5). No es un check de la compuerta: son los
+# parametros que usa `dq split` para repartir train/val/test.
+#
+# La semilla fija el reparto para que sea reproducible: correr `dq split` dos
+# veces con el mismo `seed` da exactamente las mismas asignaciones.
+#
+# `tolerance` es la desviacion maxima permitida entre la proporcion de una
+# clase en un split y su proporcion en el dataset completo.
+#
+# `group_near_duplicates` mantiene unido en un solo split a cada grupo de
+# imagenes casi identicas que detecta el pHash del Frente 3 (`duplicates`):
+# es lo que garantiza cero fuga de near-duplicates entre splits.
+splits:
+  seed: 42
+  ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  tolerance: 0.05
+  group_near_duplicates: true

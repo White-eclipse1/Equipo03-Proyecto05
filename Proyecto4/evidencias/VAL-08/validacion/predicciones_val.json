@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-03 (#13)",
+  "generado_en": "2026-10-17T01:34:24+00:00",
+  "comando": "modelo/.venv/Scripts/python validacion/predicciones_formales.py",
+  "verificar": "python validacion/verificar_predicciones.py",
+  "archivo": {
+    "nombre": "predicciones_val.csv",
+    "sha256": "08e07c060e29262c854635eabfb04f5df7da9e183e9935b61915dbf04c96ea52",
+    "filas": 292,
+    "columnas": [
+      "sample_id",
+      "true_class",
+      "original_prediction",
+      "optimized_prediction",
+      "manifest_id",
+      "split",
+      "class_index",
+      "prob_original_cat",
+      "prob_original_dog",
+      "prob_original_person",
+      "prob_optimized_cat",
+      "prob_optimized_dog",
+      "prob_optimized_person"
+    ]
+  },
+  "columnas": {
+    "sample_id": "crop_id del manifiesto del P3",
+    "true_class": "category_name del manifiesto",
+    "original_prediction": "clase predicha por model.pt 1.0.0 del P3 (PyTorch)",
+    "optimized_prediction": "clase predicha por la variante INT8 (onnxruntime)",
+    "manifest_id, split, class_index": "columnas del manifiesto para la union",
+    "prob_original_<clase>, prob_optimized_<clase>": "softmax sin redondear"
+  },
+  "clases": [
+    "cat",
+    "dog",
+    "person"
+  ],
+  "manifiesto": {
+    "manifest_id": "m-0.1.3-s42-1",
+    "sha256": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+    "ubicaciones": [
+      "Proyecto4/../Proyecto3/data/manifests/m-0.1.3-s42-1/manifest.jsonl (DVC: Proyecto3/data/manifests/m-0.1.3-s42-1.dvc)",
+      "s3://p4-capturas-474665692638/datos/p3/manifests/m-0.1.3-s42-1/manifest.jsonl"
+    ],
+    "referencia_p3": "Proyecto3/docs/selection.json (manifest_hash)",
+    "extracto_val": {
+      "archivo": "validacion/resultados/manifiesto/manifest_val.jsonl",
+      "sha256": "d307002abbef03c250dd5c415d93ac867f64e92b00eeddb839d914f468b8459b",
+      "lineas": 292,
+      "nota": "lineas val del manifiesto, byte a byte y en su orden"
+    },
+    "meta": {
+      "archivo": "validacion/resultados/manifiesto/manifest.meta.json",
+      "sha256": "f1e832d4acbab40c90e9a4934cae096bdd7263a8c71c9286df3380613355a8b4"
+    }
+  },
+  "exclusiones": [],
+  "exclusiones_previas_al_manifiesto": {
+    "fuente": "manifest.meta.json -> exclusions",
+    "anotaciones": 661,
+    "motivos": [
+      "excluded_category"
+    ],
+    "categorias": [
+      "bicycle",
+      "car"
+    ],
+    "nota": "el P3 dejo fuera car y bicycle antes de armar el manifiesto; no son muestras de val, ver Proyecto3/docs/clases.md"
+  },
+  "modelos": {
+    "original": {
+      "archivo": "model.pt",
+      "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+      "preprocesamiento": "build_eval_transform del P3 (torchvision)"
+    },
+    "optimizado": {
+      "archivo": "model_int8.onnx",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "preprocesamiento": "modelo/preprocesar.py (numpy + Pillow)",
+      "runtime": "onnxruntime 1.31.0 CPUExecutionProvider, optimizaciones por defecto",
+      "maquina": "Raspberry Pi 4 Model B Rev 1.5 (Debian GNU/Linux 13 (trixie) aarch64)",
+      "nota": "INT8 ejecutado en la Raspberry Pi 4 de la demostracion (VAL-07, onnxruntime por defecto): la cifra de la rubrica"
+    }
+  },
+  "fuente": {
+    "comparacion_csv": {
+      "archivo": "validacion/resultados/comparacion_val_edge.csv",
+      "sha256": "8e819dc4417b38c94e33e67929934e761357e6a06bd0396bb8cac506175f0af7"
+    },
+    "comparacion_json_generado_en": "2026-10-17T01:34:13+00:00"
+  },
+  "resumen": {
+    "muestras": 292,
+    "aciertos_original": 291,
+    "aciertos_optimizado": 290,
+    "acuerdo_original_optimizado": 291
+  },
+  "verificacion": {
+    "ok": true,
+    "manifiesto_usado": "manifiesto completo del P3",
+    "comprobaciones": [
+      {
+        "id": "formato",
+        "ok": true,
+        "detalle": "columnas requeridas ausentes: []"
+      },
+      {
+        "id": "csv.sha256",
+        "ok": true,
+        "detalle": "SHA-256 del CSV 08e07c060e29262c854635eabfb04f5df7da9e183e9935b61915dbf04c96ea52; declarado 08e07c060e29262c854635eabfb04f5df7da9e183e9935b61915dbf04c96ea52"
+      },
+      {
+        "id": "manifiesto.vinculo",
+        "ok": true,
+        "detalle": "manifiesto completo del P3 (SHA-256 45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305); m-0.1.3-s42-1 45600f297d13..., manifest_hash del meta 45600f297d13..."
+      },
+      {
+        "id": "manifiesto.extracto",
+        "ok": true,
+        "detalle": "el extracto versionado es, linea por linea, el val del manifiesto completo"
+      },
+      {
+        "id": "ids.duplicados",
+        "ok": true,
+        "detalle": "292 filas, duplicados: []"
+      },
+      {
+        "id": "ids.union_con_manifiesto",
+        "ok": true,
+        "detalle": "292 muestras val en el manifiesto; faltantes sin justificar: []; sobrantes: []; exclusiones documentadas: 0"
+      },
+      {
+        "id": "etiquetas",
+        "ok": true,
+        "detalle": "true_class, class_index, split y manifest_id iguales al manifiesto; distintas: []"
+      },
+      {
+        "id": "clases",
+        "ok": true,
+        "detalle": "declaradas ['cat', 'dog', 'person']; por clase {'cat': 67, 'dog': 78, 'person': 147} (meta: {'cat': 67, 'dog': 78, 'person': 147}); predicciones fuera de las clases: []"
+      },
+      {
+        "id": "resumen.recalculado",
+        "ok": true,
+        "detalle": "recalculado {'muestras': 292, 'aciertos_original': 291, 'aciertos_optimizado': 290, 'acuerdo_original_optimizado': 291}; declarado {'muestras': 292, 'aciertos_original': 291, 'aciertos_optimizado': 290, 'acuerdo_original_optimizado': 291}"
+      }
+    ]
+  }
+}

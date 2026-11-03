@@ -1,0 +1,59 @@
+{
+  "generado_en": "2026-09-18T19:24:38+00:00",
+  "alcance": "grafo completo",
+  "reproducible": true,
+  "etapas_primera": [],
+  "etapas_segunda": [],
+  "hashes_estables": true,
+  "hashes": {
+    "analyze": {
+      "reports/exploration.json": "b92a0527a081cdc041235621e3726552",
+      "reports/stats.json": "5cf7c4517ea6476f89b518c6c6facabb"
+    },
+    "gate": {
+      "reports/quality.json": "2426fc8a8fe438edbd080cf49a4bc118"
+    },
+    "split": {
+      "reports/splits.json": "4c78ae41d5381a252741726e64fbf072"
+    },
+    "release": {
+      "reports/versions.json": "9ac0de9cd34491abf5e05ff33eb72ebd"
+    }
+  },
+  "remotes": {
+    "dev": "en sincronia",
+    "prod": "en sincronia"
+  },
+  "pasos": [
+    {
+      "titulo": "Primera corrida (grafo completo)",
+      "comando": "C:\\Users\\angel\\OneDrive\\Documentos\\semestre 9 intercambio\\mlops\\proyecto 2\\ruta-al-dataset-v1\\Proyecto2\\.venv\\Scripts\\python.exe -m dvc repro",
+      "exit_code": 0,
+      "salida": "Stage 'analyze' didn't change, skipping\nStage 'gate' didn't change, skipping\nStage 'split' didn't change, skipping\nStage 'release' didn't change, skipping\nData and pipelines are up to date."
+    },
+    {
+      "titulo": "Segunda corrida (grafo completo)",
+      "comando": "C:\\Users\\angel\\OneDrive\\Documentos\\semestre 9 intercambio\\mlops\\proyecto 2\\ruta-al-dataset-v1\\Proyecto2\\.venv\\Scripts\\python.exe -m dvc repro",
+      "exit_code": 0,
+      "salida": "Stage 'analyze' didn't change, skipping\nStage 'gate' didn't change, skipping\nStage 'split' didn't change, skipping\nStage 'release' didn't change, skipping\nData and pipelines are up to date."
+    },
+    {
+      "titulo": "Estado del grafo (grafo completo)",
+      "comando": "C:\\Users\\angel\\OneDrive\\Documentos\\semestre 9 intercambio\\mlops\\proyecto 2\\ruta-al-dataset-v1\\Proyecto2\\.venv\\Scripts\\python.exe -m dvc status",
+      "exit_code": 0,
+      "salida": "Data and pipelines are up to date."
+    },
+    {
+      "titulo": "Estado contra el remote dev",
+      "comando": "C:\\Users\\angel\\OneDrive\\Documentos\\semestre 9 intercambio\\mlops\\proyecto 2\\ruta-al-dataset-v1\\Proyecto2\\.venv\\Scripts\\python.exe -m dvc status -r dev",
+      "exit_code": 0,
+      "salida": "Cache and remote 'dev' are in sync."
+    },
+    {
+      "titulo": "Estado contra el remote prod",
+      "comando": "C:\\Users\\angel\\OneDrive\\Documentos\\semestre 9 intercambio\\mlops\\proyecto 2\\ruta-al-dataset-v1\\Proyecto2\\.venv\\Scripts\\python.exe -m dvc status -r prod",
+      "exit_code": 0,
+      "salida": "Cache and remote 'prod' are in sync."
+    }
+  ]
+}

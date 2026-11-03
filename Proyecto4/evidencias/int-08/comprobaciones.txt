@@ -1,0 +1,15 @@
+Comprobaciones previas a la entrega, 2026-10-17T04:10:38Z (desde la laptop de Diego)
+
+1. Portal sin usuario (debe ser 401):
+   GET / -> 401
+2. Receptor sin token (debe ser 401 no_autorizado):
+   {"error":"no_autorizado","detail":"Falta el token del dispositivo o no es valido","detalles":[]}
+      -> 401
+3. Identidad de solo lectura:
+   arn:aws:iam::474665692638:user/p4-lectura
+4. Escritura con p4-lectura (debe ser AccessDenied):
+   AccessDenied
+5. Capturas en S3:
+   edge01: 24 eventos
+6. Enlaces del paquete:
+   35 documentos revisados; 0 enlace(s) roto(s)

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-08 (#24): comparacion con el INT8 medido en el dispositivo",
+  "generado_en": "2026-10-17T01:34:13+00:00",
+  "comando": "python validacion/comparacion_edge.py",
+  "split": "val",
+  "clases": [
+    "cat",
+    "dog",
+    "person"
+  ],
+  "fuentes": {
+    "original": {
+      "archivo": "validacion/resultados/comparacion_val.csv",
+      "sha256": "e3be4f682b56b1f1d6e4fc514567f61b127c6da2c49142ef28a1058549ad8240",
+      "nota": "model.pt en PyTorch (laptop, VAL-02); en la Raspberry su FP32 ONNX da las mismas 292 predicciones"
+    },
+    "edge": {
+      "archivo": "evidencias/VAL-07/raspberry/resultados.csv",
+      "sha256": "9743e14466a2cbf9d8bac31f30dd492dc473b428cc0b9d1e79ebdc63d65b3615",
+      "fecha": "2026-10-16T18:31:22.424792-06:00",
+      "probabilidades": "softmax de los logits registrados en el dispositivo"
+    }
+  },
+  "manifiesto": {
+    "ruta": "Proyecto4/../Proyecto3/data/manifests/m-0.1.3-s42-1/manifest.jsonl",
+    "sha256": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+    "crops_jsonl_sha256": "d3d61f35a3efb60e665ac16c95a18f1602df44f3df7c22b86e1c949fadbe1bed",
+    "filas_val": 292,
+    "recortes_con_dimensiones_de_crops_jsonl": 292,
+    "recortes_con_sha256_del_inventario": 292,
+    "inventario": {
+      "archivo": "recortes_0.1.3.jsonl",
+      "sha256": "c223e226694208c20cba37e4ea68f6c8ab0a1cade2ce317a91c9b2d460296612"
+    }
+  },
+  "modelos": {
+    "original": {
+      "archivo": "model.pt",
+      "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+      "preprocesamiento": "build_eval_transform del P3 (torchvision)"
+    },
+    "fp32": {
+      "archivo": "model_fp32.onnx",
+      "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+      "preprocesamiento": "modelo/preprocesar.py (numpy + Pillow)"
+    },
+    "int8": {
+      "archivo": "model_int8.onnx",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "preprocesamiento": "modelo/preprocesar.py (numpy + Pillow)"
+    }
+  },
+  "verificacion": {
+    "filas": 292,
+    "ids_unicos": 292,
+    "duplicados": [],
+    "mismos_ids_que_val": true,
+    "mismo_orden_que_manifiesto": true,
+    "etiquetas_iguales_al_manifiesto": true,
+    "faltantes": [],
+    "ok": true
+  },
+  "resumen": {
+    "muestras": 292,
+    "por_clase": {
+      "cat": 67,
+      "dog": 78,
+      "person": 147
+    },
+    "aciertos": {
+      "original": 291,
+      "fp32": 291,
+      "int8": 290,
+      "int8_referencia": 290
+    },
+    "accuracy": {
+      "original": 0.9965753424657534,
+      "fp32": 0.9965753424657534,
+      "int8": 0.9931506849315068,
+      "int8_referencia": 0.9931506849315068
+    },
+    "acuerdo_int8_vs_original": 291,
+    "acuerdo_int8_vs_fp32": 291,
+    "acuerdo_int8_vs_int8_referencia": 292,
+    "nota": "Metricas formales por clase y analisis de errores: VAL-04 (#14).",
+    "clases_presentes": true
+  },
+  "csv": {
+    "archivo": "comparacion_val_edge.csv",
+    "sha256": "8e819dc4417b38c94e33e67929934e761357e6a06bd0396bb8cac506175f0af7"
+  },
+  "entorno": {
+    "python": "3.13.5",
+    "sistema": "Debian GNU/Linux 13 (trixie)",
+    "maquina": "aarch64",
+    "procesador": "Raspberry Pi 4 Model B Rev 1.5",
+    "onnxruntime": "1.31.0",
+    "proveedor_onnx": "CPUExecutionProvider"
+  },
+  "nota_optimizado": "INT8 ejecutado en la Raspberry Pi 4 de la demostracion (VAL-07, onnxruntime por defecto): la cifra de la rubrica"
+}

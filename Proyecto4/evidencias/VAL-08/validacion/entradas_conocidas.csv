@@ -1,0 +1,12 @@
+id,tipo,clase,tensor_igual_edge_laptop,original_val02,fp32_edge,fp32_laptop,int8_referencia_edge,int8_referencia_laptop,int8_edge,int8_laptop
+edge01-9495b250a4e44d8d8e7aafed2ef76fbd,camara,cat,True,,cat,cat,cat,cat,cat,cat
+edge01-e3bbf60be9974bf7a2f6eae6d9b55ff0,camara,dog,True,,dog,dog,dog,dog,dog,dog
+edge01-9ca0684f7544466d864c8b253fb9e2b7,camara,person,True,,person,person,person,person,person,person
+0.1.3:a1647,val,cat,True,cat,cat,cat,cat,cat,cat,person
+0.1.3:a322,val,cat,True,dog,dog,dog,dog,dog,dog,cat
+0.1.3:a448,val,cat,True,cat,cat,cat,cat,cat,cat,person
+0.1.3:a554,val,dog,True,dog,dog,dog,dog,dog,dog,person
+0.1.3:a559,val,dog,True,dog,dog,dog,cat,cat,cat,cat
+0.1.3:a1528,val,cat,True,cat,cat,cat,cat,cat,cat,cat
+0.1.3:a1330,val,dog,True,dog,dog,dog,dog,dog,dog,dog
+0.1.3:a1022,val,person,True,person,person,person,person,person,person,person

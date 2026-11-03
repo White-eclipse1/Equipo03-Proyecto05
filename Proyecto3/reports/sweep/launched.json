@@ -1,0 +1,273 @@
+{
+  "launched_at": "2026-09-27T01:55:51Z",
+  "manifest_id": "m-0.1.3-s42-1",
+  "experiment": "p3-clasificador",
+  "runs": [
+    {
+      "name": "r01",
+      "job_id": "592ae51867e64ea9a84fb5e97a07db32",
+      "config": {
+        "optimizer": "adamw",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.0003,
+        "image_size": 224,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.3,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r02",
+      "job_id": "5c311abaf8ee49ecbdd84a949190050d",
+      "config": {
+        "optimizer": "adamw",
+        "batch_size": 64,
+        "max_epochs": 30,
+        "learning_rate": 0.001,
+        "image_size": 224,
+        "hidden_layers": [
+          512,
+          128
+        ],
+        "dropout": 0.5,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r03",
+      "job_id": "9e30bec5ccf54ee8856ca3f7556f4556",
+      "config": {
+        "optimizer": "adam",
+        "batch_size": 32,
+        "max_epochs": 15,
+        "learning_rate": 0.0001,
+        "image_size": 224,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.2,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r04",
+      "job_id": "0a35de003d844628aba76b525684b0fc",
+      "config": {
+        "optimizer": "adam",
+        "batch_size": 64,
+        "max_epochs": 30,
+        "learning_rate": 0.0003,
+        "image_size": 128,
+        "hidden_layers": [],
+        "dropout": 0.2,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r05",
+      "job_id": "a8f42a4384264afbb44ad40229174fbd",
+      "config": {
+        "optimizer": "sgd",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.01,
+        "image_size": 224,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.5,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r06",
+      "job_id": "7df85d2d08664fd895ec594780979628",
+      "config": {
+        "optimizer": "sgd",
+        "batch_size": 64,
+        "max_epochs": 15,
+        "learning_rate": 0.003,
+        "image_size": 128,
+        "hidden_layers": [
+          512,
+          128
+        ],
+        "dropout": 0.2,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r07",
+      "job_id": "3a307dab8eb6417bb7d8f7cc794f0fce",
+      "config": {
+        "optimizer": "adamw",
+        "batch_size": 32,
+        "max_epochs": 15,
+        "learning_rate": 0.0003,
+        "image_size": 128,
+        "hidden_layers": [
+          512,
+          128
+        ],
+        "dropout": 0.5,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r08",
+      "job_id": "b3b8183c13ae4e25b1a8482122c69608",
+      "config": {
+        "optimizer": "sgd",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.001,
+        "image_size": 224,
+        "hidden_layers": [],
+        "dropout": 0.3,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r09",
+      "job_id": "ce3281cc00384fe7b34bd29701ad523a",
+      "config": {
+        "optimizer": "adam",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.001,
+        "image_size": 224,
+        "hidden_layers": [
+          512,
+          128
+        ],
+        "dropout": 0.3,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r10",
+      "job_id": "c953c0beeba14b439f12faa3f27528a9",
+      "config": {
+        "optimizer": "adamw",
+        "batch_size": 64,
+        "max_epochs": 15,
+        "learning_rate": 0.0001,
+        "image_size": 224,
+        "hidden_layers": [],
+        "dropout": 0.5,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r11",
+      "job_id": "cad2db8e206f4f83bb0ff63cac9b3acd",
+      "config": {
+        "optimizer": "sgd",
+        "batch_size": 64,
+        "max_epochs": 30,
+        "learning_rate": 0.01,
+        "image_size": 128,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.3,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r12",
+      "job_id": "a038e6ae553c4793a2b2b17ecc3cc306",
+      "config": {
+        "optimizer": "adamw",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.0001,
+        "image_size": 160,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.2,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      }
+    },
+    {
+      "name": "r03",
+      "job_id": "efd7a80ed83947dc8f2df6bb49ba174b",
+      "config": {
+        "optimizer": "adam",
+        "batch_size": 32,
+        "max_epochs": 15,
+        "learning_rate": 0.0001,
+        "image_size": 224,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.2,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      },
+      "relanzada": "corte de luz; el trabajo 9e30bec5ccf54ee8856ca3f7556f4556 quedo failed"
+    },
+    {
+      "name": "r05",
+      "job_id": "26ee057fd5924952b4227cdcb6e3c98c",
+      "config": {
+        "optimizer": "sgd",
+        "batch_size": 32,
+        "max_epochs": 30,
+        "learning_rate": 0.01,
+        "image_size": 224,
+        "hidden_layers": [
+          256
+        ],
+        "dropout": 0.5,
+        "seed": 42,
+        "patience": 5,
+        "min_delta": 0.001,
+        "monitor_metric": "val_accuracy"
+      },
+      "relanzada": "corte de luz; el trabajo a8f42a4384264afbb44ad40229174fbd quedo failed"
+    }
+  ]
+}

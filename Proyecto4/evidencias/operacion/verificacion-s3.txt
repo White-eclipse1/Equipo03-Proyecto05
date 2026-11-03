@@ -1,0 +1,28 @@
+Verificacion de solo lectura (p4-lectura) de las 22 capturas de EDGE-07 en S3, 2026-10-17T03:43:23Z.
+Por captura: consultar_captura.py <id> --profile p4-lectura --evento-local <evento de EDGE-07> --foto-local <JPEG de EDGE-07>
+Columnas: capture_id, clase en S3, versiones (registro,foto), resultado.
+
+edge01-074e76d751ff4ea8988f963e025fc847 cat versiones=1,1, Resultado: OK
+edge01-14c1c319b85643718ded1f3ea7e4c4ce cat versiones=1,1, Resultado: OK
+edge01-1ce4274400004f048022f43797952f43 person versiones=1,1, Resultado: OK
+edge01-2463509b5d204a4fa930797afef3415b person versiones=1,1, Resultado: OK
+edge01-2e367c3d47bf4fc288dd6a0670b5e376 cat versiones=1,1, Resultado: OK
+edge01-3902da1c599d4f4dac27208ac55224f3 cat versiones=1,1, Resultado: OK
+edge01-41ed02d11eff4cdd8d7e432d8157f61f cat versiones=1,1, Resultado: OK
+edge01-44f00a824c364fb2a76304ac166dcf5a person versiones=1,1, Resultado: OK
+edge01-4daf06578d5b488f9b21bc616b57335a person versiones=1,1, Resultado: OK
+edge01-4f9cc269f3e144909973d6584f138b84 person versiones=1,1, Resultado: OK
+edge01-5457de2f62a84935a54f651aa2b1fde4 cat versiones=1,1, Resultado: OK
+edge01-56e673a6dc744323953d0c8154328885 dog versiones=1,1, Resultado: OK
+edge01-894285730f2d4a01868c5cae0978d135 dog versiones=1,1, Resultado: OK
+edge01-985d15e63c72433bbda0aa8130b69c5f dog versiones=1,1, Resultado: OK
+edge01-998ab6b6a4d1472894f64a646c005709 cat versiones=1,1, Resultado: OK
+edge01-a8209f83630d4de9b91ae4478b7610e5 person versiones=1,1, Resultado: OK
+edge01-c0aa9f1c0a634f4b950b84c52b162809 person versiones=1,1, Resultado: OK
+edge01-c8ec8cb680114db087b4ba0ef3fe2287 dog versiones=1,1, Resultado: OK
+edge01-cffc92d7d4ad4883883bbf58961a68d9 cat versiones=1,1, Resultado: OK
+edge01-ee3a3136d0ec4c55a989a7c02cf08fbd cat versiones=1,1, Resultado: OK
+edge01-f53c989d21404692a170a4bcafba648b cat versiones=1,1, Resultado: OK
+edge01-9ceccec9de1349f088b92aafdc546a5b cat versiones=1,1, Resultado: OK
+
+OK=22 REVISAR=0

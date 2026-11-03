@@ -1,0 +1,112 @@
+{
+  "fecha": "2026-10-15T04:06:17+00:00",
+  "comando": "modelo/.venv/Scripts/python modelo/convertir.py",
+  "configuracion": {
+    "origen": {
+      "version_p3": "1.0.0",
+      "run_id": "9f9b62c202f0446a8a4b411a10321eff",
+      "checkpoint": "../Proyecto3/mlflow_snapshot/artifacts/3/9f9b62c202f0446a8a4b411a10321eff/artifacts/checkpoint/model.pt",
+      "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172"
+    },
+    "variante": {
+      "version": "1.0.0-int8-e05.1",
+      "entrada": "entrada",
+      "salida": "logits",
+      "opset": 18
+    },
+    "cuantizacion": {
+      "tecnica": "static_post_training_quantization",
+      "formato": "QDQ",
+      "por_canal": true,
+      "pesos": "QInt8",
+      "activaciones": "QUInt8",
+      "metodo_calibracion": "MinMax"
+    },
+    "calibracion": {
+      "manifiesto": "../Proyecto3/data/manifests/m-0.1.3-s42-1/manifest.jsonl",
+      "manifiesto_sha256": "45600f297d13f51685e051e0cbc4962beb1f7c6a4e03247cbf61a345e6fa4305",
+      "recortes": "../Proyecto3/data/crops/0.1.3",
+      "split": "train",
+      "muestras": 300,
+      "semilla": 42
+    },
+    "verificacion": {
+      "split": "val"
+    }
+  },
+  "entorno": {
+    "python": "3.13.15",
+    "maquina": "AMD64",
+    "sistema": "Windows",
+    "torch": "2.14.0+cpu",
+    "torchvision": "0.29.0+cpu",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.31.0",
+    "numpy": "2.5.3"
+  },
+  "entrada": {
+    "archivo": "../Proyecto3/mlflow_snapshot/artifacts/3/9f9b62c202f0446a8a4b411a10321eff/artifacts/checkpoint/model.pt",
+    "sha256": "e4acca429ebf73d0e5a60fb0dda383a6a5322dccb1decf04b4e40ab9db989172",
+    "bytes": 44783563,
+    "version_p3": "1.0.0",
+    "run_id": "9f9b62c202f0446a8a4b411a10321eff"
+  },
+  "salidas": {
+    "fp32": {
+      "archivo": "model_fp32.onnx",
+      "sha256": "6b640343a5862ad546d074e0b2a7701d5da61d65552f18555d1b4dccf30506c1",
+      "bytes": 44702717,
+      "operadores": {
+        "Add": 8,
+        "Conv": 20,
+        "Flatten": 1,
+        "Gemm": 1,
+        "GlobalAveragePool": 1,
+        "MaxPool": 1,
+        "Relu": 17
+      }
+    },
+    "int8": {
+      "archivo": "model_int8.onnx",
+      "sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+      "bytes": 11295280,
+      "operadores": {
+        "Add": 8,
+        "Conv": 20,
+        "DequantizeLinear": 75,
+        "Flatten": 1,
+        "Gemm": 1,
+        "GlobalAveragePool": 1,
+        "MaxPool": 1,
+        "QuantizeLinear": 33
+      }
+    },
+    "model_package.json": {
+      "sha256": "3edc0ce22a2cb98e2d4f282d5d79d8532d48238c1b3e1c0c0dbb41a256b6d6dd"
+    }
+  },
+  "reduccion_tamano_pct": 74.78,
+  "calibracion": {
+    "split": "train",
+    "muestras": 300,
+    "por_clase": {
+      "cat": 62,
+      "dog": 86,
+      "person": 152
+    },
+    "ids": "registros/calibracion_ids.jsonl",
+    "ids_sha256": "229bdff9f2686d01020ed2d8688cc61c121e5fd85ab5a438dba056a2750eb28a"
+  },
+  "verificacion_rapida": {
+    "split": "val",
+    "muestras": 292,
+    "max_dif_logits_fp32_vs_torch": 1.2874603271484375e-05,
+    "accuracy": {
+      "fp32": 0.9966,
+      "int8": 0.9932,
+      "original": 0.9966
+    },
+    "acuerdo_int8_vs_original": 0.9966,
+    "nota": "Comprobacion de la conversion; la comparacion formal por muestra es de VAL."
+  }
+}

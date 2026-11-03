@@ -1,0 +1,5 @@
+[core]
+    remote = prod
+['remote "prod"']
+    url = s3://dataset-quality-dvc-cache-750702272375
+    region = us-east-1

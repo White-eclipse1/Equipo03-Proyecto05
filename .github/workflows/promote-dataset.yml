@@ -1,0 +1,139 @@
+name: Promote validated dataset to PROD
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: dataset-promotion-prod
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: github.repository == 'stephy0410/ruta-al-dataset-v1' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: Proyecto2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - id: validate
+        name: Validate release code and configuration
+        run: |
+          pip install -e '.[dev,pipeline]'
+          cp .env.example .env
+          ruff check .
+          ruff format --check .
+          pytest
+          python - <<'PY'
+          import os
+          from dataset_quality.tiers.release import load_manifest
+          entry = load_manifest().versions[-1]
+          with open(os.environ['GITHUB_ENV'], 'a') as file:
+              file.write(f'RELEASE_VERSION={entry.version}\n')
+          PY
+      - id: auth
+        name: Authenticate with the repository AWS role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          unset-current-credentials: true
+          retry-max-attempts: 3
+      - id: restore
+        name: Recover the dataset from PROD
+        run: |
+          aws sts get-caller-identity --output json > "$RUNNER_TEMP/prod-identity.json"
+          cp data/raw.dvc "$RUNNER_TEMP/target-raw.dvc"
+          if ! dvc pull -r prod data/raw.dvc; then
+            # El primer cierre puede tener el puntero nuevo en Git antes de
+            # publicar su cache. Recuperamos el anterior y verificamos todos
+            # los bytes contra el release nuevo antes de permitir la subida.
+            git show 9ffbd9b3f4b2578f7f6376049613d9cb3cd048bc:Proyecto2/data/raw.dvc > data/raw.dvc
+            dvc pull -r prod data/raw.dvc
+          fi
+      - id: match
+        name: Verify dataset and archive against the local release
+        run: |
+          python scripts/prepare_prod_archive.py "$RELEASE_VERSION"
+          dvc add data/raw
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import yaml
+          actual = yaml.safe_load(Path('data/raw.dvc').read_text())
+          expected = yaml.safe_load((Path(os.environ['RUNNER_TEMP']) / 'target-raw.dvc').read_text())
+          if actual != expected:
+              raise SystemExit('El puntero reconstruido no coincide con el dataset validado localmente')
+          PY
+      - id: publish
+        name: Publish the verified dataset to the PROD DVC cache
+        run: dvc push -r prod data/raw.dvc
+      - id: promotion
+        name: Promote the identical archive and synchronize the final lock
+        run: |
+          dq promote "$RELEASE_VERSION" --remote prod --archive "reports/releases/$RELEASE_VERSION/dataset.tar.zst"
+          dvc commit --force release
+          dvc status --json > "$RUNNER_TEMP/dvc-status.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          status = json.loads((Path(os.environ['RUNNER_TEMP']) / 'dvc-status.json').read_text())
+          if status:
+              raise SystemExit(f'DVC aun detecta cambios: {status}')
+          PY
+      - name: Save promotion evidence
+        if: always()
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
+          AUTH_OUTCOME: ${{ steps.auth.outcome }}
+          RESTORE_OUTCOME: ${{ steps.restore.outcome }}
+          MATCH_OUTCOME: ${{ steps.match.outcome }}
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+          PROMOTION_OUTCOME: ${{ steps.promotion.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          outcomes = {name: os.environ[name.upper() + '_OUTCOME'] for name in
+                      ['validate', 'auth', 'restore', 'match', 'publish', 'promotion']}
+          identity = Path(os.environ['RUNNER_TEMP']) / 'prod-identity.json'
+          result = {
+              'status': 'success' if all(v == 'success' for v in outcomes.values()) else 'failed',
+              'version': os.environ.get('RELEASE_VERSION'),
+              'steps': outcomes,
+              'workflow_url': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+          }
+          if identity.exists():
+              data = json.loads(identity.read_text())
+              result['aws_account'] = data['Account']
+              result['aws_identity'] = data['Arn']
+          Path('reports/prod-promotion.json').write_text(json.dumps(result, indent=2) + '\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/prod-promotion.json
+          if [ "$PROMOTION_OUTCOME" = success ]; then
+            git add reports/versions.json dvc.lock
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(release): record verified PROD promotion result'
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dataset-prod-promotion
+          path: |
+            Proyecto2/reports/prod-promotion.json
+            Proyecto2/reports/versions.json
+            Proyecto2/dvc.lock

@@ -1,0 +1,351 @@
+# Infraestructura local: MariaDB + MinIO + la app.
+# Ningun valor vive aqui: todo sale de `.env` y la sintaxis `${VAR:?...}` hace
+# que compose se niegue a arrancar si falta una variable.
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: dq_mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?falta DB_ROOT_PASSWORD en .env}
+      MARIADB_DATABASE: ${DB_NAME:?falta DB_NAME en .env}
+      MARIADB_USER: ${DB_USER:?falta DB_USER en .env}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+    ports:
+      - "${DB_PORT:?falta DB_PORT en .env}:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  minio:
+    # MinIO dejo de publicar sus imagenes (al 24 sep 2026 quay.io y Docker Hub
+    # responden "no such manifest") y un clon limpio ya no arrancaba.
+    # `pgsty/minio` es un build comunitario del mismo codigo, multi-arquitectura
+    # (amd64/arm64), con el mismo entrypoint y `mc` incluido para el healthcheck.
+    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
+    container_name: dq_minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?falta MINIO_ROOT_USER en .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?falta MINIO_ROOT_PASSWORD en .env}
+    ports:
+      - "${MINIO_PORT:?falta MINIO_PORT en .env}:9000"
+      - "${MINIO_CONSOLE_PORT:?falta MINIO_CONSOLE_PORT en .env}:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - minio_data:/data
+
+  # Job de un solo uso: crea los buckets y termina. Es idempotente.
+  minio-init:
+    # Mismo motivo que `minio`: la imagen oficial de `mc` ya no se publica.
+    image: pgsty/mc:RELEASE.2026-09-16T00-00-00Z
+    container_name: dq_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?}
+      MINIO_BUCKET_RELEASES: ${MINIO_BUCKET_RELEASES:?falta MINIO_BUCKET_RELEASES en .env}
+      MINIO_BUCKET_DVC_CACHE: ${MINIO_BUCKET_DVC_CACHE:?falta MINIO_BUCKET_DVC_CACHE en .env}
+      MINIO_BUCKET_IMAGES: ${MINIO_BUCKET_IMAGES:?falta MINIO_BUCKET_IMAGES en .env}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -e
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"
+        mc mb --ignore-existing "local/$$MINIO_BUCKET_RELEASES"
+        mc mb --ignore-existing "local/$$MINIO_BUCKET_DVC_CACHE"
+        mc mb --ignore-existing "local/$$MINIO_BUCKET_IMAGES"
+        echo "buckets listos: $$MINIO_BUCKET_RELEASES, $$MINIO_BUCKET_DVC_CACHE, $$MINIO_BUCKET_IMAGES"
+
+  # El protocolo MCP queda aislado de la red del host. Solo el servicio `app`
+  # puede alcanzarlo por `http://mcp:8001/mcp`; no recibe secretos ni permisos
+  # sobre MariaDB, MinIO, el dataset o la politica.
+  mcp:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: dq_mcp
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+    volumes:
+      - ./reports:/app/reports:ro
+    command:
+      - python
+      - -m
+      - dataset_quality.mcp_server
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=5)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: dq_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    # La app ESCRIBE en el repositorio montado: `PUT /api/policy` reescribe
+    # `quality.yaml` y `POST /api/pipeline/refresh` regenera `reports/*.json`.
+    #
+    # En un bind mount el kernel compara UIDs NUMERICOS, no nombres de usuario.
+    # Da igual que la imagen haya hecho `chown appuser /app` al construirse: el
+    # montaje trae el dueno que el directorio tiene EN EL HOST, y encima de un
+    # arbol de trabajo ajeno el `appuser` de uid 10001 no puede ni crear el
+    # `quality.yaml.tmp` del guardado atomico. El PUT muere con EACCES y la
+    # pantalla de Settings recibe un 500 sin explicacion.
+    #
+    # No es un problema solo de CI (donde el arbol es de `runner`, uid 1001):
+    # le pasa igual a cualquiera que levante esto en Linux. `scripts/up.py`
+    # exporta DQ_UID/DQ_GID con la identidad del host donde existe; en Windows
+    # y macOS no existen — Docker Desktop no traslada permisos POSIX al
+    # montaje — y el valor por defecto deja el `appuser` de la imagen.
+    user: "${DQ_UID:-10001}:${DQ_GID:-10001}"
+    environment:
+      # Dentro de la red de compose los servicios se llaman por su nombre.
+      # Esto es topologia de red, no configuracion secreta.
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MCP_SERVER_URL: http://mcp:8001/mcp
+      # URL de la UI de MLflow alcanzable desde el navegador (no la de tracking
+      # interna). El portal la usa para enlazar a los runs sin hornear el 5000:
+      # el puerto sale de MLFLOW_PORT, no del codigo del front.
+      MLFLOW_UI_URL: ${MLFLOW_UI_URL:-http://localhost:${MLFLOW_PORT:-5000}}
+      # Proyecto 3 vive en el mismo portal: su paquete `p3` se monta en
+      # `/opt/p3/src` (ver `volumes`) y la app monta su router `/api/p3/...`.
+      # Proyecto 4 igual: `p4` en `/opt/p4/src` y su router `/api/p4/capturas`.
+      PYTHONPATH: /app/src:/opt/p3/src:/opt/p4/src
+      P3_MANIFESTS_DIR: /opt/p3/data/manifests
+      P3_CROPS_DIR: /opt/p3/data/crops
+    ports:
+      - "${APP_PORT:?falta APP_PORT en .env}:8000"
+    volumes:
+      # El repositorio entero, no archivos sueltos. Montar `./quality.yaml`
+      # solo parecia mas prolijo y rompia la pantalla de Settings: `policy.save()`
+      # guarda con un rename atomico (escribe `quality.yaml.tmp` al lado y hace
+      # `os.replace`), y un archivo bind-montado es un punto de montaje, no una
+      # entrada normal del directorio -- el rename falla con `EBUSY` aunque el
+      # montaje sea de escritura. El rename necesita que el DIRECTORIO sea el
+      # montado, y el directorio que contiene `quality.yaml` es la raiz.
+      #
+      # De paso entran `data/` y `reports/` sin declararlos, asi que da igual
+      # correr `dq` dentro del contenedor o fuera: ambos ven los mismos datos.
+      - ./:/app
+      # El codigo, otra vez y en solo lectura: montado encima del anterior por
+      # ser mas profundo. Editar en el host recarga uvicorn, pero el contenedor
+      # no reescribe sus propias fuentes. Ya no tapa el build de la web: vive
+      # en `/opt/dq/static` (ver `DQ_STATIC_DIR` en docker/Dockerfile).
+      - ./src:/app/src:ro
+      # El codigo de Proyecto 3, en solo lectura y fuera de `/app/src` para no
+      # crear un punto de montaje dentro del arbol de Proyecto2.
+      - ../Proyecto3/src:/opt/p3/src:ro
+      # El codigo de Proyecto 4 (receptor de Capturas Edge), igual que el de P3.
+      - ../Proyecto4/src:/opt/p4/src:ro
+      # Los datos de P3, en solo lectura, como el worker: manifiestos de F3
+      # (`/api/p3/manifests`) y recortes de F2 (miniaturas de Evaluation). Se
+      # monta `data/` entera porque existe en Git: montar `data/crops`, que no
+      # existe hasta generar los recortes, hace que Docker la cree como root en
+      # Linux y `generate_crops.py` falle despues con PermissionError.
+      - ../Proyecto3/data:/opt/p3/data:ro
+      # Volumenes anonimos que tapan artefactos del host sin sentido aqui
+      # dentro: un venv de Windows y binarios nativos compilados para el host.
+      - /app/.venv
+      - /app/web/node_modules
+    command:
+      - uvicorn
+      - dataset_quality.main:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8000"
+      - --reload
+      - --reload-dir
+      - /app/src
+      - --reload-dir
+      - /opt/p3/src
+      - --reload-dir
+      - /opt/p4/src
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen("http://localhost:8000/health", timeout=5).status == 200 else 1)
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+      mcp:
+        condition: service_healthy
+
+  # --- Proyecto 3 ------------------------------------------------------------
+
+  # Tracking de experimentos. Registros en SQLite y artefactos en disco, ambos
+  # dentro del volumen `mlflow_data`: sobreviven a `down`/`up` (solo `down -v`
+  # los borra). `--serve-artifacts` hace que los clientes suban y bajen
+  # artefactos por HTTP, sin credenciales de almacenamiento.
+  # Job de un solo uso: si el volumen de MLflow esta vacio y hay un snapshot
+  # (`Proyecto3/mlflow_snapshot`, versionado con DVC tras el barrido), lo copia.
+  # Asi un clon limpio con `dvc pull` ve las mismas corridas (criterios 3.1/3.2).
+  mlflow-restore:
+    image: ghcr.io/mlflow/mlflow:v3.16.1
+    container_name: p3_mlflow_restore
+    volumes:
+      - mlflow_data:/mlflow
+      - ../Proyecto3/mlflow_snapshot:/snapshot:ro
+      # Restaura tambien si MLflow ya creo una base SIN corridas (up.py antes de
+      # dvc pull); nunca pisa una base con corridas (p3/mlflow_restore.py).
+      - ../Proyecto3/src/p3/mlflow_restore.py:/restore.py:ro
+    command: ["python3", "/restore.py", "/snapshot", "/mlflow"]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.16.1
+    container_name: p3_mlflow
+    restart: unless-stopped
+    command:
+      - mlflow
+      - server
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - sqlite:////mlflow/mlflow.db
+      - --artifacts-destination
+      - /mlflow/artifacts
+      - --serve-artifacts
+      - --allowed-hosts
+      - localhost:*,127.0.0.1:*,mlflow:*
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    depends_on:
+      mlflow-restore:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen("http://localhost:5000/health", timeout=5).status == 200 else 1)
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 10s
+
+  # Worker de entrenamiento: toma trabajos de la tabla `p3_training_jobs` de
+  # MariaDB y reporta estado, progreso, logs y error en la misma fila. El
+  # endpoint HTTP solo encola (`POST /api/p3/training/jobs`).
+  p3-worker:
+    build:
+      context: ../Proyecto3
+      dockerfile: docker/Dockerfile
+    container_name: p3_worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      P3_DATA_DIR: /data
+      # Commit del codigo que entrena (lo exporta `scripts/up.py`); va a cada run.
+      P3_CODE_COMMIT: ${P3_CODE_COMMIT:-unknown}
+      P3_CODE_DIRTY: ${P3_CODE_DIRTY:-false}
+    volumes:
+      # Manifiestos (DVC) y recortes (`scripts/generate_crops.py`), solo lectura.
+      - ../Proyecto3/data:/data:ro
+    # Los DataLoader con varios procesos comparten memoria por /dev/shm; los
+    # 64 MB por defecto de Docker no alcanzan para lotes de imagenes.
+    shm_size: "2gb"
+    # Sin GPU entrena en CPU. Con NVIDIA, `scripts/up.py` agrega
+    # `docker-compose.gpu.yml`, que le reserva la GPU a este servicio.
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+
+  # Inferencia con el modelo publicado (F4 T24): unico servicio HTTP con
+  # PyTorch. No se publica al host; la app le reenvia `/api/p3/inference`.
+  # Lee el registro y los pesos de S3 con el perfil de AWS de quien levanta el
+  # stack (`~/.aws`, solo lectura, lo exporta `scripts/up.py`).
+  p3-inference:
+    build:
+      context: ../Proyecto3
+      dockerfile: docker/Dockerfile
+    container_name: p3_inference
+    restart: unless-stopped
+    command: ["uvicorn", "p3.inference.app:app", "--host", "0.0.0.0", "--port", "8010"]
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      AWS_CONFIG_FILE: /aws/config
+      AWS_SHARED_CREDENTIALS_FILE: /aws/credentials
+      P3_AWS_PROFILE: ${P3_AWS_PROFILE:-}
+      P3_MODELS_BUCKET: ${P3_MODELS_BUCKET:-dataset-quality-releases-750702272375}
+      P3_MODELS_PREFIX: ${P3_MODELS_PREFIX:-models/clasificador}
+      # Vacias en uso normal (AWS S3). Solo para probar con MinIO antes de F7.
+      P3_S3_ENDPOINT: ${P3_S3_ENDPOINT:-}
+      P3_S3_ACCESS_KEY: ${P3_S3_ACCESS_KEY:-}
+      P3_S3_SECRET_KEY: ${P3_S3_SECRET_KEY:-}
+      # Cola de anotacion: la API de P1 corriendo en el host.
+      P3_ANNOTATION_URL: ${P3_ANNOTATION_URL:-http://host.docker.internal:3000}
+    volumes:
+      # Sin `~/.aws` se monta una carpeta sin credenciales: el servicio arranca y
+      # responde 409 hasta que haya un modelo accesible.
+      - ${P3_AWS_DIR:-../Proyecto3/docker}:/aws:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen("http://localhost:8010/health", timeout=5).status == 200 else 1)
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+volumes:
+  mariadb_data:
+  minio_data:
+  mlflow_data:

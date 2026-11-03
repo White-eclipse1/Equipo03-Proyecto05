@@ -1,0 +1,151 @@
+name: P3 CI
+
+# CI del Proyecto 3 (clasificador). El portal de P3 vive en `Proyecto2/web` y ya
+# lo cubre `ci.yml` (job `web`: pruebas de componente + build/typecheck). Este
+# workflow cubre lo que faltaba (hallazgo 7 del inventario): el paquete Python de
+# P3 (`Proyecto3/src/p3`, worker e inferencia) y el escaneo de secretos.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  # El recorrido E2E real (job `p3-e2e-portal`) necesita Docker + MinIO + MLflow y
+  # es lento: se dispara a mano. El resto de jobs corre en cada push/PR.
+  workflow_dispatch:
+
+jobs:
+  p3-python:
+    name: P3 · Ruff + pytest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto3/requirements.lock.txt
+
+      # Desde el lockfile, no desde los rangos de `pyproject.toml`: el árbol de
+      # dependencias es el MISMO que corre dentro de la app de P2. Sin esto, una
+      # versión nueva de una dependencia indirecta podría mover la CI sin que
+      # nadie tocara el repositorio.
+      - name: Instalar dependencias (fijadas)
+        run: pip install -r requirements.lock.txt
+
+      # `--no-deps` para que no vuelva a resolver y deshaga los pines.
+      - name: Instalar el paquete
+        run: pip install --no-deps -e .
+
+      # El build DEBE fallar si el lint o las pruebas fallan: sin `continue-on-error`.
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Ruff (formato)
+        run: ruff format --check .
+
+      - name: pytest
+        run: pytest
+
+  p3-e2e:
+    name: P3 · E2E (integración)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto3/requirements.lock.txt
+
+      - name: Instalar dependencias (fijadas)
+        run: pip install -r requirements.lock.txt
+
+      - name: Instalar el paquete
+        run: pip install --no-deps -e .
+
+      # Job separado (T26 paso 4). `-s` deja la cadena de IDs en el log como
+      # evidencia. Hoy cubre release -> manifiesto; el flujo completo (F4-F7) se
+      # activa solo cuando esas fases estén en main.
+      - name: E2E de integración
+        run: pytest tests/test_e2e.py -v -s
+
+  # Recorrido E2E con infraestructura REAL (MinIO + MLflow + p3-inference), manual
+  # (`workflow_dispatch`): levanta el stack de prueba y corre `scripts/e2e_portal.py`.
+  # El job en memoria `p3-e2e` sigue cubriendo cada push. Usa el fixture del repo,
+  # así que no necesita `dvc pull`.
+  p3-e2e-portal:
+    name: P3 · E2E portal (manual, infra real)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto3/requirements.lock.txt
+
+      - name: Instalar dependencias (fijadas)
+        run: pip install -r requirements.lock.txt
+
+      - name: Instalar el paquete
+        run: pip install --no-deps -e .
+
+      # `--wait` bloquea hasta que MinIO/MLflow/p3-inference estén healthy y
+      # minio-init haya terminado; si algo no arranca, el job falla aquí.
+      - name: Levantar el stack de prueba (MinIO + MLflow + p3-inference)
+        run: docker compose -f docker-compose.e2e.yml up -d --build --wait
+
+      - name: Recorrido E2E del portal (imprime la cadena de IDs)
+        env:
+          P3_S3_ENDPOINT: http://localhost:9100
+          P3_S3_ACCESS_KEY: minioadmin
+          P3_S3_SECRET_KEY: minioadmin
+          P3_MODELS_BUCKET: p3-e2e
+          P3_MODELS_PREFIX: models/clasificador
+          P3_MLFLOW_URL: http://localhost:5500
+          P3_INFERENCE_API: http://localhost:8010
+        run: python scripts/e2e_portal.py
+
+      - name: Logs del stack si algo falló
+        if: failure()
+        run: docker compose -f docker-compose.e2e.yml logs --no-color --tail 200
+
+      - name: Apagar el stack
+        if: always()
+        run: docker compose -f docker-compose.e2e.yml down -v
+
+  secrets:
+    name: gitleaks (secretos)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      # Se usa el binario por CLI en vez de `gitleaks-action`: la action llama a
+      # la API de GitHub (para comentar en el PR) y falla con "Resource not
+      # accessible by integration" cuando el token del repo es de solo lectura.
+      # El binario escanea los archivos sin tocar la API: determinista y sin
+      # token. El binario se baja a /tmp para no escanearse a sí mismo.
+      - name: Instalar gitleaks
+        run: |
+          VERSION=8.18.4
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz" \
+            | tar -xz -C /tmp gitleaks
+          /tmp/gitleaks version
+
+      - name: Escanear el árbol en busca de secretos
+        run: /tmp/gitleaks detect --no-git --source . --config .gitleaks.toml --redact --no-banner

@@ -1,0 +1,11 @@
+{
+  "estado": "capturada",
+  "capture_id": "edge01-64243509029441bebb8637c55f3b02ce",
+  "captured_at": "2026-10-16T19:26:57.696781-06:00",
+  "device_id": "edge01",
+  "image_ref": "/home/pi/edge01/evidencias/EDGE-07/fallo-recuperacion/sesiones/9ae1d49a57bc46eb8c9bea5377c63d7f/capturas/edge01-64243509029441bebb8637c55f3b02ce.jpg",
+  "image_sha256": "3b3e0adcaffa9a50cfedf88173920fd0b88a95ce05d80653faef6f8909775519",
+  "width": 1920,
+  "height": 1080,
+  "image_bytes": 74520
+}

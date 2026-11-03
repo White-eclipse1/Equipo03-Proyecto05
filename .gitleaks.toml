@@ -1,0 +1,18 @@
+# Configuración de gitleaks para el escaneo de secretos en CI (F10 T25).
+#
+# Reglas por defecto de gitleaks más un allowlist de rutas que NO contienen
+# secretos reales: archivos de EJEMPLO (`.env.example`), lockfiles (hashes de
+# integridad, no credenciales) y fixtures de prueba. Así el escaneo protege el
+# repo sin volverse rojo por valores de ejemplo.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Rutas sin secretos reales (ejemplos, lockfiles, fixtures)"
+paths = [
+  '''(^|/)\.env\.example$''',
+  '''(^|/)package-lock\.json$''',
+  '''(^|/)requirements\.lock(\.txt)?$''',
+  '''(^|/)tests/fixtures/''',
+]

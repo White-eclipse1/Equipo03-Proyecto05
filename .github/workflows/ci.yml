@@ -1,0 +1,441 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  web:
+    name: Web tests + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Proyecto2/web/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run test:unit
+      - run: npm run build
+
+  quality:
+    name: Ruff + pytest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto2/requirements.lock.txt
+
+      # Desde el lockfile, no desde los rangos de `pyproject.toml`: el arbol de
+      # dependencias de este job es EL MISMO que el de la imagen y el que
+      # resolvio el ultimo `scripts/lock_requirements.py`. Sin esto, una
+      # version nueva de una dependencia indirecta podia poner CI en rojo (o,
+      # peor, en verde) sin que nadie hubiera tocado el repositorio.
+      - name: Instalar dependencias (fijadas)
+        run: pip install -r requirements.lock.txt
+
+      # `--no-deps` para que no vuelva a resolver y deshaga los pines.
+      - name: Instalar el paquete
+        run: pip install --no-deps -e .
+
+      # El build DEBE fallar si el lint o las pruebas fallan: sin `continue-on-error`.
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Ruff (formato)
+        run: ruff format --check .
+
+      - name: pytest
+        run: pytest
+
+      # Las pruebas de mutacion se ejecutan dentro de `pytest`, pero se vuelven
+      # a invocar aparte y nombradas: son la evidencia de que los analizadores
+      # DETECTAN defectos, no solo de que calculan sobre datos sanos. Si alguien
+      # las borra, este paso falla con "no tests ran" en vez de pasar en
+      # silencio dentro de una suite de 260.
+      - name: Las mutaciones se siguen detectando
+        run: pytest tests/test_mutaciones.py -v --no-header
+
+      - name: El Copilot no inventa cuando falla la evidencia
+        run: pytest tests/test_copilot_resiliencia.py -v --no-header
+
+      # No corre `dvc repro` de verdad: necesitaria el dataset de 300+
+      # imagenes y MinIO levantado, y el job `smoke` ya prueba que la
+      # infraestructura arranca. Esto solo valida que `dvc.yaml` describe un
+      # grafo bien formado (sin ciclos, sin una etapa que quedo sin conectar
+      # por un typo en `deps`/`outs`) sin ejecutar ningun comando del pipeline.
+      - name: dvc.yaml es un grafo valido
+        run: dvc dag
+
+  lockfile:
+    name: El lockfile esta al dia
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2
+    steps:
+      - uses: actions/checkout@v4
+
+      # Un lockfile que nadie verifica se queda atras en cuanto alguien anade
+      # una dependencia a `pyproject.toml` y no lo regenera: a partir de ahi
+      # `pip install -r requirements.lock.txt` instala un arbol que ya no
+      # corresponde al proyecto. Este job vuelve a resolver desde cero y exige
+      # que el resultado sea byte a byte el que esta commiteado.
+      - name: Regenerar y comparar
+        run: python scripts/lock_requirements.py --check
+
+  smoke:
+    name: Arranque desde cero + navegador
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Proyecto2/web/package-lock.json
+
+      # ESTE PASO VA ANTES DE `up.py`, y el orden no es estetico.
+      #
+      # `docker-compose.yml` monta el repositorio entero en `/app` y encima le
+      # pone un volumen anonimo en `/app/web/node_modules` (para que el venv y
+      # los binarios nativos del host no entren al contenedor). Cuando ese
+      # directorio NO existe en el host — y en un runner recien clonado no
+      # existe, `node_modules/` esta en .gitignore — el daemon de Docker lo
+      # crea el mismo para poder montar ahi: como el daemon corre como root, el
+      # directorio queda `root:root` dentro del arbol de trabajo. A partir de
+      # ese momento `npm ci`, que corre como `runner`, no puede escribir dentro
+      # y muere con `EACCES: permission denied, mkdir '.../node_modules/@babel'`.
+      #
+      # Instalando primero, el directorio ya existe y es del usuario `runner`
+      # cuando compose monta encima: Docker no toca el dueno de un directorio
+      # que ya estaba.
+      #
+      # Las pruebas de navegador van en este job y no en `web` porque corren
+      # contra la app de verdad — las siete pantallas pidiendo sus artefactos al
+      # backend y recibiendolos con 200 — y eso exige el entorno levantado. En
+      # el job `web` solo se podria probar contra mocks, que es probar el mock.
+      - name: Instalar Playwright
+        working-directory: Proyecto2/web
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      # ESTE PASO TAMBIEN VA ANTES DE `up.py`, y por la misma razon que el
+      # anterior: el directorio tiene que existir y ser de `runner` antes de
+      # que compose monte el repositorio dentro del contenedor.
+      #
+      # El hover de Exploracion pide `GET /api/exploration/thumbnail/{id}`, que
+      # abre el archivo real de `data/raw/images/`. Ese directorio NO esta en
+      # Git — el dataset vive en el remote de DVC y este job no tiene
+      # credenciales para traerlo — asi que sin este paso el endpoint responde
+      # 404 con toda la razon y la prueba falla por falta de dataset, no por un
+      # defecto de la app. El script escribe un JPEG diminuto por cada
+      # `file_name` del manifiesto versionado y nunca sobrescribe uno que ya
+      # este: el endpoint hace su trabajo entero (resolver el id contra el
+      # manifiesto, abrir, redimensionar, codificar) sobre archivos de verdad.
+      #
+      # La version de Pillow sale del lockfile en vez de estar escrita aqui:
+      # una segunda copia del numero se queda atras en cuanto se regenera.
+      - name: Sembrar las imagenes que pide el hover de Exploracion
+        run: |
+          pip install "$(grep -i '^pillow==' requirements.lock.txt)"
+          python scripts/imagenes_de_prueba.py
+
+      # Reproduce la compuerta M1 de la rubrica: un clon limpio tiene que
+      # levantar app + MariaDB + MinIO con un solo comando, sin pasos extra.
+      # `up.py` falla con codigo != 0 si /health no queda en OK.
+      #
+      # `up.py` exporta ademas DQ_UID/DQ_GID: sin eso el contenedor corre como
+      # uid 10001 sobre un arbol que aqui es de `runner` (uid 1001) y el
+      # guardado de la politica —el unico PUT de la app— muere con EACCES.
+      - name: python scripts/up.py
+        run: python scripts/up.py
+
+      - name: Pruebas de navegador
+        working-directory: Proyecto2/web
+        run: npx playwright test
+
+      # El reporte con las capturas es la evidencia que se entrega; se sube
+      # tambien cuando fallan, que es cuando mas falta hace mirarlo.
+      - name: Publicar el reporte de Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: Proyecto2/reports/evaluation/playwright
+          retention-days: 30
+
+      # La suite de Settings reescribe `quality.yaml` y lo repone al terminar.
+      # Si la reposicion fallo hay que saberlo: dejar un umbral de prueba en el
+      # archivo que lee la compuerta seria grave.
+      #
+      # `git diff --exit-code` y no `git status --porcelain`: el guardado de la
+      # politica escribe finales de linea LF, y en un arbol con
+      # `core.autocrlf=true` eso basta para que `status` marque el archivo como
+      # modificado aunque su contenido sea identico byte a byte tras
+      # normalizar. Lo que importa aqui es el CONTENIDO, y `diff` es el que lo
+      # compara normalizado.
+      - name: Las pruebas repusieron quality.yaml
+        run: |
+          if ! git diff --exit-code -- quality.yaml; then
+            echo "::error::quality.yaml quedo modificado tras las pruebas de navegador."
+            exit 1
+          fi
+          echo "quality.yaml intacto."
+
+      - name: Logs de la app si algo fallo
+        if: failure()
+        run: docker compose logs
+
+      - name: Apagar
+        if: always()
+        run: docker compose down -v
+
+  terraform:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2/terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.0"
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+  compuerta:
+    name: La compuerta bloquea el build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto2/requirements.lock.txt
+
+      - name: Instalar dependencias (fijadas)
+        run: |
+          pip install -r requirements.lock.txt
+          pip install --no-deps -e .
+
+      # El dataset real vive en el remote de DVC y pesa 400 MB: traerlo aqui
+      # seria lento y necesitaria credenciales. Para probar que la compuerta
+      # BLOQUEA basta un dataset que no cumpla el minimo, y la fixture de F2
+      # tiene 3 imagenes: falla `min_images_per_class` por definicion.
+      - name: Preparar un dataset que no cumple el minimo
+        run: |
+          mkdir -p data/raw/images
+          cp tests/fixtures/coco_valido.json data/raw/annotations.coco.json
+
+      # Este paso es el que da sentido al Frente 4 en CI. Sin el, el `exit 1`
+      # de la compuerta solo existe en la terminal de quien lo corre a mano.
+      - name: La compuerta debe rechazar un dataset insuficiente
+        run: |
+          if dq gate; then
+            echo "::error::La compuerta dejo pasar un dataset de 3 imagenes."
+            exit 1
+          fi
+          echo "La compuerta bloqueo, como debe."
+
+      - name: El reporte nombra la regla que fallo
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          reporte = json.loads(Path("reports/quality.json").read_text(encoding="utf-8"))
+          bloquean = [
+              check["name"]
+              for check in reporte["checks"]
+              if check["status"] == "fail" and check["severity"] == "error"
+          ]
+          assert reporte["status"] == "fail", reporte["status"]
+          assert reporte["exit_code"] == 1, reporte["exit_code"]
+          assert "min_images_per_class" in bloquean, bloquean
+          print("Bloquean:", ", ".join(bloquean))
+          PY
+
+  promote:
+    name: Publicar el dataset validado en PROD
+    needs: [quality, web, terraform]
+    if: github.repository == 'stephy0410/ruta-al-dataset-v1' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      id-token: write
+    uses: ./.github/workflows/promote-dataset.yml
+
+  versionado:
+    name: El dataset sigue versionado
+    needs: [promote]
+    # En main se verifica el remote despues de publicar el nuevo cache.
+    # Las demas ramas conservan su validacion, aunque no promuevan releases.
+    if: ${{ !cancelled() && (needs.promote.result == 'success' || needs.promote.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Proyecto2
+    # `id-token: write` es lo que deja a GitHub emitir el JWT que AWS cambia
+    # por credenciales temporales. Sin esta linea el paso de OIDC falla con
+    # "Unable to get ACTIONS_ID_TOKEN_REQUEST_URL". Al declarar `permissions`
+    # a nivel de job, lo que no se nombre queda en none: de ahi el
+    # `contents: read`, que es lo minimo que necesita el checkout.
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      # El ARN del rol va en `vars`, no en `secrets`: no es material sensible
+      # y la compuerta M2 exige cero llaves de larga vida guardadas en el
+      # repo. Un fork no tiene la variable, asi que el `dvc pull` se salta en
+      # vez de fallar. Referenciar el contexto directamente en un `if` no es
+      # fiable, por eso se resuelve aqui.
+      HAY_ROL: ${{ vars.AWS_ROLE_ARN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # En el repositorio de origen y sobre `main`, que el rol no este
+      # configurado NO puede ser un `skip` silencioso: seria exactamente el
+      # fallo que se quiere evitar — un job verde que no verifico nada contra
+      # PROD porque le faltaba una variable que nadie miro. En un fork, o en
+      # una rama de trabajo, sigue siendo un salto legitimo.
+      #
+      # El valor sale de Terraform:
+      #   terraform -chdir=Proyecto2/terraform output -raw github_actions_role_arn
+      #   gh variable set AWS_ROLE_ARN --body "<ese arn>"
+      - name: El rol OIDC esta conectado
+        if: github.ref == 'refs/heads/main' && github.repository == 'stephy0410/ruta-al-dataset-v1'
+        run: |
+          if [ "${HAY_ROL}" != "true" ]; then
+            echo "::error::Falta la variable de repositorio AWS_ROLE_ARN. Sin ella este job" \
+                 "no verifica nada contra PROD. Ponla con el output de Terraform:" \
+                 "gh variable set AWS_ROLE_ARN --body \"\$(terraform -chdir=Proyecto2/terraform" \
+                 "output -raw github_actions_role_arn)\""
+            exit 1
+          fi
+          echo "AWS_ROLE_ARN configurado; se verificara PROD por OIDC."
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: Proyecto2/requirements.lock.txt
+
+      - name: Instalar dependencias (fijadas)
+        run: |
+          pip install -r requirements.lock.txt
+          pip install --no-deps -e .
+
+      # Guarda contra el fallo silencioso que tuvimos: si alguien borra el
+      # puntero, `dvc pull` deja de recuperar el dataset y nadie se entera
+      # hasta que un companero clona el repo y se encuentra `data/raw` vacio.
+      - name: El puntero de DVC existe y es valido
+        run: |
+          test -f data/raw.dvc || {
+            echo "::error::Falta data/raw.dvc. El dataset dejo de estar versionado."
+            exit 1
+          }
+          python - <<'PY'
+          import sys
+
+          import yaml
+
+          puntero = yaml.safe_load(open("data/raw.dvc", encoding="utf-8"))
+          outs = puntero.get("outs") or []
+          if not outs or "md5" not in outs[0] or not outs[0].get("nfiles"):
+              sys.exit("data/raw.dvc no declara un directorio con hash y nfiles")
+          print(f"data/raw -> {outs[0]['md5']}  ({outs[0]['nfiles']} archivos)")
+          PY
+
+      # Federacion OIDC contra el rol que crea `terraform/modules/oidc_github`:
+      # GitHub presenta un JWT, AWS devuelve credenciales temporales de ~1h.
+      # No queda ninguna llave de larga vida guardada en el repositorio, y la
+      # trust policy del rol solo acepta `repo:<owner>/<repo>:*`, asi que un
+      # fork no puede asumirlo aunque conozca el ARN.
+      - name: Autenticar contra AWS por OIDC
+        if: env.HAY_ROL == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          # Misma region que `aws_region` en terraform/variables.tf.
+          aws-region: us-east-1
+
+      # Solo corre cuando el repositorio tiene configurado el rol de `prod`.
+      # Sin el, el paso se salta en vez de fallar: un fork no tiene la variable.
+      - name: Recuperar el dataset desde el remote
+        if: env.HAY_ROL == 'true'
+        run: |
+          dvc pull -r prod data/raw.dvc
+          dq gate
+
+      # Con el dataset ya en disco, las dos comprobaciones que no se pueden
+      # hacer en ningun otro job porque todos los demas corren sin el.
+      #
+      # Esta es la que responde a "los numeros del reporte son ciertos": un
+      # segundo programa, que no importa `dataset_quality` ni `imagehash`,
+      # recalcula cajas, clases, objetos pequenos, duplicados y sesgo desde el
+      # COCO crudo y exige que coincidan con `reports/*.json`. Si un analizador
+      # se rompe, aqui divergen y el job falla.
+      - name: Recalculo independiente de las metricas
+        if: env.HAY_ROL == 'true'
+        run: python scripts/recalculo_independiente.py
+
+      # Y esta responde a "el pipeline es reproducible": dos `dvc repro`
+      # seguidos, y la segunda corrida no puede rehacer ni una etapa.
+      #
+      # Solo las tres etapas deterministas. `release` queda fuera a proposito y
+      # no por comodidad: `dq release` empaqueta y SUBE el artefacto, asi que
+      # exige `.env` con credenciales de MinIO/S3 y los buckets creados. Aqui
+      # no hay nada de eso — este job solo hace `dvc pull` — y la etapa muere
+      # construyendo `Settings()`. Es la misma razon por la que `dq ingest`
+      # nunca fue una etapa del grafo: escribe en servicios externos.
+      #
+      # `--sin-remotes` porque el `dvc status -r dev` apunta al MinIO local,
+      # que en este job no existe; PROD ya se verifico con el `dvc pull` de
+      # arriba, que falla si el cache remoto no tiene el dataset del puntero.
+      - name: El pipeline es reproducible
+        if: env.HAY_ROL == 'true'
+        run: python scripts/evidencia_dvc.py --etapas analyze gate split --sin-remotes
+
+      - name: Publicar la evidencia
+        if: always() && env.HAY_ROL == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencia-dataset
+          path: Proyecto2/reports/evaluation
+          retention-days: 30

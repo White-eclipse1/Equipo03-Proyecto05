@@ -1,0 +1,53 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListarSoloPrefijosDelP4",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::p4-capturas-474665692638",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "edge-capturas/*",
+            "modelos/*",
+            "models/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "CapturasEdgeLeerYEscribir",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::p4-capturas-474665692638/edge-capturas/*"
+    },
+    {
+      "Sid": "ModelosSoloLectura",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::p4-capturas-474665692638/modelos/*",
+        "arn:aws:s3:::p4-capturas-474665692638/models/*"
+      ]
+    },
+    {
+      "Sid": "SecretosDeLaInstancia",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter",
+        "ssm:GetParameter"
+      ],
+      "Resource": "arn:aws:ssm:us-east-1:474665692638:parameter/p4/*"
+    },
+    {
+      "Sid": "ActivarVersionDelModeloP3",
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::p4-capturas-474665692638/models/clasificador/registry.json"
+    }
+  ]
+}

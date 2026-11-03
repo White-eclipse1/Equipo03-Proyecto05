@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "tarea": "VAL-04 (#14)",
+  "generado_en": "2026-10-17T01:34:24+00:00",
+  "comando": "python validacion/metricas.py",
+  "fuente": {
+    "predicciones": "validacion/resultados/predicciones_val.csv",
+    "sha256": "08e07c060e29262c854635eabfb04f5df7da9e183e9935b61915dbf04c96ea52",
+    "manifest_id": "m-0.1.3-s42-1",
+    "verificacion": "verificar_predicciones.verificar: ok",
+    "optimizado": "Raspberry Pi 4 Model B Rev 1.5 (Debian GNU/Linux 13 (trixie) aarch64)"
+  },
+  "particion": "val",
+  "clases": [
+    "cat",
+    "dog",
+    "person"
+  ],
+  "modelos": {
+    "original": {
+      "muestras": 292,
+      "aciertos": 291,
+      "accuracy": 0.9965753424657534,
+      "accuracy_fraccion": "291/292",
+      "f1_macro": 0.9953705920853088,
+      "por_clase": {
+        "cat": {
+          "precision": 1.0,
+          "recall": 0.9850746268656716,
+          "f1": 0.9924812030075187,
+          "support": 67,
+          "tp": 66,
+          "fp": 0,
+          "fn": 1
+        },
+        "dog": {
+          "precision": 0.9873417721518988,
+          "recall": 1.0,
+          "f1": 0.9936305732484076,
+          "support": 78,
+          "tp": 78,
+          "fp": 1,
+          "fn": 0
+        },
+        "person": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 147,
+          "tp": 147,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "matriz_confusion": {
+        "etiquetas": [
+          "cat",
+          "dog",
+          "person"
+        ],
+        "filas_real_columnas_predicha": [
+          [
+            66,
+            1,
+            0
+          ],
+          [
+            0,
+            78,
+            0
+          ],
+          [
+            0,
+            0,
+            147
+          ]
+        ]
+      }
+    },
+    "optimized": {
+      "muestras": 292,
+      "aciertos": 290,
+      "accuracy": 0.9931506849315068,
+      "accuracy_fraccion": "290/292",
+      "f1_macro": 0.9907513713483863,
+      "por_clase": {
+        "cat": {
+          "precision": 0.9850746268656716,
+          "recall": 0.9850746268656716,
+          "f1": 0.9850746268656716,
+          "support": 67,
+          "tp": 66,
+          "fp": 1,
+          "fn": 1
+        },
+        "dog": {
+          "precision": 0.9871794871794872,
+          "recall": 0.9871794871794872,
+          "f1": 0.9871794871794872,
+          "support": 78,
+          "tp": 77,
+          "fp": 1,
+          "fn": 1
+        },
+        "person": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 147,
+          "tp": 147,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "matriz_confusion": {
+        "etiquetas": [
+          "cat",
+          "dog",
+          "person"
+        ],
+        "filas_real_columnas_predicha": [
+          [
+            66,
+            1,
+            0
+          ],
+          [
+            1,
+            77,
+            0
+          ],
+          [
+            0,
+            0,
+            147
+          ]
+        ]
+      }
+    }
+  },
+  "caida_accuracy": {
+    "pp": 0.3424657534246575,
+    "pp_fraccion": "25/73",
+    "limite_pp": 2.0,
+    "cumple": true,
+    "nota": "(aciertos_original - aciertos_optimizado) / muestras * 100, con fracciones exactas; la comparacion con el limite no redondea"
+  },
+  "cambio_por_clase_pp": {
+    "cat": {
+      "precision": -1.492537313432836,
+      "recall": 0.0,
+      "f1": -0.7406576141847155
+    },
+    "dog": {
+      "precision": -0.01622849724115547,
+      "recall": -1.2820512820512822,
+      "f1": -0.6451086068920464
+    },
+    "person": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "errores_relevantes": [
+    {
+      "sample_id": "0.1.3:a322",
+      "tipo": "ambos_fallan",
+      "true_class": "cat",
+      "original_prediction": "dog",
+      "optimized_prediction": "dog",
+      "prob_original_real": 0.10443587601184845,
+      "prob_original_predicha": 0.8912931680679321,
+      "prob_optimized_real": 0.14796692751853288,
+      "prob_optimized_predicha": 0.8452539917080922,
+      "int8_referencia_prediction_val02": "dog"
+    },
+    {
+      "sample_id": "0.1.3:a559",
+      "tipo": "regresion",
+      "true_class": "dog",
+      "original_prediction": "dog",
+      "optimized_prediction": "cat",
+      "prob_original_real": 0.5834636688232422,
+      "prob_original_predicha": 0.5834636688232422,
+      "prob_optimized_real": 0.4995415026313381,
+      "prob_optimized_predicha": 0.4995415026313381,
+      "int8_referencia_prediction_val02": "cat"
+    }
+  ],
+  "referencia_test_p3": {
+    "particion": "test del P3 (145 muestras): NO es la validacion de VAL-04",
+    "fuente": "Proyecto3/reports/evaluation/9f9b62c202f0446a8a4b411a10321eff/metrics.json",
+    "modelo": "original (solo se evaluo el original en test)",
+    "accuracy": 0.9793103448275862,
+    "f1_macro": 0.9743519475145314,
+    "uso": "solo referencia; no se compara con las cifras de val ni se usa para decidir"
+  },
+  "tabla_antes_despues": {
+    "archivo": "metricas_val.csv",
+    "sha256": "8784d62bd18add007271e274d19c3d39b17f19bae91ecf771e482a73db956aba"
+  }
+}

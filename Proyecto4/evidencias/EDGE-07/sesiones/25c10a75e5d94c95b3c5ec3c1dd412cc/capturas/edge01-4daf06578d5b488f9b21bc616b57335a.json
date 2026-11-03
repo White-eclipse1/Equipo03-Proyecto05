@@ -1,0 +1,11 @@
+{
+  "estado": "capturada",
+  "capture_id": "edge01-4daf06578d5b488f9b21bc616b57335a",
+  "captured_at": "2026-10-16T18:57:50.216904-06:00",
+  "device_id": "edge01",
+  "image_ref": "/home/pi/edge01/evidencias/EDGE-07/sesiones/25c10a75e5d94c95b3c5ec3c1dd412cc/capturas/edge01-4daf06578d5b488f9b21bc616b57335a.jpg",
+  "image_sha256": "9ff759260979b48ea508dddec41e0c2c724c74de31d254e5d6ae7eb3145db731",
+  "width": 1920,
+  "height": 1080,
+  "image_bytes": 95386
+}

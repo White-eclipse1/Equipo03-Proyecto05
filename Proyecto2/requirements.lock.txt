@@ -1,0 +1,524 @@
+#
+# Lockfile del entorno Python: la version EXACTA de cada paquete, directo o
+# transitivo. `pyproject.toml` declara rangos (`fastapi>=0.115`) porque es lo
+# que corresponde a una libreria; este archivo congela la resolucion concreta
+# para que un clon limpio instale hoy lo mismo que instalo CI ayer, sin volver
+# a resolver rangos y sin que una version nueva de una dependencia indirecta
+# rompa el build sin que nadie haya tocado el repositorio.
+#
+# Se regenera SIEMPRE dentro de la misma imagen que usan CI y el Dockerfile,
+# nunca desde el venv de Windows de quien lo corre: la resolucion depende de la
+# plataforma, y un `pip freeze` local arrastraria paquetes que en Linux no
+# existen (y omitiria los que solo existen alli).
+#
+#    python scripts/lock_requirements.py
+#
+# Unica linea editada a mano tras generarlo: el marcador de `uvloop`, mas abajo.
+#
+aiobotocore==3.9.1
+    # via
+    #   dvc-s3
+    #   s3fs
+aiohappyeyeballs==2.7.1
+    # via aiohttp
+aiohttp==3.14.3
+    # via
+    #   aiobotocore
+    #   aiohttp-retry
+    #   fsspec
+    #   s3fs
+aiohttp-retry==2.9.1
+    # via
+    #   dvc-http
+    #   scmrepo
+aioitertools==0.13.0
+    # via aiobotocore
+aiosignal==1.4.0
+    # via aiohttp
+amqp==5.3.1
+    # via kombu
+annotated-doc==0.0.5
+    # via fastapi
+annotated-types==0.8.0
+    # via pydantic
+antlr4-python3-runtime==4.9.3
+    # via
+    #   hydra-core
+    #   omegaconf
+anyio==4.15.1
+    # via
+    #   google-genai
+    #   httpx
+    #   httpx2
+    #   mcp
+    #   sse-starlette
+    #   starlette
+    #   watchfiles
+appdirs==1.4.4
+    # via iterative-telemetry
+asyncssh==2.24.0
+    # via scmrepo
+atpublic==7.0.0
+    # via flufl-lock
+attrs==26.1.0
+    # via
+    #   aiohttp
+    #   dvc
+    #   dvc-data
+    #   jsonschema
+    #   referencing
+    #   sqltrie
+billiard==4.3.0
+    # via celery
+boto3==1.43.75
+    # via dataset-quality (pyproject.toml)
+botocore==1.43.75
+    # via
+    #   aiobotocore
+    #   boto3
+    #   dvc-s3
+    #   s3transfer
+celery==5.6.3
+    # via
+    #   dvc
+    #   dvc-task
+certifi==2026.7.22
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
+cffi==2.1.1
+    # via
+    #   cryptography
+    #   pygit2
+charset-normalizer==3.5.1
+    # via requests
+click==8.5.0
+    # via
+    #   celery
+    #   click-didyoumean
+    #   click-plugins
+    #   click-repl
+    #   gto
+    #   uvicorn
+click-didyoumean==0.3.1
+    # via celery
+click-plugins==1.1.1.2
+    # via celery
+click-repl==0.4.0
+    # via celery
+colorama==0.4.6
+    # via dvc
+configobj==5.0.9
+    # via dvc
+coverage==7.16.1
+    # via pytest-cov
+cryptography==50.0.1
+    # via
+    #   asyncssh
+    #   google-auth
+    #   pyjwt
+dictdiffer==0.10.0
+    # via dvc-data
+diskcache==5.6.3
+    # via dvc-data
+distro==1.9.0
+    # via
+    #   dvc
+    #   google-genai
+    #   iterative-telemetry
+dpath==2.2.0
+    # via dvc
+dulwich==1.2.15
+    # via
+    #   dvc
+    #   dvc-studio-client
+    #   scmrepo
+dvc==3.67.1
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   dvc-s3
+dvc-data==3.18.3
+    # via dvc
+dvc-http==2.32.0
+    # via dvc
+dvc-objects==5.2.0
+    # via
+    #   dvc
+    #   dvc-data
+dvc-render==1.0.2
+    # via dvc
+dvc-s3==3.3.0
+    # via dvc
+dvc-studio-client==0.23.0
+    # via dvc
+dvc-task==0.40.2
+    # via dvc
+entrypoints==0.4
+    # via gto
+fastapi==0.141.1
+    # via dataset-quality (pyproject.toml)
+filelock==4.0.0
+    # via iterative-telemetry
+flatten-dict==0.5.0
+    # via
+    #   dvc
+    #   dvc-s3
+flufl-lock==9.1.0
+    # via dvc
+frozenlist==1.8.0
+    # via
+    #   aiohttp
+    #   aiosignal
+fsspec==2026.9.0
+    # via
+    #   dvc
+    #   dvc-data
+    #   dvc-http
+    #   dvc-objects
+    #   dvc-s3
+    #   s3fs
+    #   scmrepo
+funcy==2.1
+    # via
+    #   dvc
+    #   dvc-s3
+    #   dvc-task
+    #   gto
+gitdb==4.0.12
+    # via gitpython
+gitpython==3.1.62
+    # via scmrepo
+google-auth==2.58.0
+    # via google-genai
+google-genai==2.24.0
+    # via dataset-quality (pyproject.toml)
+grandalf==0.8
+    # via dvc
+greenlet==3.5.6
+    # via sqlalchemy
+gto==1.10.1
+    # via dvc
+h11==0.16.0
+    # via
+    #   httpcore
+    #   httpcore2
+    #   uvicorn
+httpcore==1.0.9
+    # via httpx
+httpcore2==2.13.0
+    # via httpx2
+httptools==0.8.0
+    # via uvicorn
+httpx==0.28.1
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   google-genai
+httpx2==2.13.0
+    # via mcp
+hydra-core==1.3.7
+    # via dvc
+idna==3.20
+    # via
+    #   anyio
+    #   httpx
+    #   httpx2
+    #   requests
+    #   yarl
+imagehash==4.3.2
+    # via dataset-quality (pyproject.toml)
+iniconfig==2.3.0
+    # via pytest
+iterative-telemetry==0.0.10
+    # via dvc
+jmespath==1.1.0
+    # via
+    #   aiobotocore
+    #   boto3
+    #   botocore
+jsonschema==4.26.0
+    # via mcp
+jsonschema-specifications==2025.9.1
+    # via jsonschema
+kombu==5.6.2
+    # via
+    #   celery
+    #   dvc
+    #   dvc-task
+markdown-it-py==4.2.0
+    # via rich
+mcp==2.2.0
+    # via dataset-quality (pyproject.toml)
+mcp-types==2.2.0
+    # via mcp
+mdurl==0.1.2
+    # via markdown-it-py
+multidict==6.9.0
+    # via
+    #   aiobotocore
+    #   aiohttp
+    #   yarl
+networkx==3.6.1
+    # via dvc
+numpy==2.5.3
+    # via
+    #   imagehash
+    #   pywavelets
+    #   scipy
+omegaconf==2.3.1
+    # via
+    #   dvc
+    #   hydra-core
+opentelemetry-api==1.44.0
+    # via mcp
+orjson==3.12.0
+    # via
+    #   dvc-data
+    #   sqltrie
+packaging==26.3
+    # via
+    #   dvc
+    #   hydra-core
+    #   kombu
+    #   pytest
+pathspec==1.1.1
+    # via
+    #   dvc
+    #   scmrepo
+pillow==12.3.0
+    # via imagehash
+platformdirs==4.11.10
+    # via dvc
+pluggy==1.6.0
+    # via
+    #   pytest
+    #   pytest-cov
+prompt-toolkit==3.0.53
+    # via click-repl
+propcache==0.5.4
+    # via
+    #   aiohttp
+    #   yarl
+psutil==7.2.2
+    # via
+    #   dvc
+    #   flufl-lock
+pyasn1==0.6.4
+    # via pyasn1-modules
+pyasn1-modules==0.4.2
+    # via google-auth
+pycparser==3.0
+    # via cffi
+pydantic==2.13.5
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   fastapi
+    #   google-genai
+    #   gto
+    #   mcp
+    #   mcp-types
+    #   pydantic-settings
+pydantic-core==2.46.5
+    # via pydantic
+pydantic-settings==2.15.0
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   gto
+pydot==4.0.1
+    # via dvc
+pygit2==1.20.1
+    # via scmrepo
+pygments==2.21.0
+    # via
+    #   pytest
+    #   rich
+pygtrie==2.6.2
+    # via
+    #   dvc
+    #   dvc-data
+    #   scmrepo
+    #   sqltrie
+pyjwt==2.14.0
+    # via mcp
+pymysql==1.2.3
+    # via dataset-quality (pyproject.toml)
+pyparsing==3.3.2
+    # via
+    #   dvc
+    #   grandalf
+    #   pydot
+pytest==9.1.1
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   pytest-cov
+pytest-cov==7.1.0
+    # via dataset-quality (pyproject.toml)
+python-dateutil==2.9.0.post0
+    # via
+    #   aiobotocore
+    #   botocore
+    #   celery
+python-dotenv==1.2.3
+    # via
+    #   pydantic-settings
+    #   uvicorn
+python-multipart==0.0.32
+    # via mcp
+pywavelets==1.10.0
+    # via imagehash
+pyyaml==6.0.3
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   omegaconf
+    #   uvicorn
+referencing==0.37.0
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
+requests==2.34.2
+    # via
+    #   dvc
+    #   dvc-studio-client
+    #   google-auth
+    #   google-genai
+    #   iterative-telemetry
+rich==15.0.0
+    # via
+    #   dvc
+    #   gto
+rpds-py==2026.6.3
+    # via
+    #   jsonschema
+    #   referencing
+ruamel-yaml==0.19.1
+    # via
+    #   dvc
+    #   gto
+ruff==0.16.8
+    # via dataset-quality (pyproject.toml)
+s3fs==2026.9.0
+    # via dvc-s3
+s3transfer==0.19.2
+    # via boto3
+scipy==1.18.1
+    # via imagehash
+scmrepo==3.6.2
+    # via
+    #   dvc
+    #   gto
+semver==3.1.0
+    # via gto
+shortuuid==1.0.13
+    # via
+    #   dvc
+    #   dvc-task
+shtab==1.12.1
+    # via dvc
+six==1.17.0
+    # via python-dateutil
+smmap==5.0.3
+    # via gitdb
+sniffio==1.3.1
+    # via google-genai
+sqlalchemy==2.0.54
+    # via dataset-quality (pyproject.toml)
+sqltrie==0.11.3
+    # via dvc-data
+sse-starlette==3.4.11
+    # via mcp
+starlette==1.6.0
+    # via
+    #   fastapi
+    #   mcp
+    #   sse-starlette
+tabulate==0.10.0
+    # via
+    #   dvc
+    #   gto
+tenacity==9.1.4
+    # via google-genai
+tomlkit==0.15.1
+    # via dvc
+tqdm==4.70.1
+    # via
+    #   dvc
+    #   dvc-data
+    #   fsspec
+    #   scmrepo
+truststore==0.10.4
+    # via
+    #   httpcore2
+    #   httpx2
+types-pyyaml==6.0.12.20260906
+    # via dataset-quality (pyproject.toml)
+typing-extensions==4.16.0
+    # via
+    #   aiohttp
+    #   aiosignal
+    #   anyio
+    #   asyncssh
+    #   click-repl
+    #   fastapi
+    #   google-genai
+    #   httpx2
+    #   mcp
+    #   mcp-types
+    #   opentelemetry-api
+    #   pydantic
+    #   pydantic-core
+    #   referencing
+    #   sqlalchemy
+    #   starlette
+    #   typing-inspection
+typing-inspection==0.4.4
+    # via
+    #   fastapi
+    #   mcp
+    #   pydantic
+    #   pydantic-settings
+tzdata==2026.4
+    # via kombu
+tzlocal==5.4.4
+    # via celery
+urllib3==2.8.0
+    # via
+    #   botocore
+    #   dulwich
+    #   requests
+uvicorn==0.53.0
+    # via
+    #   dataset-quality (pyproject.toml)
+    #   mcp
+# El marcador es el que declara `uvicorn[standard]` y pip-compile pierde al
+# resolver para Linux: uvloop no publica rueda para Windows, y sin el marcador
+# este lockfile seria ininstalable en el host de medio equipo.
+uvloop==0.22.1 ; sys_platform != 'win32' and sys_platform != 'cygwin' and platform_python_implementation != 'PyPy'
+    # via uvicorn
+vine==5.1.0
+    # via
+    #   amqp
+    #   celery
+    #   kombu
+voluptuous==0.16.0
+    # via
+    #   dvc
+    #   dvc-studio-client
+watchfiles==1.2.0
+    # via uvicorn
+wcwidth==0.8.4
+    # via prompt-toolkit
+websockets==16.1.1
+    # via
+    #   google-genai
+    #   uvicorn
+wrapt==2.4.1
+    # via aiobotocore
+yarl==1.25.1
+    # via aiohttp
+zc-lockfile==4.0
+    # via dvc
+zstandard==0.25.0
+    # via dataset-quality (pyproject.toml)
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

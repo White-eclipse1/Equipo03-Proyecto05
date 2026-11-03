@@ -1,0 +1,32 @@
+# Secretos: nunca se versionan.
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Artefactos de entrenamiento: viven en MLflow y S3, nunca en Git.
+mlruns/
+mlartifacts/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Datos derivados: fuera de Git. Los recortes se regeneran desde el release
+# (scripts/generate_crops.py); los manifiestos viven en DVC y solo su puntero
+# `data/manifests/*.dvc` (y el .gitignore que escribe `dvc add`) entra a Git.
+/data/*
+!/data/manifests/
+
+# Snapshot de MLflow (scripts/mlflow_snapshot.py): vive en DVC, en Git solo
+# su puntero `mlflow_snapshot.dvc`.
+/mlflow_snapshot/

@@ -1,0 +1,153 @@
+# Stack del recorrido E2E del portal (F14 / 7.2).
+#
+# Levanta MLflow + MinIO + el servicio p3-inference APUNTADO A UN MinIO DE PRUEBA
+# (nunca a AWS) para que `scripts/e2e_portal.py` haga el recorrido real:
+# entrena corto -> run en MLflow -> evalua -> publica a MinIO -> activa ->
+# inferencia por HTTP. Es autocontenido (no necesita .env) y usa credenciales y
+# bucket de PRUEBA a proposito; los puertos del host son distintos a los del
+# stack principal para poder convivir.
+#
+#   cd Proyecto3
+#   docker compose -f docker-compose.e2e.yml up -d --build
+#   # ... correr scripts/e2e_portal.py (ver docs/e2e_portal.md) ...
+#   docker compose -f docker-compose.e2e.yml down -v
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: p3e2e_mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: e2e-root
+      MARIADB_DATABASE: p3e2e
+      MARIADB_USER: p3e2e
+      MARIADB_PASSWORD: e2e-pass
+    ports:
+      - "${P3E2E_DB_PORT:-3307}:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  minio:
+    # Mismo build comunitario que el stack principal (las imagenes oficiales de
+    # MinIO/mc ya no se publican).
+    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
+    container_name: p3e2e_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${P3E2E_S3_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${P3E2E_S3_SECRET_KEY:-minioadmin}
+    ports:
+      - "${P3E2E_MINIO_PORT:-9100}:9000"
+      - "${P3E2E_MINIO_CONSOLE_PORT:-9101}:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - minio_e2e:/data
+
+  # Crea el bucket de modelos de prueba y termina (idempotente).
+  minio-init:
+    image: pgsty/mc:RELEASE.2026-09-16T00-00-00Z
+    container_name: p3e2e_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${P3E2E_S3_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${P3E2E_S3_SECRET_KEY:-minioadmin}
+      P3E2E_BUCKET: ${P3E2E_MODELS_BUCKET:-p3-e2e}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -e
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"
+        mc mb --ignore-existing "local/$$P3E2E_BUCKET"
+        echo "bucket de prueba listo: $$P3E2E_BUCKET"
+
+  # MLflow fresco (sin restaurar snapshot): el recorrido crea sus propias corridas.
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.16.1
+    container_name: p3e2e_mlflow
+    command:
+      - mlflow
+      - server
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - sqlite:////mlflow/mlflow.db
+      - --artifacts-destination
+      - /mlflow/artifacts
+      - --serve-artifacts
+      - --allowed-hosts
+      - localhost:*,127.0.0.1:*,mlflow:*
+    ports:
+      - "${P3E2E_MLFLOW_PORT:-5500}:5000"
+    volumes:
+      - mlflow_e2e:/mlflow
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen("http://localhost:5000/health", timeout=5).status == 200 else 1)
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 10s
+
+  # El unico servicio con PyTorch: sirve la inferencia leyendo el modelo del
+  # MinIO de prueba. P3_S3_ENDPOINT no vacio => cliente boto3 contra MinIO (jamas
+  # la cadena de credenciales de AWS).
+  p3-inference:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: p3e2e_inference
+    command: ["uvicorn", "p3.inference.app:app", "--host", "0.0.0.0", "--port", "8010"]
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      DB_NAME: p3e2e
+      DB_USER: p3e2e
+      DB_PASSWORD: e2e-pass
+      P3_MODELS_BUCKET: ${P3E2E_MODELS_BUCKET:-p3-e2e}
+      P3_MODELS_PREFIX: ${P3E2E_MODELS_PREFIX:-models/clasificador}
+      # Endpoint INTERNO de la red de compose (el host usa el puerto publicado).
+      P3_S3_ENDPOINT: http://minio:9000
+      P3_S3_ACCESS_KEY: ${P3E2E_S3_ACCESS_KEY:-minioadmin}
+      P3_S3_SECRET_KEY: ${P3E2E_S3_SECRET_KEY:-minioadmin}
+      P3_AWS_REGION: us-east-1
+    ports:
+      - "${P3E2E_INFERENCE_PORT:-8010}:8010"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen("http://localhost:8010/health", timeout=5).status == 200 else 1)
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
+volumes:
+  minio_e2e:
+  mlflow_e2e:

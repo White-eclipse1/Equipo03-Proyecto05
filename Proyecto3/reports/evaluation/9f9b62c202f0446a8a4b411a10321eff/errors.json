@@ -1,0 +1,111 @@
+{
+  "correct": [
+    {
+      "crop_id": "0.1.3:a1057",
+      "crop_path": "person/0.1.3_a1057.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.99782794713974
+    },
+    {
+      "crop_id": "0.1.3:a1193",
+      "crop_path": "person/0.1.3_a1193.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.8672992587089539
+    },
+    {
+      "crop_id": "0.1.3:a1216",
+      "crop_path": "person/0.1.3_a1216.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.9984042048454285
+    },
+    {
+      "crop_id": "0.1.3:a1282",
+      "crop_path": "person/0.1.3_a1282.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.9842350482940674
+    },
+    {
+      "crop_id": "0.1.3:a1446",
+      "crop_path": "dog/0.1.3_a1446.png",
+      "true": "dog",
+      "predicted": "dog",
+      "probability": 0.9970231652259827
+    },
+    {
+      "crop_id": "0.1.3:a1546",
+      "crop_path": "cat/0.1.3_a1546.png",
+      "true": "cat",
+      "predicted": "cat",
+      "probability": 0.9974742531776428
+    },
+    {
+      "crop_id": "0.1.3:a1654",
+      "crop_path": "cat/0.1.3_a1654.png",
+      "true": "cat",
+      "predicted": "cat",
+      "probability": 0.7636213898658752
+    },
+    {
+      "crop_id": "0.1.3:a1970",
+      "crop_path": "person/0.1.3_a1970.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.9993045330047607
+    },
+    {
+      "crop_id": "0.1.3:a410",
+      "crop_path": "cat/0.1.3_a410.png",
+      "true": "cat",
+      "predicted": "cat",
+      "probability": 0.9999097585678101
+    },
+    {
+      "crop_id": "0.1.3:a612",
+      "crop_path": "dog/0.1.3_a612.png",
+      "true": "dog",
+      "predicted": "dog",
+      "probability": 0.9929597973823547
+    },
+    {
+      "crop_id": "0.1.3:a666",
+      "crop_path": "dog/0.1.3_a666.png",
+      "true": "dog",
+      "predicted": "dog",
+      "probability": 0.9997054934501648
+    },
+    {
+      "crop_id": "0.1.3:a782",
+      "crop_path": "person/0.1.3_a782.png",
+      "true": "person",
+      "predicted": "person",
+      "probability": 0.9975019097328186
+    }
+  ],
+  "errors": [
+    {
+      "crop_id": "0.1.3:a1574",
+      "crop_path": "cat/0.1.3_a1574.png",
+      "true": "cat",
+      "predicted": "dog",
+      "probability": 0.6765671968460083
+    },
+    {
+      "crop_id": "0.1.3:a1656",
+      "crop_path": "cat/0.1.3_a1656.png",
+      "true": "cat",
+      "predicted": "dog",
+      "probability": 0.8900582790374756
+    },
+    {
+      "crop_id": "0.1.3:a579",
+      "crop_path": "person/0.1.3_a579.png",
+      "true": "person",
+      "predicted": "dog",
+      "probability": 0.9986298084259033
+    }
+  ]
+}

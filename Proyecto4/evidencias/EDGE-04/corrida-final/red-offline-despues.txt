@@ -1,0 +1,10 @@
+2026-10-16T01:20:39-06:00
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+wlan0            DORMANT        
+usb0             UNKNOWN        10.60.188.190/24 fe80::6cb5:4ff:feef:9414/64 
+default via 10.60.188.31 dev usb0 proto dhcp src 10.60.188.190 metric 100 
+10.60.188.0/24 dev usb0 proto kernel scope link src 10.60.188.190 metric 100 
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (6) Could not resolve host: example.com

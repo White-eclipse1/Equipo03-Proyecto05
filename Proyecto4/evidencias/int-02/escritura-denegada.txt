@@ -1,0 +1,3 @@
+# Intento de escritura con el perfil de solo lectura p4-lectura (15 oct 2026). Debe ser denegado.
+$ echo prueba | aws s3 cp - s3://p4-capturas-474665692638/edge-capturas/_verificacion/no-debe-escribirse.txt --profile p4-lectura
+upload failed: - to s3://p4-capturas-474665692638/edge-capturas/_verificacion/no-debe-escribirse.txt An error occurred (AccessDenied) when calling the PutObject operation: User: arn:aws:iam::474665692638:user/p4-lectura is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::p4-capturas-474665692638/edge-capturas/_verificacion/no-debe-escribirse.txt" because no identity-based policy allows the s3:PutObject action

@@ -1,0 +1,27 @@
+schema_version: 1
+release_id: 0.1.3
+dataset_fingerprint: 2200274dc6bbe6d0bc516e0136ae68651c0040bc6cab64a871794924fa39aa84
+min_originals: 300
+decided_at: '2026-09-25'
+classes:
+- class_index: 0
+  category_id: 4
+  category_name: cat
+  originals: 312
+- class_index: 1
+  category_id: 3
+  category_name: dog
+  originals: 348
+- class_index: 2
+  category_id: 2
+  category_name: person
+  originals: 441
+excluded:
+- category_id: 5
+  category_name: bicycle
+  originals: 240
+  reason: 240 originales distintos < 300
+- category_id: 1
+  category_name: car
+  originals: 247
+  reason: 247 originales distintos < 300

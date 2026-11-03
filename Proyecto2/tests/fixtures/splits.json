@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-11T10:05:00Z",
+  "seed": 42,
+  "ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "counts": {
+    "train": 2,
+    "val": 1,
+    "test": 1
+  },
+  "stratified_by": "category_id",
+  "assignments": [
+    {
+      "image_id": 1,
+      "split": "train"
+    },
+    {
+      "image_id": 2,
+      "split": "train"
+    },
+    {
+      "image_id": 3,
+      "split": "val"
+    },
+    {
+      "image_id": 4,
+      "split": "test"
+    }
+  ],
+  "per_class": {
+    "car": {
+      "train": 2,
+      "val": 1,
+      "test": 1,
+      "total": 4,
+      "max_deviation": 0.2
+    },
+    "dog": {
+      "train": 1,
+      "val": 0,
+      "test": 0,
+      "total": 1,
+      "max_deviation": 0.3
+    }
+  },
+  "grouped_near_duplicates": 1
+}

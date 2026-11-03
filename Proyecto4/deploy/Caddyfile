@@ -1,0 +1,42 @@
+# HTTPS del portal en AWS (P4, INT-01 / INT-07). Lo usa Proyecto2/docker-compose.aws.yml.
+#
+# - Certificado de Let's Encrypt automatico para P4_DOMINIO (<ip-con-guiones>.sslip.io).
+# - Todo el portal (web, API, fotos, exportacion) y MLflow piden usuario y contrasena
+#   de evaluacion (basic_auth). La contrasena solo existe como hash bcrypt en
+#   /opt/p4/secretos/caddy.env, generado en la instancia.
+# - Excepcion: POST /api/p4/capturas, que usa el dispositivo y protege su propio
+#   token Bearer (P4_TOKEN_DISPOSITIVO). Un GET a esa misma ruta si pide la contrasena.
+
+{$P4_DOMINIO} {
+	encode gzip
+
+	@envio_dispositivo {
+		method POST
+		path /api/p4/capturas
+	}
+	handle @envio_dispositivo {
+		# La foto pesa hasta 5 MB; el tope del cuerpo deja margen para el multipart.
+		request_body {
+			max_size 6MB
+		}
+		reverse_proxy app:8000
+	}
+
+	handle {
+		basic_auth {
+			{$P4_PORTAL_USUARIO} {$P4_PORTAL_HASH}
+		}
+		reverse_proxy app:8000
+	}
+}
+
+mlflow.{$P4_DOMINIO} {
+	encode gzip
+	basic_auth {
+		{$P4_PORTAL_USUARIO} {$P4_PORTAL_HASH}
+	}
+	# MLflow solo acepta los hosts de --allowed-hosts: se le presenta como `mlflow`.
+	reverse_proxy mlflow:5000 {
+		header_up Host mlflow:5000
+	}
+}

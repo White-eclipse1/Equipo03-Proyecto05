@@ -1,0 +1,29 @@
+1. Consulta como: arn:aws:iam::474665692638:user/p4-lectura
+
+2. Registro s3://p4-capturas-474665692638/edge-capturas/eventos/prueba-int-20261015T164022-0001.json
+   VersionId HUw1H2f3RY85bJst6kQyobzDXV_x4CcN  LastModified 2026-10-15T22:40:26+00:00
+   capture_id       prueba-int-20261015T164022-0001
+   captured_at      2026-10-15T16:40:22-06:00
+   received_at      2026-10-15T22:40:25.035+00:00
+   device_id        prueba-int
+   predicted_class  dog
+   confidence       0.5
+   model_version    1.0.0-int8-e05.1
+   model_sha256     ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12
+   image_sha256     229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a
+   image_ref        capturas/pruebas/prueba-int-20261015T164022-0001/foto.jpg
+   region           None
+
+3. Foto s3://p4-capturas-474665692638/edge-capturas/fotos/prueba-int-20261015T164022-0001.jpg
+   VersionId AtoUfsFwsQZJ5wU_Z7CZAI9tyLPEeHvw  18285 bytes
+   SHA-256 en metadatos de S3: 229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a
+
+4. SHA-256 recalculado:       229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a
+   igual al de S3:      True
+   igual al del evento: True
+
+5. Versiones (1 = sin sobrescrituras ni duplicados):
+   1  edge-capturas/eventos/prueba-int-20261015T164022-0001.json
+   1  edge-capturas/fotos/prueba-int-20261015T164022-0001.jpg
+
+Resultado: OK

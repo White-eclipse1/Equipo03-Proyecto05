@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "capture_id": "prueba-int-20261015T164022-0001",
+  "captured_at": "2026-10-15T16:40:22-06:00",
+  "predicted_class": "dog",
+  "confidence": 0.5,
+  "device_id": "prueba-int",
+  "model_version": "1.0.0-int8-e05.1",
+  "model_sha256": "ba89ee435ce33e0f0cdd4e8ed84dfb50d74e5a3bc23c32af975085306ca02a12",
+  "image_sha256": "229b542d0fef7991bed25c9b8cce7a2e4d04f11a37f8951036b94f78d414d84a",
+  "image_ref": "capturas/pruebas/prueba-int-20261015T164022-0001/foto.jpg",
+  "region": null
+}

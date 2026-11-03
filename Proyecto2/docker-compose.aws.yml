@@ -1,0 +1,80 @@
+# Despliegue en AWS (P4, INT-01): se aplica ENCIMA de docker-compose.yml.
+#
+#     docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d --build
+#
+# Guia y recursos: `Proyecto4/docs/despliegue.md`. Diferencias con el desarrollo local:
+# - Solo Caddy publica puertos (80/443, HTTPS de Let's Encrypt). MariaDB, MinIO,
+#   MLflow y la app quedan dentro de la red de compose.
+# - Sin `--reload`: el codigo es el clon del repositorio en la instancia.
+# - Capturas Edge escribe en S3 real con el ROL DE LA INSTANCIA: ninguna llave de
+#   AWS en archivos ni variables (perfiles vacios -> cadena estandar de boto3).
+# - Secretos (`.env` y `/opt/p4/secretos/caddy.env`) los genera
+#   `Proyecto4/deploy/instalar_ec2.sh` en la instancia; ninguno va a Git.
+
+services:
+  caddy:
+    image: caddy:2.11.4-alpine
+    container_name: p4_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      # P4_DOMINIO, P4_PORTAL_USUARIO, P4_PORTAL_HASH (bcrypt). Solo root lo lee.
+      - /opt/p4/secretos/caddy.env
+    volumes:
+      - ../Proyecto4/deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+
+  mariadb:
+    ports: !reset []
+
+  minio:
+    ports: !reset []
+
+  mlflow:
+    ports: !reset []
+
+  app:
+    ports: !reset []
+    environment:
+      # Enlaces del portal a MLflow: el subdominio que sirve Caddy.
+      MLFLOW_UI_URL: https://mlflow.${P4_DOMINIO:?falta P4_DOMINIO en .env}
+      # Capturas Edge en S3 real con el rol de la instancia.
+      P4_ALMACEN: s3
+      P4_BUCKET: ${P4_BUCKET:?falta P4_BUCKET en .env}
+      P4_PREFIJO: edge-capturas/
+      P4_AWS_REGION: us-east-1
+      P4_AWS_PROFILE: ""
+      P4_S3_ENDPOINT: ""
+      P4_S3_ACCESS_KEY: ""
+      P4_S3_SECRET_KEY: ""
+      P4_TOKEN_DISPOSITIVO: ${P4_TOKEN_DISPOSITIVO:?falta P4_TOKEN_DISPOSITIVO en .env}
+      P4_MODELOS_ACEPTADOS: ${P4_MODELOS_ACEPTADOS:-}
+    command: !override
+      - uvicorn
+      - dataset_quality.main:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8000"
+      # Detras de Caddy: confia en los encabezados X-Forwarded-* de CUALQUIER origen.
+      # Es aceptable porque la app no publica puertos: solo la alcanzan los contenedores
+      # de este compose (Caddy y los servicios internos), nunca un cliente de internet.
+      - --proxy-headers
+      - --forwarded-allow-ips
+      - "*"
+
+  p3-inference:
+    environment:
+      # Rol de la instancia, no un perfil de ~/.aws.
+      P3_AWS_PROFILE: ""
+      P3_MODELS_BUCKET: ${P4_BUCKET:?}
+
+volumes:
+  caddy_data:
+  caddy_config:
