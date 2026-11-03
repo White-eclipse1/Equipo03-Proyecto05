@@ -46,8 +46,18 @@ class Cuadro(BaseModel):
     image_width: int = Field(gt=0)
     image_height: int = Field(gt=0)
     status: Literal["ok", "error"]
+    # Obligatorio si status=ok (ver `_detections_explicito`); con status=error puede
+    # omitirse y queda vacio.
     detections: tuple[Deteccion, ...] = ()
     error: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _detections_explicito(cls, datos: object) -> object:
+        # Omitir `detections` NO significa "sin objetos": eso es la lista vacia [].
+        if isinstance(datos, dict) and datos.get("status") == "ok" and "detections" not in datos:
+            raise ValueError("status=ok exige `detections` explicito ([] si no hay objetos)")
+        return datos
 
     @model_validator(mode="after")
     def _estado_coherente(self) -> Cuadro:

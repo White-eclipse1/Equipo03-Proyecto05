@@ -108,14 +108,18 @@ class Decision(_Inmutable):
 
 
 def _zonas_de(det: Deteccion, cuadro: Cuadro, config: ConfigPolitica) -> tuple[NombreZona, ...]:
+    """Zonas que cubre la caja: el solape debe alcanzar `cobertura_min_zona` del MENOR
+    de los dos anchos (zona o caja). Asi una caja grande ocupa una zona si cubre una
+    parte relevante de ella, y una caja angosta ocupa cada zona donde cae una parte
+    relevante de la caja. Ninguna caja dentro del cuadro queda sin zona: siempre hay
+    una zona con al menos 1/3 de su ancho."""
     x1, _, x2, _ = det.bbox_xyxy
     a, b = max(x1, 0) / cuadro.image_width, min(x2, cuadro.image_width) / cuadro.image_width
     cubiertas = []
     for nombre in ZONAS:
         ini, fin = getattr(config.zonas, nombre)
         solape = max(0.0, min(b, fin) - max(a, ini))
-        dentro = a >= ini and b <= fin
-        if solape > 0 and (dentro or solape >= config.geometria.cobertura_min_zona * (fin - ini)):
+        if solape > 0 and solape >= config.geometria.cobertura_min_zona * min(fin - ini, b - a):
             cubiertas.append(nombre)
     return tuple(cubiertas)
 

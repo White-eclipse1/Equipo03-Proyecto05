@@ -49,7 +49,7 @@ Un objeto por cuadro (JSON/JSONL). Lo valida `Cuadro`, y un campo extra se recha
 
 - `bbox_xyxy`: píxeles del cuadro **original**, no del tensor redimensionado. El origen está en la esquina superior izquierda; x crece a la derecha e y hacia abajo. Se exige `x2 > x1` y `y2 > y1`, dentro del cuadro con una tolerancia de 1 px.
 - `confidence`: un valor finito en [0, 1]. NaN e infinito se rechazan.
-- **Escena vacía**: `status: "ok"` con `detections: []`.
+- **Escena vacía**: `status: "ok"` con `detections: []`. Con `status: "ok"`, el campo `detections` es **obligatorio**: si falta o es `null`, el cuadro se rechaza y `decidir_crudo` lo trata como `SALIDA_MALFORMADA` (STOP), nunca como vía libre.
 - **Fallo del detector**: `status: "error"`, sin detecciones y con `error` explicando el motivo. Nunca se confunde con una escena vacía.
 - `t_capture_ms`: tiempo relativo al inicio de la secuencia. Tiene que crecer estrictamente dentro de la secuencia.
 
@@ -66,7 +66,11 @@ y  0.40 ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 ```
 
 - **Tres zonas verticales.** El centro (30 % del ancho) representa la trayectoria del auto si avanza recto; los laterales representan hacia dónde podría evadir. Las zonas tienen que ser contiguas y cubrir [0, 1], o la configuración se rechaza.
-- **Una caja ocupa todas las zonas que cubre**: las que la contienen completa, o aquellas cuyo ancho cubre en al menos `cobertura_min_zona` (15 %). Así, una caja ancha bloquea centro y lateral a la vez (C5).
+- **Una caja ocupa todas las zonas que cubre.** La regla es `solape ≥ cobertura_min_zona (15 %) × min(ancho de la zona, ancho de la caja)`:
+  - una caja ancha ocupa una zona si cubre al menos el 15 % de ella, así que puede bloquear centro y lateral a la vez (C5);
+  - una caja **angosta** ocupa toda zona donde caiga al menos el 15 % de la caja. Un obstáculo pequeño montado sobre el límite entre izquierda y centro ocupa **las dos**;
+  - **ninguna caja dentro del cuadro queda sin zona**, porque siempre hay una zona que contiene al menos 1/3 de su ancho;
+  - una caja lateral grande que apenas roza el centro (menos del 15 % de ambos anchos) no lo ocupa.
 - **Banda de riesgo** (`y2/alto ≥ 0.40`): con la cámara mirando al frente, un objeto cuya base aparece en la parte alta del cuadro está lejos o fuera del piso. Se registra como `ignorada / fuera_de_banda`.
 - **Proximidad**: se usa `area_caja / area_cuadro ≥ area_min` (0.5 %) como **proxy**. **No es una distancia en metros**, porque no hay calibración de la cámara.
 - **Clases obstáculo** (`clases_obstaculo`): person, bicycle, car, motorcycle, bus, truck, cat y dog. Cualquier otra clase se registra como `ignorada / clase_no_obstaculo`. Si A1 elige un detector con otras clases, se ajusta esta lista **antes** de calcular métricas.
