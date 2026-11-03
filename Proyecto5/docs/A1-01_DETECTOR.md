@@ -30,22 +30,48 @@ La ficha completa de procedencia corresponde a A1-02.
 
 ## Preparación
 
-Desde Proyecto5, con Python 3.12:
+Requiere Python 3.12. Los comandos se ejecutan desde la raíz del repositorio, en orden y en la misma terminal. No hace falta activar el entorno virtual. La carpeta models/ no se versiona.
 
-```bash
-python -m venv .venv
-.venv/Scripts/pip install -r requirements.lock.txt
-.venv/Scripts/pip install --no-deps -e .
-mkdir -p models
-curl -fsSL -o models/yolox_tiny.onnx https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
+### PowerShell
+
+`py -3.12` encuentra el Python 3.12 instalado desde python.org. Con otra instalación, como la de uv, `py -3.12` puede fallar: usa en ese paso la entrada 3.12 que muestre `py -0p`, por ejemplo `py -V:Astral/CPython3.12.16 -m venv .venv`.
+
+```powershell
+cd Proyecto5
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.lock.txt
+.venv\Scripts\python -m pip install --no-deps -e .
+New-Item -ItemType Directory -Force models | Out-Null
+curl.exe -fsSL -o models\yolox_tiny.onnx https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
+if ((Get-FileHash models\yolox_tiny.onnx -Algorithm SHA256).Hash -ne "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7") { throw "SHA-256 no coincide" }
 ```
 
-En Linux/macOS cambia `.venv/Scripts/` por `.venv/bin/`. La carpeta models/ no se versiona.
+### Linux
+
+```bash
+cd Proyecto5
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.lock.txt
+.venv/bin/python -m pip install --no-deps -e .
+mkdir -p models
+curl -fsSL -o models/yolox_tiny.onnx https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
+echo "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7  models/yolox_tiny.onnx" | sha256sum -c -
+```
 
 ## Uso
 
+Desde Proyecto5, con una imagen del repositorio como ejemplo. Para otra imagen, cambia la ruta de `--image`.
+
+### PowerShell
+
+```powershell
+.venv\Scripts\python -m p5.detector --weights models\yolox_tiny.onnx --image ..\Proyecto4\evidencias\EDGE-01\camara-nueva.jpg
+```
+
+### Linux
+
 ```bash
-.venv/Scripts/python -m p5.detector --weights models/yolox_tiny.onnx --image <ruta-de-imagen>
+.venv/bin/python -m p5.detector --weights models/yolox_tiny.onnx --image ../Proyecto4/evidencias/EDGE-01/camara-nueva.jpg
 ```
 
 Opciones: `--score-threshold` (0.10 por defecto) y `--nms-threshold` (0.45 por defecto).
@@ -106,12 +132,24 @@ El comando termina con código 1 y no imprime JSON. Una falla nunca se presenta 
 
 ## Verificación
 
-Desde Proyecto5:
+Desde Proyecto5.
+
+### PowerShell
+
+```powershell
+$env:P5_DETECTOR_WEIGHTS = "models/yolox_tiny.onnx"
+.venv\Scripts\python -m pytest
+.venv\Scripts\python -m ruff check .
+.venv\Scripts\python -m ruff format --check .
+```
+
+### Linux
 
 ```bash
-P5_DETECTOR_WEIGHTS=models/yolox_tiny.onnx .venv/Scripts/python -m pytest
-.venv/Scripts/python -m ruff check .
-.venv/Scripts/python -m ruff format --check .
+export P5_DETECTOR_WEIGHTS=models/yolox_tiny.onnx
+.venv/bin/python -m pytest
+.venv/bin/python -m ruff check .
+.venv/bin/python -m ruff format --check .
 ```
 
 Sin `P5_DETECTOR_WEIGHTS`, las pruebas con pesos reales se omiten. El CI descarga los pesos, verifica su SHA-256 y las ejecuta.
