@@ -1,0 +1,3286 @@
+{
+  "detecciones": "sinteticas",
+  "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+  "total": 9,
+  "pasan": 9,
+  "casos": [
+    {
+      "id": "C1",
+      "nombre": "Via despejada con percepcion valida",
+      "justificacion": "Sin objetos en ninguna zona. Tras 3 cuadros libres (cuadros_para_liberar) la via queda confirmada y debe avanzar con velocidad positiva; un objeto en la parte alta del cuadro (fuera de la banda de riesgo) no cambia eso.",
+      "config_cambios": {},
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            1,
+            2
+          ],
+          "permitidas": [
+            "STOP"
+          ]
+        },
+        {
+          "cuadros": [
+            3,
+            9
+          ],
+          "permitidas": [
+            "FORWARD"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1200.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "ignorada",
+              "motivo": "fuera_de_banda",
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0008",
+          "t_capture_ms": 800.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1300.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "ignorada",
+              "motivo": "fuera_de_banda",
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C1",
+          "frame_id": "C1-0009",
+          "t_capture_ms": 900.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1400.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "ignorada",
+              "motivo": "fuera_de_banda",
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "nombre": "Obstaculo confiable en la zona central",
+      "justificacion": "Persona centrada (x 0.41-0.59) en la banda de riesgo con confianza 0.9. El primer cuadro ya no permite crucero; al segundo (cuadros_para_bloquear) el bloqueo se confirma: STOP, o evasion hacia un lateral verificado libre.",
+      "config_cambios": {},
+      "plazo_cuadros": 2,
+      "esperado": [
+        {
+          "cuadros": [
+            3,
+            3
+          ],
+          "permitidas": [
+            "FORWARD"
+          ]
+        },
+        {
+          "cuadros": [
+            4,
+            4
+          ],
+          "permitidas": [
+            "SLOW",
+            "STOP"
+          ]
+        },
+        {
+          "cuadros": [
+            5,
+            7
+          ],
+          "permitidas": [
+            "STOP",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "EVADE_RIGHT",
+          "reason_code": "EVASION_DERECHA",
+          "razon": "Centro bloqueado; la zona derecha esta verificada libre.",
+          "velocidad": 0.2,
+          "direccion": 0.5,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "EVADE_RIGHT",
+          "reason_code": "EVASION_DERECHA",
+          "razon": "Centro bloqueado; la zona derecha esta verificada libre.",
+          "velocidad": 0.2,
+          "direccion": 0.5,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2",
+          "frame_id": "C2-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "EVADE_RIGHT",
+          "reason_code": "EVASION_DERECHA",
+          "razon": "Centro bloqueado; la zona derecha esta verificada libre.",
+          "velocidad": 0.2,
+          "direccion": 0.5,
+          "valido_hasta_ms": 1200.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 4,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C2-sin-evasion",
+      "nombre": "Obstaculo central con la evasion deshabilitada",
+      "justificacion": "Igual que C2; sin evasion la unica respuesta admisible es STOP.",
+      "config_cambios": {
+        "evasion": {
+          "habilitada": false
+        }
+      },
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            5,
+            6
+          ],
+          "permitidas": [
+            "STOP"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C2-sin-evasion",
+          "frame_id": "C2-sin-evasion-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "nombre": "Obstaculo solo a la izquierda con el centro libre",
+      "justificacion": "La caja (x 0.03-0.28) solo cubre la zona izquierda. El centro sigue libre: se admite avanzar recto a precaucion, nunca girar a la izquierda.",
+      "config_cambios": {},
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            4,
+            8
+          ],
+          "permitidas": [
+            "SLOW",
+            "FORWARD",
+            "EVADE_RIGHT"
+          ],
+          "direccion_max": 1.0,
+          "direccion_min": 0.0
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1200.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 4,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C3",
+          "frame_id": "C3-0008",
+          "t_capture_ms": 800.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1300.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 5,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "nombre": "Obstaculo solo a la derecha con el centro libre",
+      "justificacion": "Espejo de C3 (x 0.73-0.97); comprueba el signo de la direccion.",
+      "config_cambios": {},
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            4,
+            8
+          ],
+          "permitidas": [
+            "SLOW",
+            "FORWARD",
+            "EVADE_LEFT"
+          ],
+          "direccion_max": 0.0,
+          "direccion_min": -1.0
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1200.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 4,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C4",
+          "frame_id": "C4-0008",
+          "t_capture_ms": 800.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "LATERAL_OCUPADO",
+          "razon": "Centro libre con un lateral ocupado: avance recto a precaucion.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1300.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 5,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "nombre": "Varios obstaculos con todas las rutas bloqueadas",
+      "justificacion": "Tres personas cubren izquierda, centro y derecha. No hay zona libre a la que evadir: STOP. La mas confiable es la lateral (0.99), pero la central (0.6) tambien es firme y bloquea: se considera el conjunto.",
+      "config_cambios": {},
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            5,
+            6
+          ],
+          "permitidas": [
+            "STOP"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.99,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.6,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 2,
+              "class_name": "person",
+              "confidence": 0.8,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "STOP",
+          "reason_code": "SIN_ZONA_LIBRE",
+          "razon": "Centro bloqueado y ningun lateral verificado libre: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.99,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.6,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 2,
+              "class_name": "person",
+              "confidence": 0.8,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5",
+          "frame_id": "C5-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "SIN_ZONA_LIBRE",
+          "razon": "Centro bloqueado y ningun lateral verificado libre: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.99,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.6,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 2,
+              "class_name": "person",
+              "confidence": 0.8,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "derecha"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C5-evasion",
+      "nombre": "Varios obstaculos con un lateral libre",
+      "justificacion": "Centro e izquierda ocupados; la derecha esta libre y verificada.",
+      "config_cambios": {},
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            5,
+            6
+          ],
+          "permitidas": [
+            "STOP",
+            "EVADE_RIGHT"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "EVADE_RIGHT",
+          "reason_code": "EVASION_DERECHA",
+          "razon": "Centro bloqueado; la zona derecha esta verificada libre.",
+          "velocidad": 0.2,
+          "direccion": 0.5,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C5-evasion",
+          "frame_id": "C5-evasion-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "EVADE_RIGHT",
+          "reason_code": "EVASION_DERECHA",
+          "razon": "Centro bloqueado; la zona derecha esta verificada libre.",
+          "velocidad": 0.2,
+          "direccion": 0.5,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            },
+            {
+              "indice": 1,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "izquierda"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "nombre": "Deteccion bajo umbral y despues sobre umbral",
+      "justificacion": "Persona centrada con confianza 0.40 (entre umbral_bajo 0.30 y umbral_alto 0.50): es debil, baja la velocidad pero no detiene ni se toma como via libre a crucero. Al subir a 0.55 cruza el umbral y en 2 cuadros bloquea.",
+      "config_cambios": {
+        "evasion": {
+          "habilitada": false
+        }
+      },
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            4,
+            7
+          ],
+          "permitidas": [
+            "SLOW"
+          ]
+        },
+        {
+          "cuadros": [
+            8,
+            8
+          ],
+          "permitidas": [
+            "SLOW",
+            "STOP"
+          ]
+        },
+        {
+          "cuadros": [
+            9,
+            10
+          ],
+          "permitidas": [
+            "STOP"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_DEBIL",
+          "razon": "Deteccion debil en el centro: se reduce velocidad sin detener.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.4,
+              "nivel": "debil",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_DEBIL",
+          "razon": "Deteccion debil en el centro: se reduce velocidad sin detener.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1000.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.4,
+              "nivel": "debil",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_DEBIL",
+          "razon": "Deteccion debil en el centro: se reduce velocidad sin detener.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1100.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.4,
+              "nivel": "debil",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_DEBIL",
+          "razon": "Deteccion debil en el centro: se reduce velocidad sin detener.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1200.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.4,
+              "nivel": "debil",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0008",
+          "t_capture_ms": 800.0,
+          "estado_anterior": "CAUTION",
+          "estado": "CAUTION",
+          "cambio_estado": false,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1300.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.55,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0009",
+          "t_capture_ms": 900.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.55,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C6",
+          "frame_id": "C6-0010",
+          "t_capture_ms": 1000.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 10
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 10
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.55,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "nombre": "Libre, obstaculo persistente y desaparicion",
+      "justificacion": "Se bloquea al confirmar el obstaculo y, al desaparecer, se mantiene STOP hasta 3 cuadros libres seguidos (histeresis temporal). Un cuadro vacio aislado durante el bloqueo no reanuda.",
+      "config_cambios": {
+        "evasion": {
+          "habilitada": false
+        }
+      },
+      "plazo_cuadros": null,
+      "esperado": [
+        {
+          "cuadros": [
+            3,
+            3
+          ],
+          "permitidas": [
+            "FORWARD"
+          ]
+        },
+        {
+          "cuadros": [
+            5,
+            11
+          ],
+          "permitidas": [
+            "STOP"
+          ]
+        },
+        {
+          "cuadros": [
+            12,
+            13
+          ],
+          "permitidas": [
+            "FORWARD"
+          ]
+        }
+      ],
+      "resultado": "PASA",
+      "fallos": [],
+      "decisiones": [
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0001",
+          "t_capture_ms": 100.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0002",
+          "t_capture_ms": 200.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "UNKNOWN",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "PERCEPCION_NO_CONFIRMADA",
+          "razon": "Aun no hay suficientes cuadros validos para confirmar el centro.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "centro": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "DESCONOCIDA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0003",
+          "t_capture_ms": 300.0,
+          "estado_anterior": "UNKNOWN",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0004",
+          "t_capture_ms": 400.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CAUTION",
+          "cambio_estado": true,
+          "accion": "SLOW",
+          "reason_code": "CENTRO_POR_CONFIRMAR",
+          "razon": "Obstaculo firme en el centro aun no confirmado: se reduce velocidad.",
+          "velocidad": 0.3,
+          "direccion": 0.0,
+          "valido_hasta_ms": 900.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0005",
+          "t_capture_ms": 500.0,
+          "estado_anterior": "CAUTION",
+          "estado": "BLOCKED",
+          "cambio_estado": true,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 2,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 5
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0006",
+          "t_capture_ms": 600.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 3,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 6
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0007",
+          "t_capture_ms": 700.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 4,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 7
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0008",
+          "t_capture_ms": 800.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_HISTERESIS",
+          "razon": "El centro sigue ocupado hasta completar los cuadros libres exigidos.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 8
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0009",
+          "t_capture_ms": 900.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_BLOQUEADO",
+          "razon": "Obstaculo confirmado en el centro: STOP.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 1,
+              "racha_libre": 0
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 9
+            }
+          },
+          "detecciones": [
+            {
+              "indice": 0,
+              "class_name": "person",
+              "confidence": 0.9,
+              "nivel": "firme",
+              "motivo": null,
+              "zonas": [
+                "centro"
+              ]
+            }
+          ],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0010",
+          "t_capture_ms": 1000.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_HISTERESIS",
+          "razon": "El centro sigue ocupado hasta completar los cuadros libres exigidos.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 10
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 0,
+              "racha_libre": 1
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 10
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0011",
+          "t_capture_ms": 1100.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "BLOCKED",
+          "cambio_estado": false,
+          "accion": "STOP",
+          "reason_code": "CENTRO_HISTERESIS",
+          "razon": "El centro sigue ocupado hasta completar los cuadros libres exigidos.",
+          "velocidad": 0.0,
+          "direccion": 0.0,
+          "valido_hasta_ms": null,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 11
+            },
+            "centro": {
+              "estado": "OCUPADA",
+              "racha_ocupada": 0,
+              "racha_libre": 2
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 11
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0012",
+          "t_capture_ms": 1200.0,
+          "estado_anterior": "BLOCKED",
+          "estado": "CLEAR",
+          "cambio_estado": true,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1700.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 12
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 3
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 12
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        },
+        {
+          "sequence_id": "C7",
+          "frame_id": "C7-0013",
+          "t_capture_ms": 1300.0,
+          "estado_anterior": "CLEAR",
+          "estado": "CLEAR",
+          "cambio_estado": false,
+          "accion": "FORWARD",
+          "reason_code": "VIA_LIBRE",
+          "razon": "Las tres zonas estan confirmadas libres.",
+          "velocidad": 0.6,
+          "direccion": 0.0,
+          "valido_hasta_ms": 1800.0,
+          "zonas": {
+            "izquierda": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 13
+            },
+            "centro": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 4
+            },
+            "derecha": {
+              "estado": "LIBRE",
+              "racha_ocupada": 0,
+              "racha_libre": 13
+            }
+          },
+          "detecciones": [],
+          "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+          "error": null
+        }
+      ]
+    }
+  ],
+  "casos_archivo": "casos\\politica_c1_c7.yaml",
+  "config_archivo": "config\\politica.yaml"
+}
