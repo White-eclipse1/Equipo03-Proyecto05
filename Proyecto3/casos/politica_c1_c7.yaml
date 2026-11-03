@@ -1,0 +1,139 @@
+# Casos C1-C7 de la politica con detecciones SINTETICAS (B1-03; E5, criterio 2.2).
+#
+# Aislan reglas de politica: no acreditan el detector real. Las secuencias con
+# pesos reales las corre B3 (B3-01/B3-02) por el recorrido integral.
+#
+# Las expectativas se fijaron por geometria ANTES de ejecutar
+# (`tests/test_policy_casos.py`, commit red 5695701). El runner
+# `scripts/casos_politica.py` NUNCA pasa `permitidas` a la politica: solo las
+# compara con la decision observada.
+#
+# Cuadro 640x480; cajas xyxy en pixeles, origen arriba-izquierda, x a la derecha.
+# Zonas (config/politica.yaml): izquierda x<0.35, centro 0.35-0.65, derecha >0.65.
+schema_version: 1
+imagen: {ancho: 640, alto: 480}
+periodo_ms: 100
+
+cajas:
+  CENTRO: [260, 200, 380, 460]  # x 0.41-0.59, y2 0.96: solo centro, en banda
+  IZQ: [20, 200, 180, 460]      # x 0.03-0.28: solo izquierda
+  DER: [470, 200, 620, 460]     # x 0.73-0.97: solo derecha
+  ALTO: [260, 10, 380, 120]     # centro pero y2 0.25: fuera de la banda
+
+casos:
+  - id: C1
+    nombre: Via despejada con percepcion valida
+    justificacion: >-
+      Sin objetos en ninguna zona. Tras 3 cuadros libres (cuadros_para_liberar)
+      la via queda confirmada y debe avanzar con velocidad positiva; un objeto en
+      la parte alta del cuadro (fuera de la banda de riesgo) no cambia eso.
+    escenas:
+      - {repetir: 6, objetos: []}
+      - {repetir: 3, objetos: [{caja: ALTO}]}
+    esperado:
+      - {cuadros: [1, 2], permitidas: [STOP]}
+      - {cuadros: [3, 9], permitidas: [FORWARD]}
+
+  - id: C2
+    nombre: Obstaculo confiable en la zona central
+    plazo_cuadros: 2
+    justificacion: >-
+      Persona centrada (x 0.41-0.59) en la banda de riesgo con confianza 0.9.
+      El primer cuadro ya no permite crucero; al segundo (cuadros_para_bloquear)
+      el bloqueo se confirma: STOP, o evasion hacia un lateral verificado libre.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 4, objetos: [{caja: CENTRO}]}
+    esperado:
+      - {cuadros: [3, 3], permitidas: [FORWARD]}
+      - {cuadros: [4, 4], permitidas: [SLOW, STOP]}
+      - {cuadros: [5, 7], permitidas: [STOP, EVADE_LEFT, EVADE_RIGHT]}
+
+  - id: C2-sin-evasion
+    nombre: Obstaculo central con la evasion deshabilitada
+    config: {evasion: {habilitada: false}}
+    justificacion: Igual que C2; sin evasion la unica respuesta admisible es STOP.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 3, objetos: [{caja: CENTRO}]}
+    esperado:
+      - {cuadros: [5, 6], permitidas: [STOP]}
+
+  - id: C3
+    nombre: Obstaculo solo a la izquierda con el centro libre
+    justificacion: >-
+      La caja (x 0.03-0.28) solo cubre la zona izquierda. El centro sigue libre:
+      se admite avanzar recto a precaucion, nunca girar a la izquierda.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 5, objetos: [{caja: IZQ}]}
+    esperado:
+      - {cuadros: [4, 8], permitidas: [SLOW, FORWARD, EVADE_RIGHT], direccion_max: 1.0, direccion_min: 0.0}
+
+  - id: C4
+    nombre: Obstaculo solo a la derecha con el centro libre
+    justificacion: Espejo de C3 (x 0.73-0.97); comprueba el signo de la direccion.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 5, objetos: [{caja: DER}]}
+    esperado:
+      - {cuadros: [4, 8], permitidas: [SLOW, FORWARD, EVADE_LEFT], direccion_max: 0.0, direccion_min: -1.0}
+
+  - id: C5
+    nombre: Varios obstaculos con todas las rutas bloqueadas
+    justificacion: >-
+      Tres personas cubren izquierda, centro y derecha. No hay zona libre a la
+      que evadir: STOP. La mas confiable es la lateral (0.99), pero la central
+      (0.6) tambien es firme y bloquea: se considera el conjunto.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - repetir: 3
+        objetos:
+          - {caja: IZQ, conf: 0.99}
+          - {caja: CENTRO, conf: 0.60}
+          - {caja: DER, conf: 0.80}
+    esperado:
+      - {cuadros: [5, 6], permitidas: [STOP]}
+
+  - id: C5-evasion
+    nombre: Varios obstaculos con un lateral libre
+    justificacion: Centro e izquierda ocupados; la derecha esta libre y verificada.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 3, objetos: [{caja: CENTRO}, {caja: IZQ}]}
+    esperado:
+      - {cuadros: [5, 6], permitidas: [STOP, EVADE_RIGHT]}
+
+  - id: C6
+    nombre: Deteccion bajo umbral y despues sobre umbral
+    config: {evasion: {habilitada: false}}
+    justificacion: >-
+      Persona centrada con confianza 0.40 (entre umbral_bajo 0.30 y umbral_alto
+      0.50): es debil, baja la velocidad pero no detiene ni se toma como via
+      libre a crucero. Al subir a 0.55 cruza el umbral y en 2 cuadros bloquea.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 4, objetos: [{caja: CENTRO, conf: 0.40}]}
+      - {repetir: 3, objetos: [{caja: CENTRO, conf: 0.55}]}
+    esperado:
+      - {cuadros: [4, 7], permitidas: [SLOW]}
+      - {cuadros: [8, 8], permitidas: [SLOW, STOP]}
+      - {cuadros: [9, 10], permitidas: [STOP]}
+
+  - id: C7
+    nombre: Libre, obstaculo persistente y desaparicion
+    config: {evasion: {habilitada: false}}
+    justificacion: >-
+      Se bloquea al confirmar el obstaculo y, al desaparecer, se mantiene STOP
+      hasta 3 cuadros libres seguidos (histeresis temporal). Un cuadro vacio
+      aislado durante el bloqueo no reanuda.
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 4, objetos: [{caja: CENTRO}]}
+      - {repetir: 1, objetos: []}
+      - {repetir: 1, objetos: [{caja: CENTRO}]}
+      - {repetir: 4, objetos: []}
+    esperado:
+      - {cuadros: [3, 3], permitidas: [FORWARD]}
+      - {cuadros: [5, 11], permitidas: [STOP]}
+      - {cuadros: [12, 13], permitidas: [FORWARD]}
