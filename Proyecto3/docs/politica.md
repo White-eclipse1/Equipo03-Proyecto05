@@ -69,7 +69,7 @@ y  0.40 ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 - **Una caja ocupa todas las zonas que cubre.** La regla es `solape ≥ cobertura_min_zona (15 %) × min(ancho de la zona, ancho de la caja)`:
   - una caja ancha ocupa una zona si cubre al menos el 15 % de ella, así que puede bloquear centro y lateral a la vez (C5);
   - una caja **angosta** ocupa toda zona donde caiga al menos el 15 % de la caja. Un obstáculo pequeño montado sobre el límite entre izquierda y centro ocupa **las dos**;
-  - **ninguna caja dentro del cuadro queda sin zona**, porque siempre hay una zona que contiene al menos 1/3 de su ancho;
+  - **ninguna caja dentro del cuadro queda sin zona**. `cobertura_min_zona` está limitada a ≤ 0.5 y la configuración rechaza valores mayores: una caja repartida entre dos zonas siempre deja al menos la mitad de su ancho en una de ellas. Como **respaldo**, si aun así una caja no alcanzara ninguna zona, ocupa **todas las zonas que toca**: el lado seguro es contarla, nunca ignorarla;
   - una caja lateral grande que apenas roza el centro (menos del 15 % de ambos anchos) no lo ocupa.
 - **Banda de riesgo** (`y2/alto ≥ 0.40`): con la cámara mirando al frente, un objeto cuya base aparece en la parte alta del cuadro está lejos o fuera del piso. Se registra como `ignorada / fuera_de_banda`.
 - **Proximidad**: se usa `area_caja / area_cuadro ≥ area_min` (0.5 %) como **proxy**. **No es una distancia en metros**, porque no hay calibración de la cámara.

@@ -47,7 +47,9 @@ class Zonas(_Estricto):
 class Geometria(_Estricto):
     banda_riesgo_y_min: float = Field(ge=0, lt=1)
     area_min: float = Field(ge=0, lt=1)
-    cobertura_min_zona: float = Field(gt=0, le=1)
+    # <= 0.5: una caja repartida entre dos zonas siempre deja >= la mitad de su
+    # ancho en una de ellas, asi que nunca queda sin zona (revision PR #19).
+    cobertura_min_zona: float = Field(gt=0, le=0.5)
 
 
 class Confianza(_Estricto):
