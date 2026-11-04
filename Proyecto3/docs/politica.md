@@ -161,13 +161,15 @@ Con las secuencias reales y el detector real, los casos los corre el runner de B
 
 ## C5 y C7 con el detector real (análisis de B1)
 
-Con el detector real, C5 falla en `seq05` 8–10 (EVADE_RIGHT con una persona a la derecha). C7 falla en `seq06` 30/31 (sin BLOCKED en el plazo de 2 cuadros) y 36/38 (FORWARD con la persona al centro). **No se corrigieron cambiando la política ni las expectativas**, porque la causa principal es el detector. Este es el análisis:
+Con el detector real, C5 falla en `seq05` 8–10 (EVADE_RIGHT con una persona a la derecha). C7 falla en `seq06` 30/31 (sin BLOCKED en el plazo de 2 cuadros) y 36/38 (FORWARD con la persona al centro). **No se corrigieron cambiando la política ni las expectativas**, porque la causa principal es el detector. Este análisis documenta los fallos, pero **no cierra B1-03 (#3)**: su definición de terminado exige que C1–C7 pasen.
 
 **Reproducción**, desde `Proyecto5` en el commit `fe9f5d5` de `main`:
 
 ```powershell
-.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output <carpeta-nueva>
+.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output resultados\c1-c10-detector-real
 ```
+
+`resultados/` está en `.gitignore`. El runner no sobrescribe: si la carpeta ya existe, usa otro nombre. Sale con código 1 mientras C5 y C7 fallen y C9 y C10 sigan pendientes.
 
 | Dato | Valor |
 |---|---|
