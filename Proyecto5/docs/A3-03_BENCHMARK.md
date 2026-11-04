@@ -68,7 +68,7 @@ Opciones:
 - `--calentamientos`: 10 por defecto. Menos de 10 se rechaza.
 - `--repeticiones`: 200 por defecto. Menos de 100 se rechaza.
 - `--weights`: models/yolox_tiny.onnx por defecto.
-- `--policy-config`: ../Proyecto3/config/politica.yaml por defecto.
+- `--policy-config`: config/politica.yaml por defecto.
 
 Al terminar imprime p50, p95 y máximo por etapa.
 

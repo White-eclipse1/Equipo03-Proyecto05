@@ -110,7 +110,7 @@ Abre http://127.0.0.1:8765. Las líneas punteadas marcan las zonas de la políti
 
 Los estados laterales admiten el giro hacia el lado libre porque la política tarda varios cuadros en liberar el centro y sigue evadiendo mientras la persona se aleja. SLOW y STOP cubren las demás transiciones. Cuándo aplica cada acción lo acotan los casos C1–C7 de B3.
 
-Las zonas y clases son copia de `Proyecto3/config/politica.yaml`. Si B1 las cambia, hay que actualizar `paquete.py` antes de congelar.
+Las zonas y clases son copia de `config/politica.yaml` de P5. Si B1 las cambia, hay que actualizar `paquete.py` antes de congelar.
 
 ## Paso 6: validar y congelar
 

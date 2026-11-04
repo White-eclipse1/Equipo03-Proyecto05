@@ -53,7 +53,7 @@ Opciones:
 - `--sequence`: sin ella, recorre todo el manifiesto.
 - `--output`: cualquier ruta. Crea las carpetas que falten. Si el archivo ya existe, termina con código 1 y no lo toca. resultados/ no se versiona.
 - `--weights`: models/yolox_tiny.onnx por defecto.
-- `--policy-config`: ../Proyecto3/config/politica.yaml por defecto.
+- `--policy-config`: config/politica.yaml por defecto.
 
 Al terminar imprime `frames=<total> errors=<cuadros con error> output=<ruta>`. Cada comando también queda en el log, en stderr, con su `frame_id`.
 

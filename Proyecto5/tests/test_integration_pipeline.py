@@ -28,7 +28,7 @@ from p5.integration.pipeline import (
 )
 from test_detector import PERSON, FakeSession, raw_output, write_png
 
-POLICY_CONFIG = Path(__file__).resolve().parents[2] / "Proyecto3" / "config" / "politica.yaml"
+POLICY_CONFIG = Path(__file__).resolve().parents[1] / "config" / "politica.yaml"
 # Persona con confianza 0.9, en el tercio central de la imagen de 416x416.
 CENTER = raw_output((0, 208, 300, 100, 200, 1.0, PERSON, 0.9))
 CLEAR = raw_output()
