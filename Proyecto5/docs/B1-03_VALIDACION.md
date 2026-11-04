@@ -9,7 +9,7 @@ Responsables: Andrés Quiroz Valdovinos (@AndresQuiVal) y Omar Ramirez (@OmarCTM
 | Criterio de #3 | Estado | Evidencia |
 |---|---|---|
 | C1–C4 y C6 | Pasan con detector real y en replay sintético | `B3-02_RUNNER.md`, `evidencias/B1-02/` |
-| C5 considera todas las detecciones | Falla con detector real en `seq05` 8–10 | `../Proyecto3/docs/politica.md`, «C5 y C7 con el detector real» |
+| C5 considera todas las detecciones | Falla con detector real en `seq05` 8–10 | [`Proyecto3/docs/politica.md`](../../Proyecto3/docs/politica.md), «C5 y C7 con el detector real» |
 | C7 clear → blocked → clear | Pasa en sintético; falla con detector real en `seq06` 30/31, 36 y 38 | Misma sección |
 | Expectativas antes del resultado | Sintéticas sí (commit red `5695701`). Reales: `B3-02_RUNNER.md` declara que se escribieron durante la captura | `B3-02_RUNNER.md`, «Límites conocidos» |
 | Cada fallo produce salida verificable | Sí | `resultados.json` y `decisiones.jsonl` del runner |
@@ -39,7 +39,7 @@ Resultado, en `evidencias/B1-03/ajuste.json` (manifiesto `b4029c40…`, modelo `
 | Actual: 0.30, bloquear 2, liberar 3 | 13 | 0 |
 | **Seleccionada:** 0.15, bloquear 2, liberar 5 | **8** | 1 |
 
-Las 8 restantes están en `aj06` 6–14. Ahí el detector no entrega a la persona del centro ni siquiera a 0.10, así que ninguna configuración de la política puede verla. La selección se commiteó (`1b59eb2`) antes de cambiar la configuración y de medir `p5-eval-v1`.
+Las 8 restantes están en `aj06` 6–12 y 14. En esos cuadros ninguna caja `person` del detector, que entrega desde 0.10, se solapa con la persona anotada en el centro (IoU 0), así que ninguna configuración de la política puede verla. La selección se commiteó (`1b59eb2`) antes de cambiar la configuración y de medir `p5-eval-v1`.
 
 ## Medición única en `p5-eval-v1`
 
