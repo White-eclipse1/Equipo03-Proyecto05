@@ -548,3 +548,36 @@ def test_c8_watchdog_is_reproducible(rows, config):
     assert commands[2]["evento"] == "cuadro_vencido"
     assert commands[2]["direction"] == "stop"
     assert commands[2]["reason_code"] == "watchdog_timeout"
+
+
+def test_real_runner_watchdog_stops_when_frame_stream_ends(rows, config):
+    sequence = [row for row in rows if row["sequence_id"] == "seq01"][:3]
+
+    case = copy.deepcopy(case_by_id(load_cases(CASES), "C1"))
+    case["alguna"] = []
+
+    result = run_real_case(
+        case,
+        sequence,
+        config,
+        perfect_detector(rows),
+        DATASET,
+    )
+
+    assert len(result["decisiones"]) == 3
+    assert result["decisiones"][-1]["comando"]["direction"] == "forward"
+
+    events = result["eventos_watchdog"]
+
+    assert len(events) == 1
+
+    stop = events[0]
+
+    assert stop["direction"] == "stop"
+    assert stop["speed"] == 0.0
+    assert stop["reason_code"] == "watchdog_timeout"
+    assert stop["frame_id"] == sequence[-1]["frame_id"]
+
+    expected_deadline = sequence[-1]["t_capture_ms"] + config[0].temporal.vigencia_comando_ms
+
+    assert stop["at_ms"] == expected_deadline

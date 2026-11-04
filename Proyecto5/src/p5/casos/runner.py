@@ -178,14 +178,21 @@ def run_real_case(
         missing = {"regla": "entrada", "motivo": f"no existe la secuencia {case['secuencia']}"}
         return {**result, "resultado": FAILED, "fallos": [missing], "decisiones": []}
 
+    now = {"ms": float(sequence[0]["t_capture_ms"])}
+    adapter = VirtualControlAdapter(
+        clock_ms=lambda: now["ms"],
+        timeout_ms=float(settings.temporal.vigencia_comando_ms),
+    )
     pipeline = Pipeline(
         detector,
         PoliticaDecision(settings, config_sha256=config_sha256),
-        VirtualControlAdapter(),
+        adapter,
     )
     decisions = []
     failures = []
+    watchdog_events = []
     for number, row in enumerate(sequence, start=1):
+        now["ms"] = float(row["t_capture_ms"])
         where = {"cuadro": number, "frame_id": row["frame_id"]}
         try:
             trace = pipeline.process(_frame_input(row, dataset))
@@ -218,12 +225,41 @@ def run_real_case(
                     "comando": record["comando"],
                 }
             )
+
+        command = adapter.last_command
+        if (
+            command is not None
+            and command.direction != "stop"
+            and command.valid_until_ms is not None
+        ):
+            next_capture_ms = (
+                float(sequence[number]["t_capture_ms"]) if number < len(sequence) else None
+            )
+
+            if next_capture_ms is None or next_capture_ms >= command.valid_until_ms:
+                now["ms"] = command.valid_until_ms
+                watchdog_stop = adapter.check_watchdog()
+
+                if watchdog_stop is not None:
+                    watchdog_events.append(
+                        {
+                            "at_ms": now["ms"],
+                            "direction": watchdog_stop.direction,
+                            "speed": watchdog_stop.speed,
+                            "steering": watchdog_stop.steering,
+                            "frame_id": watchdog_stop.frame_id,
+                            "decision_id": watchdog_stop.decision_id,
+                            "reason_code": watchdog_stop.reason_code,
+                        }
+                    )
+
     failures.extend(_rule_failures(case, decisions))
     return {
         **result,
         "resultado": FAILED if failures else PASSED,
         "fallos": failures,
         "decisiones": decisions,
+        "eventos_watchdog": watchdog_events,
     }
 
 
