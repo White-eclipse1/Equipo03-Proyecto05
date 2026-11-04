@@ -14,6 +14,7 @@ from dataset_helpers import (
 )
 from p5.dataset import paquete
 from p5.dataset.paquete import (
+    allowed_actions,
     annotation_errors,
     build_report,
     freeze,
@@ -62,6 +63,42 @@ def test_manifest_row_links_image_labels_and_allowed_actions(dataset):
     assert row["t_capture_ms"] == 1500
     assert row["annotations"] == [person(CENTER_BOX)]
     assert "FORWARD" not in row["allowed_actions"]
+
+
+@pytest.mark.parametrize(
+    ("state", "boxes", "expected"),
+    [
+        ("libre", [], ["FORWARD", "SLOW", "STOP"]),
+        ("centro", [CENTER_BOX], ["STOP", "SLOW", "EVADE_LEFT", "EVADE_RIGHT"]),
+        # Con alguien a un lado, solo se admite girar hacia el lado contrario.
+        ("varios", [CENTER_BOX, RIGHT_BOX], ["STOP", "SLOW", "EVADE_LEFT"]),
+        ("varios", [LEFT_BOX, CENTER_BOX], ["STOP", "SLOW", "EVADE_RIGHT"]),
+        ("varios", [LEFT_BOX, CENTER_BOX, RIGHT_BOX], ["STOP", "SLOW"]),
+        # La politica sigue evadiendo mientras libera el centro.
+        ("lateral_izquierda", [LEFT_BOX], ["FORWARD", "SLOW", "STOP", "EVADE_RIGHT"]),
+        ("lateral_derecha", [RIGHT_BOX], ["FORWARD", "SLOW", "STOP", "EVADE_LEFT"]),
+    ],
+)
+def test_allowed_actions_only_turn_towards_a_free_zone(state, boxes, expected):
+    objects = [person(box) for box in boxes]
+
+    assert allowed_actions(state, objects, WIDTH) == expected
+
+
+def test_a_box_over_two_zones_blocks_turning_towards_either(dataset):
+    # Entre el centro y la derecha: ocupa las dos zonas, aunque la mayor parte caiga en una.
+    box = [200.0, 100.0, 300.0, 280.0]
+
+    assert allowed_actions("centro", [person(box)], WIDTH) == ["STOP", "SLOW", "EVADE_LEFT"]
+
+
+def test_manifest_rows_do_not_allow_turning_towards_an_occupied_zone(dataset):
+    rows = build_report(dataset).rows
+
+    left_occupied = [r for r in rows if r["road_state"] == "lateral_izquierda"]
+    right_occupied = [r for r in rows if r["road_state"] == "lateral_derecha"]
+    assert left_occupied and all("EVADE_LEFT" not in r["allowed_actions"] for r in left_occupied)
+    assert right_occupied and all("EVADE_RIGHT" not in r["allowed_actions"] for r in right_occupied)
 
 
 def test_clear_frame_keeps_an_explicit_empty_annotation(dataset):

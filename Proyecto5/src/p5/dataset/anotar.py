@@ -12,8 +12,8 @@ from urllib.parse import unquote, urlsplit
 
 from p5.dataset.captura import SEQUENCES_DIR
 from p5.dataset.paquete import (
-    ALLOWED_ACTIONS,
     ANNOTATIONS_FILE,
+    BASE_ACTIONS,
     OBSTACLE_CLASSES,
     ZONES,
     annotation_errors,
@@ -221,7 +221,7 @@ class _Handler(BaseHTTPRequestHandler):
             payload = {
                 "frames": frames,
                 "classes": OBSTACLE_CLASSES,
-                "states": tuple(ALLOWED_ACTIONS),
+                "states": tuple(BASE_ACTIONS),
                 "zones": [ZONES["izquierda"][1], ZONES["centro"][1]],
             }
             self._json(HTTPStatus.OK, payload)
