@@ -25,16 +25,30 @@ Los comandos todavía no pasan por el adaptador: el runner compara las decisione
 
 ## Uso
 
-Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. La política vive en Proyecto3, así que hay que incluirla en `PYTHONPATH`. En Windows el separador es `;`, y en Linux es `:`.
+Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. La política vive en Proyecto3, así que hay que incluirla en `PYTHONPATH`.
+
+### PowerShell
+
+```powershell
+$env:PYTHONPATH = "src;../Proyecto3/src"
+.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config ../Proyecto3/config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output <carpeta-nueva>
+```
+
+Para ver el código de salida, corre `$LASTEXITCODE` justo después.
+
+### Linux
 
 ```bash
-PYTHONPATH="src;../Proyecto3/src" python -m p5.casos.runner \
+export PYTHONPATH="src:../Proyecto3/src"
+.venv/bin/python -m p5.casos.runner \
   --cases casos/c1_c10.yaml \
   --config ../Proyecto3/config/politica.yaml \
   --dataset data/p5-eval-v1 \
   --weights models/yolox_tiny.onnx \
   --output <carpeta-nueva>
 ```
+
+Para ver el código de salida, corre `echo $?` justo después.
 
 Corre en CPU, sin red ni hardware: nunca llama a las rutas de motores.
 
@@ -58,7 +72,7 @@ Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los
 | Regla | Qué exige | Para qué |
 |---|---|---|
 | `alguna` | Al menos una de esas acciones en el rango | Que detenerse siempre no apruebe C1, C3, C4 ni C7 |
-| `reaccion` | Una de esas acciones con la vía en `BLOCKED`, dentro del plazo | Que el STOP de arranque no cuente como reacción |
+| `reaccion` | Una de esas acciones con la vía en `BLOCKED`, dentro del plazo. `plazo_cuadros` incluye el cuadro `desde`: plazo 2 desde el cuadro 30 son los cuadros 30 y 31 | Que el STOP de arranque no cuente como reacción |
 | `direccion_min`, `direccion_max` | Límites de la dirección en toda la secuencia | Comprobar el signo en C3 y C4 |
 
 **Fallos de percepción:** si la percepción lanza una excepción, el cuadro pasa a `status: "error"` y la política detiene el carro. Nunca se toma como escena vacía.
@@ -73,17 +87,27 @@ Con YOLOX-Tiny sobre `p5-eval-v1`: **5 pasan, 2 fallan y 3 pendientes.** Estos s
 |---|---|---|---|
 | C5 | `seq05` 8, 9 y 10 | `EVADE_RIGHT` | Hay una persona a la derecha |
 | C7 | `seq06` 36 y 38 | `FORWARD` | Hay una persona al centro |
-| C7 | `seq06` 30 a 32 | Solo `SLOW`, sin `BLOCKED` | No confirma el bloqueo dentro del plazo de 2 cuadros |
+| C7 | `seq06` 30 y 31 | Solo `SLOW`, sin `BLOCKED` | No confirma el bloqueo dentro del plazo de 2 cuadros |
 
 En C5 y C7 el detector pierde a la persona en cuadros alternos, y la política necesita 2 cuadros firmes seguidos para bloquear. Se debe ajustar con `p5-ajuste-v1`, no con estas secuencias.
 
 ## Verificación
 
-```bash
-python -m pytest tests/test_casos_runner.py
+Con `P5_DETECTOR_WEIGHTS` definida, las pruebas también corren el detector real.
+
+### PowerShell
+
+```powershell
+$env:P5_DETECTOR_WEIGHTS = "models/yolox_tiny.onnx"
+.venv\Scripts\python -m pytest tests/test_casos_runner.py
 ```
 
-Con `P5_DETECTOR_WEIGHTS` definida, también corre el detector real.
+### Linux
+
+```bash
+export P5_DETECTOR_WEIGHTS=models/yolox_tiny.onnx
+.venv/bin/python -m pytest tests/test_casos_runner.py
+```
 
 ## Fallo inducido
 

@@ -8,7 +8,7 @@ import yaml
 from p3.policy.config import cargar_config
 
 from p5.casos import runner
-from p5.casos.runner import load_cases, run_cases, run_real_case
+from p5.casos.runner import _rule_failures, load_cases, run_cases, run_real_case
 from p5.dataset.paquete import load_manifest
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -156,6 +156,57 @@ def test_late_reaction_fails_the_case(rows, config):
 
     assert result["resultado"] == "FALLA"
     assert any(fallo.get("regla") == "reaccion" for fallo in result["fallos"])
+
+
+def decisions_blocked_at(blocked_frame, total=10):
+    return [
+        {
+            "frame_id": f"seq-{number:04d}",
+            "accion": "STOP" if number == blocked_frame else "SLOW",
+            "estado": "BLOCKED" if number == blocked_frame else "CAUTION",
+            "direccion": 0.0,
+        }
+        for number in range(1, total + 1)
+    ]
+
+
+@pytest.mark.parametrize(
+    ("blocked_frame", "on_time"),
+    [
+        (4, False),  # Antes de `desde`: no reacciona a este obstaculo.
+        (5, True),  # El primer cuadro del plazo.
+        (6, True),  # El ultimo cuadro del plazo.
+        (7, False),  # Un cuadro despues del plazo.
+    ],
+)
+def test_reaction_deadline_counts_exactly_plazo_cuadros_frames(blocked_frame, on_time):
+    case = {"reaccion": {"desde": 5, "plazo_cuadros": 2, "acciones": ["STOP"]}}
+
+    failures = _rule_failures(case, decisions_blocked_at(blocked_frame))
+
+    assert (failures == []) is on_time
+
+
+def test_reaction_deadline_of_one_frame_only_accepts_that_frame():
+    case = {"reaccion": {"desde": 5, "plazo_cuadros": 1, "acciones": ["STOP"]}}
+
+    assert _rule_failures(case, decisions_blocked_at(5)) == []
+    assert _rule_failures(case, decisions_blocked_at(6)) != []
+
+
+def test_reaction_deadline_past_the_end_of_the_sequence_fails():
+    case = {"reaccion": {"desde": 10, "plazo_cuadros": 2, "acciones": ["STOP"]}}
+
+    assert _rule_failures(case, decisions_blocked_at(10)) != []
+
+
+def test_reaction_failure_only_reports_the_frames_inside_the_deadline():
+    case = {"reaccion": {"desde": 5, "plazo_cuadros": 2, "acciones": ["STOP"]}}
+
+    failure = _rule_failures(case, decisions_blocked_at(7))[0]
+
+    # El cuadro 7 esta bloqueado, pero queda fuera del plazo.
+    assert failure["observadas"] == ["SLOW/CAUTION"]
 
 
 def test_direction_towards_the_occupied_side_fails(rows, config):

@@ -101,7 +101,8 @@ def _rule_failures(case: dict[str, Any], decisions: list[dict[str, Any]]) -> lis
 
     reaction = case.get("reaccion")
     if reaction:
-        observed = window(reaction["desde"], reaction["desde"] + reaction["plazo_cuadros"])
+        # El plazo cuenta el cuadro `desde`: 2 cuadros desde el 30 son el 30 y el 31.
+        observed = window(reaction["desde"], reaction["desde"] + reaction["plazo_cuadros"] - 1)
         # El STOP de arranque, con la via sin confirmar, no cuenta como reaccion al obstaculo.
         reacted = any(
             decision["accion"] in reaction["acciones"] and decision["estado"] == "BLOCKED"

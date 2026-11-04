@@ -8,8 +8,9 @@
 #
 # Reglas:
 #   alguna:   en ese rango debe aparecer al menos una de esas acciones.
-#   reaccion: desde `desde` y dentro de `plazo_cuadros` debe aparecer una de esas acciones con
-#             la via en estado BLOCKED. El STOP de arranque no cuenta como reaccion.
+#   reaccion: en los `plazo_cuadros` cuadros que empiezan en `desde`, incluido ese, debe aparecer
+#             una de esas acciones con la via en estado BLOCKED. Plazo 2 desde el cuadro 30 son
+#             los cuadros 30 y 31. El STOP de arranque no cuenta como reaccion.
 #   direccion_min / direccion_max: limites de la direccion en toda la secuencia.
 #             Negativo es izquierda y positivo es derecha.
 #
