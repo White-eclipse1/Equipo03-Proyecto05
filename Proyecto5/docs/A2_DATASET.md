@@ -135,8 +135,7 @@ Después de congelar, `validate` también falla si `manifiesto.jsonl` ya no coin
 - **Origen:** cámara OV2640 del carro, en resolución CIF, leyendo `/stream`. El carro estuvo inmóvil en todas las tomas; se movían las personas.
 - **Firmware:** se agregaron `set_vflip` y `set_hmirror` porque la imagen salía girada 180°. Se comprobó con un objeto real a la izquierda del carro.
 - **Etiquetas:** hechas a mano con el anotador, sobre las 8 clases obstáculo de la política. En este conjunto solo hay `person`.
-- **Sin ajuste en el paquete:** todas las secuencias son de `evaluacion`. Las tomas de prueba `aj01` a `aj07` no se publican: `aj01` a `aj03` se borraron por salir giradas, y las demás no tienen etiquetas.
-- **Pendiente de #15:** falta un conjunto de ajuste identificado, así que ese ticket sigue abierto. No hay secuencias de ajuste que B1 pueda usar hoy. Mientras no existan, la configuración de la política debe quedar sin ajustes contra datos, y el equipo debe declararlo.
+- **Sin ajuste en este paquete:** todas las secuencias son de `evaluacion`. El ajuste está en `p5-ajuste-v1`. De las tomas de prueba, `aj01` a `aj03` se borraron por salir giradas, y `aj04` y `aj07` no se publican.
 
 ### Tomas repetidas
 
@@ -152,11 +151,33 @@ Durante la captura se corrieron YOLOX-Tiny y, en `seq06`, también la política,
 
 La colocación de las personas se decidió viendo lo que el detector reconocía: de pie frente a fondos oscuros falla más, y en este conjunto están sobre todo en lugares donde se les ve bien. **Por eso estas métricas no representan cualquier escena.** Tampoco hay personas de pie a corta distancia, con el cuerpo cortado, donde el detector casi no las reconoce.
 
-Después de congelar no se repiten tomas. La política no debe ajustarse con estos cuadros. Si B1 necesita ajustarla, hay que capturar y etiquetar secuencias nuevas, separadas de estas.
+Después de congelar no se repiten tomas. La política no debe ajustarse con estos cuadros, sino con `p5-ajuste-v1`.
 
 Con la política actual y YOLOX-Tiny, 5 de 128 cuadros quedan fuera de `allowed_actions`: FORWARD en `seq06-0036` y `seq06-0038` con la persona al centro, y EVADE_RIGHT en 3 cuadros de `seq05` con una persona a la derecha. Con cajas perfectas no sale ninguno, así que vienen de los fallos del detector al combinarse con la política. Son resultados del sistema, no errores del paquete, y no se corrigieron cambiando las acciones admisibles.
 
 `base_commit` de `congelamiento.json` debe seguir en el historial de `main`, así que este PR se integra con un merge commit, no con squash.
+
+## Paquete de ajuste `p5-ajuste-v1`
+
+Es para ajustar la política y los umbrales. Se valida y congela aparte, así que no cambia `p5-eval-v1` ni su hash. Declara `"package": "ajuste"` en `secuencias.json`, y por eso no le aplican los mínimos de E3.
+
+```bash
+python -m p5.dataset.paquete validate --dataset data/p5-ajuste-v1 --against data/p5-eval-v1
+```
+
+`--against` falla si los dos paquetes comparten un `sequence_id` o una imagen idéntica. Solo compara bytes: no detecta dos tomas parecidas.
+
+| Secuencia | Escena | Cuadros | Intervalo |
+|---|---|---:|---:|
+| aj05 | Zona de sillones: persona de pie o agachada, a veces sin la cabeza en el cuadro | 25 | 1000 ms |
+| aj06 | Zona de sillones: persona de pie que cruza el centro y queda a la derecha | 30 | 1000 ms |
+| aju01 | Piso de madera: dos personas que ocupan las tres zonas | 15 | 500 ms |
+
+**Límites de este paquete:**
+- **No sirve para calcular F1:** en `aj05` y `aj06` hay personas sentadas de espaldas, lejos y fuera de la banda de riesgo, que no se etiquetaron. El detector a veces las marca, y esas detecciones no son falsos positivos.
+- **Estados en el límite:** en `aj06-0001` a `aj06-0005` la caja queda a pocos píxeles de la línea entre centro y derecha, y 0001–0004 quedan como `centro` y 0005 como `lateral_derecha`. A esta resolución, esa diferencia no es significativa.
+- **Lugares distintos a los de la evaluación:** `aj05` y `aj06` son de la zona de sillones y `aju01` del piso de madera, pero pueden ser del mismo edificio que `seq05` y `seq06`.
+- **Tomas ya vistas:** `aj05` y `aj06` se grabaron como pruebas del detector, y sirvieron para decidir cómo colocar a las personas en la evaluación.
 
 ## Formato para A3 y B3
 

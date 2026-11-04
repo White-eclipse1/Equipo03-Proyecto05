@@ -20,6 +20,7 @@ from p5.dataset.paquete import (
     freeze,
     load_manifest,
     occupied_zones,
+    overlap_errors,
     validate_package,
 )
 
@@ -194,6 +195,88 @@ def test_same_image_in_two_sequences_is_a_duplicate(dataset):
     assert any(
         "seq07-0001: imagen identica a seq01-0001" in e for e in build_report(dataset).errors
     )
+
+
+def make_tuning_package(path, first_seed=1000):
+    add_sequence(path, "aju01", ["libre", "centro"], first_seed=first_seed, split="ajuste")
+    declared = json.loads((path / "secuencias.json").read_text(encoding="utf-8"))
+    declared["package"] = "ajuste"
+    (path / "secuencias.json").write_text(json.dumps(declared), encoding="utf-8")
+
+
+def test_tuning_package_does_not_need_the_evaluation_minimums(tmp_path):
+    make_tuning_package(tmp_path)
+
+    report = build_report(tmp_path)
+
+    assert report.errors == []
+    assert report.summary()["frames_ajuste"] == 2
+    assert {row["split"] for row in report.rows} == {"ajuste"}
+
+
+def test_tuning_package_can_be_frozen_and_loaded(tmp_path):
+    make_tuning_package(tmp_path)
+
+    freeze(tmp_path, "v1")
+
+    assert len(load_manifest(tmp_path / "manifiesto.jsonl")) == 2
+
+
+def test_tuning_package_rejects_evaluation_sequences(tmp_path):
+    make_tuning_package(tmp_path)
+    add_sequence(tmp_path, "seq01", ["libre"], first_seed=2000, split="evaluacion")
+
+    errors = build_report(tmp_path).errors
+
+    assert any("seq01: un paquete de ajuste" in error for error in errors)
+
+
+def test_tuning_package_without_frames_is_an_error(tmp_path):
+    (tmp_path / "secuencias.json").write_text('{"package": "ajuste", "sequences": {}}')
+
+    assert "ajuste: el paquete no tiene cuadros validos" in build_report(tmp_path).errors
+
+
+def test_unknown_package_kind_is_an_error(dataset):
+    path = dataset / "secuencias.json"
+    declared = json.loads(path.read_text(encoding="utf-8"))
+    declared["package"] = "otro"
+    path.write_text(json.dumps(declared), encoding="utf-8")
+
+    assert any("package debe ser" in error for error in build_report(dataset).errors)
+
+
+def test_packages_without_shared_data_do_not_overlap(dataset, tmp_path_factory):
+    tuning = tmp_path_factory.mktemp("ajuste")
+    make_tuning_package(tuning)
+
+    assert overlap_errors(tuning, dataset) == []
+
+
+def test_overlap_detects_a_shared_image_and_sequence(dataset, tmp_path_factory):
+    tuning = tmp_path_factory.mktemp("ajuste")
+    # first_seed=100 produce los mismos bytes que el primer cuadro de seq01.
+    add_sequence(tuning, "seq01", ["libre"], first_seed=100, split="ajuste")
+
+    errors = overlap_errors(tuning, dataset)
+
+    assert any("seq01: la secuencia tambien esta" in error for error in errors)
+    assert any("seq01-0001: imagen identica a seq01-0001" in error for error in errors)
+
+
+def test_cli_against_fails_when_the_packages_overlap(dataset, tmp_path_factory, capsys):
+    tuning = tmp_path_factory.mktemp("ajuste")
+    add_sequence(tuning, "aju01", ["libre"], first_seed=100, split="ajuste")
+    declared = json.loads((tuning / "secuencias.json").read_text(encoding="utf-8"))
+    declared["package"] = "ajuste"
+    (tuning / "secuencias.json").write_text(json.dumps(declared), encoding="utf-8")
+
+    base = ["--dataset", str(tuning), "--against", str(dataset)]
+
+    assert paquete.main(["validate", *base]) == 1
+    assert "imagen identica" in capsys.readouterr().err
+    assert paquete.main(["freeze", "--version", "v1", *base]) == 1
+    assert not (tuning / "congelamiento.json").exists()
 
 
 def test_time_must_grow_within_a_sequence(dataset):

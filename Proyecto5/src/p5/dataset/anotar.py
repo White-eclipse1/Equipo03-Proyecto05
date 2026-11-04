@@ -149,6 +149,8 @@ $("prev").onclick = () => show(at - 1);
 $("next").onclick = () => show(at + 1);
 $("copy").onclick = copyPrevious;
 $("todo").onclick = () => show(Math.max(0, pending()));
+// Con el foco en un menu, el navegador se queda con las teclas de atajo.
+$("cls").onchange = $("state").onchange = e => e.target.blur();
 window.onkeydown = e => {
   if (e.target.tagName === "SELECT") return;
   if (e.key === "Enter") { e.preventDefault(); save(); }

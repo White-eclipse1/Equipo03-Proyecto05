@@ -205,7 +205,11 @@ def build_report(dataset: Path) -> Report:
     errors = report.errors
 
     path = dataset / SEQUENCES_FILE
-    sequences = json.loads(path.read_text(encoding="utf-8")).get("sequences", {})
+    declared = json.loads(path.read_text(encoding="utf-8"))
+    sequences = declared.get("sequences", {})
+    package = declared.get("package", SPLIT_EVALUATION)
+    if package not in SPLITS:
+        errors.append(f"{SEQUENCES_FILE}: package debe ser uno de {SPLITS}")
     annotations = load_annotations(dataset)
     captures = load_captures(dataset)
 
@@ -217,6 +221,8 @@ def build_report(dataset: Path) -> Report:
     for sequence_id, info in sequences.items():
         if info.get("split") not in SPLITS:
             errors.append(f"{sequence_id}: split debe ser uno de {SPLITS}")
+        elif package == SPLIT_TUNING and info["split"] != SPLIT_TUNING:
+            errors.append(f"{sequence_id}: un paquete de ajuste solo admite split {SPLIT_TUNING}")
 
     seen_frames: set[str] = set()
     seen_hashes: dict[str, str] = {}
@@ -279,6 +285,12 @@ def build_report(dataset: Path) -> Report:
     for frame_id in sorted(set(annotations) - seen_frames):
         errors.append(f"{frame_id}: anotacion sin cuadro capturado")
 
+    # Los minimos de E3 solo aplican a la evaluacion.
+    if package == SPLIT_TUNING:
+        if not report.rows:
+            errors.append(f"{SPLIT_TUNING}: el paquete no tiene cuadros validos")
+        return report
+
     summary = report.summary()
     if summary["secuencias_evaluacion"] < MIN_SEQUENCES:
         errors.append(f"evaluacion: {summary['secuencias_evaluacion']}/{MIN_SEQUENCES} secuencias")
@@ -294,6 +306,23 @@ def build_report(dataset: Path) -> Report:
     if missing:
         errors.append(f"evaluacion: faltan escenarios {sorted(missing)}")
     return report
+
+
+def overlap_errors(dataset: Path, other: Path) -> list[str]:
+    """Detecta secuencias o imagenes compartidas entre dos paquetes, como ajuste y evaluacion."""
+    theirs = load_captures(other)
+    their_sequences = {record["sequence_id"] for record in theirs}
+    their_hashes = {record["sha256"]: record["frame_id"] for record in theirs}
+
+    errors = []
+    mine = load_captures(dataset)
+    for sequence_id in sorted({record["sequence_id"] for record in mine} & their_sequences):
+        errors.append(f"{sequence_id}: la secuencia tambien esta en {other.name}")
+    for record in mine:
+        if record["sha256"] in their_hashes:
+            match = their_hashes[record["sha256"]]
+            errors.append(f"{record['frame_id']}: imagen identica a {match} de {other.name}")
+    return errors
 
 
 def _changed_after_freezing(record: dict[str, Any]) -> str:
@@ -374,6 +403,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=("validate", "freeze"))
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--version", help="Version a registrar. Obligatoria con freeze.")
+    parser.add_argument(
+        "--against", type=Path, help="Paquete que no debe compartir secuencias ni imagenes."
+    )
     args = parser.parse_args(argv)
 
     if args.command == "freeze" and not args.version:
@@ -381,11 +413,15 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         report = validate_package(args.dataset)
+        overlap = overlap_errors(args.dataset, args.against) if args.against else []
+        report.errors.extend(overlap)
         for error in report.errors:
             print(f"ERROR {error}", file=sys.stderr)
         if args.command == "validate":
             print(json.dumps(report.summary(), indent=2, ensure_ascii=False))
             return 1 if report.errors else 0
+        if overlap:
+            raise ValueError(f"el paquete comparte datos con {args.against}")
         record = freeze(args.dataset, args.version, commit=_current_commit())
     except (OSError, ValueError, KeyError) as error:
         print(f"paquete invalido: {error}", file=sys.stderr)

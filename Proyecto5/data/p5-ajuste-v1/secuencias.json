@@ -1,0 +1,8 @@
+{
+  "package": "ajuste",
+  "sequences": {
+    "aj05": {"split": "ajuste", "scenario": "cuerpo-cortado", "description": "Zona de sillones, persona de pie o agachada, a veces sin la cabeza en el cuadro"},
+    "aj06": {"split": "ajuste", "scenario": "cruce", "description": "Zona de sillones, persona de pie que cruza el centro y queda a la derecha"},
+    "aju01": {"split": "ajuste", "scenario": "varios", "description": "Piso de madera, dos personas que ocupan las tres zonas"}
+  }
+}
