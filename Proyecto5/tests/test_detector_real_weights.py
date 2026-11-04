@@ -4,14 +4,18 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from p3.policy.config import cargar_config
+from p3.policy.politica import PoliticaDecision
 
 from p5.detector import __main__ as cli
+from p5.detector.frame import detect_frame
 from p5.detector.yolox import YoloxDetector
 
 WEIGHTS = os.environ.get("P5_DETECTOR_WEIGHTS")
 EVIDENCE = Path(__file__).resolve().parents[2] / "Proyecto4" / "evidencias"
 STREET = EVIDENCE / "EDGE-02" / "manual" / "edge01-0dc81034998343b680ecc8aeb4452834.jpg"
 NO_PEOPLE = EVIDENCE / "EDGE-01" / "camara-nueva.jpg"
+POLICY_CONFIG = Path("Proyecto3") / "config" / "politica.yaml"
 
 pytestmark = pytest.mark.skipif(not WEIGHTS, reason="P5_DETECTOR_WEIGHTS not set")
 
@@ -47,6 +51,29 @@ def test_detections_change_with_the_objects_in_the_image(detector):
 
 def test_plain_image_has_no_detections(detector):
     assert detector.detect_image(np.full((480, 640, 3), 128, dtype=np.uint8)) == ()
+
+
+def test_policy_decides_on_real_detector_frames(detector):
+    config, sha256 = cargar_config(Path(__file__).resolve().parents[2] / POLICY_CONFIG)
+    policy = PoliticaDecision(config, sha256)
+
+    decisions = [
+        policy.decidir_crudo(
+            detect_frame(
+                detector,
+                STREET,
+                sequence_id="seq-street",
+                frame_id=f"seq-street-{index}",
+                t_capture_ms=index * 100,
+                image_size=(1920, 1080),
+            ).to_dict()
+        )
+        for index in range(2)
+    ]
+
+    assert decisions[1].frame_id == "seq-street-1"
+    assert decisions[1].estado == "BLOCKED"
+    assert decisions[1].velocidad == 0
 
 
 def test_cli_runs_with_real_weights(capsys):

@@ -16,6 +16,10 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    # Las pruebas validan contra el contrato y la politica de `Proyecto3/src/p3/policy`:
+    # mismas versiones que `Proyecto3/pyproject.toml`.
+    "pydantic==2.13.5",
+    "pyyaml==6.0.3",
     "pytest==9.1.1",
     "ruff==0.16.8",
 ]
@@ -36,5 +40,5 @@ known-first-party = ["p5"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "../Proyecto3/src"]
 addopts = "-q"
