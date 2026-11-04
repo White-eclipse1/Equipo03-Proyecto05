@@ -99,6 +99,8 @@ def to_control_decision(decision: Decision, *, frame_id: str, decision_id: str) 
         decision_id=decision_id,
         reason_code=decision.reason_code,
         requested_steering=decision.direccion,
+        t_capture_ms=decision.t_capture_ms,
+        valid_until_ms=decision.valido_hasta_ms,
     )
 
 

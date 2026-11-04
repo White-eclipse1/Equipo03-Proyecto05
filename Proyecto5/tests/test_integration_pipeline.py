@@ -679,3 +679,37 @@ def test_installed_command_finds_the_policy_without_the_pytest_path(tmp_path):
     )
 
     assert result.returncode == 0, result.stderr
+
+
+def test_policy_timing_reaches_control_decision():
+    decision = (
+        policy()
+        .decidir_crudo(
+            {
+                "sequence_id": "s-time",
+                "frame_id": "f-time",
+                "t_capture_ms": 1000.0,
+                "image_width": 10,
+                "image_height": 10,
+                "status": "ok",
+                "detections": [],
+            }
+        )
+        .model_copy(
+            update={
+                "accion": "FORWARD",
+                "velocidad": 0.5,
+                "direccion": 0.0,
+                "valido_hasta_ms": 1250.0,
+            }
+        )
+    )
+
+    control = to_control_decision(
+        decision,
+        frame_id="f-time",
+        decision_id="s-time:f-time",
+    )
+
+    assert control.t_capture_ms == 1000.0
+    assert control.valid_until_ms == 1250.0

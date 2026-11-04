@@ -22,6 +22,8 @@ from p3.policy.casos import ejecutar_casos
 from p3.policy.config import ConfigPolitica, cargar_config
 from p3.policy.politica import PoliticaDecision
 
+from p5.control.adapter import VirtualControlAdapter
+from p5.control.models import Action, ControlDecision
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.frame import detect_frame
 from p5.detector.yolox import DEFAULT_NMS_THRESHOLD, DEFAULT_SCORE_THRESHOLD, YoloxDetector
@@ -213,6 +215,95 @@ def _pending_case(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _run_watchdog_case(case: dict[str, Any]) -> dict[str, Any]:
+    """Reproduce C8 con reloj falso, sin esperar tiempo real ni recibir otro frame."""
+    now = {"ms": 1000.0}
+    deadline = now["ms"] + case["plazo_ms"]
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+
+    forward = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="c8-fresh",
+            decision_id="c8-forward",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=now["ms"],
+            valid_until_ms=deadline,
+        )
+    )
+
+    commands = [
+        {
+            "evento": "movimiento_inicial",
+            "direction": forward.direction,
+            "speed": forward.speed,
+            "reason_code": forward.reason_code,
+        }
+    ]
+    failures: list[dict[str, Any]] = []
+
+    # Dejan de llegar cuadros y solamente avanza el reloj.
+    now["ms"] = deadline
+    watchdog_stop = adapter.check_watchdog()
+
+    if watchdog_stop is None:
+        failures.append({"regla": "watchdog", "motivo": "no genero STOP al vencer"})
+    else:
+        commands.append(
+            {
+                "evento": "watchdog",
+                "direction": watchdog_stop.direction,
+                "speed": watchdog_stop.speed,
+                "reason_code": watchdog_stop.reason_code,
+            }
+        )
+
+    # Luego llega una decision basada en percepcion ya vencida.
+    stale = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="c8-stale",
+            decision_id="c8-stale",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=deadline,
+        )
+    )
+
+    commands.append(
+        {
+            "evento": "cuadro_vencido",
+            "direction": stale.direction,
+            "speed": stale.speed,
+            "reason_code": stale.reason_code,
+        }
+    )
+
+    if stale.direction != "stop" or stale.reason_code != "watchdog_timeout":
+        failures.append(
+            {
+                "regla": "cuadro_vencido",
+                "motivo": "la percepcion vencida reinicio el movimiento",
+            }
+        )
+
+    return {
+        **_base_result(case),
+        "entrada": case["entrada"],
+        "esperado": case["esperado"],
+        "plazo_ms": case["plazo_ms"],
+        "resultado": FAILED if failures else PASSED,
+        "fallos": failures,
+        "decisiones": [],
+        "comandos": commands,
+    }
+
+
 def run_cases(
     data: dict[str, Any], rows: list[dict[str, Any]], config: Config, perceive: Perceive
 ) -> dict[str, Any]:
@@ -222,6 +313,8 @@ def run_cases(
             results.append(run_real_case(case, rows, config, perceive))
         elif case["tipo"] == "sintetico":
             results.append(_run_synthetic_case(case, config))
+        elif case["tipo"] == "watchdog":
+            results.append(_run_watchdog_case(case))
         else:
             results.append(_pending_case(case))
 
