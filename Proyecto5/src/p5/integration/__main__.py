@@ -49,7 +49,8 @@ def main(argv: list[str] | None = None) -> int:
     failed = 0
     try:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        with args.output.open("w", encoding="utf-8") as output:
+        # "x": nunca reemplaza evidencia anterior. Fin de linea fijo: mismo archivo en cada SO.
+        with args.output.open("x", encoding="utf-8", newline="\n") as output:
             for frame in frames:
                 trace = pipeline.process(frame)
                 failed += bool(trace.errors)

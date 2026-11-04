@@ -23,6 +23,8 @@ from p5.detector.yolox import YoloxDetector
 logger = logging.getLogger(__name__)
 
 FAILSAFE_REASON = "FALLO_INTEGRACION"
+# El STOP de respaldo tampoco llego al adaptador: solo consta en la traza.
+STOP_NOT_EMITTED_REASON = "STOP_NO_EMITIDO"
 
 _ACTIONS = {
     "STOP": Action.STOP,
@@ -221,7 +223,7 @@ class Pipeline:
             _record(errors, "failsafe", frame, str(failure) or type(failure).__name__)
             self.halted = True
             self.adapter.cancel()
-            # El adaptador no llego a generarlo: por eso no tiene hora de emision.
+            # El adaptador no lo genero: por eso no tiene hora de emision.
             return {
                 "speed": 0.0,
                 "direction": "stop",
@@ -229,7 +231,7 @@ class Pipeline:
                 "timestamp": None,
                 "frame_id": frame.frame_id,
                 "decision_id": decision_id,
-                "reason_code": FAILSAFE_REASON,
+                "reason_code": STOP_NOT_EMITTED_REASON,
             }
 
     def _restart_confirmation(self, frame: FrameInput) -> None:

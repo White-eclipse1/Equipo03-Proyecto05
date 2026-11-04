@@ -13,6 +13,7 @@ class VirtualControlAdapter:
     def __init__(self) -> None:
         self._last_command: ControlCommand | None = None
         self._history: list[ControlCommand] = []
+        self._cancelled: list[ControlCommand] = []
 
     @property
     def last_command(self) -> ControlCommand | None:
@@ -21,6 +22,11 @@ class VirtualControlAdapter:
     @property
     def history(self) -> tuple[ControlCommand, ...]:
         return tuple(self._history)
+
+    @property
+    def cancelled(self) -> tuple[ControlCommand, ...]:
+        """Comandos anulados por `cancel`. El historial solo tiene comandos emitidos."""
+        return tuple(self._cancelled)
 
     def apply(self, decision: ControlDecision) -> ControlCommand:
         if decision.action == Action.STOP:
@@ -51,7 +57,17 @@ class VirtualControlAdapter:
 
     def cancel(self) -> None:
         """Anula el comando vigente sin generar otro, si un STOP no se pudo emitir."""
+        command = self._last_command
         self._last_command = None
+        if command is None:
+            return
+        self._cancelled.append(command)
+        logger.warning(
+            "virtual_control_cancel direction=%s frame_id=%s decision_id=%s",
+            command.direction,
+            command.frame_id,
+            command.decision_id,
+        )
 
     def _record(self, command: ControlCommand) -> ControlCommand:
         self._last_command = command

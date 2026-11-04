@@ -20,6 +20,7 @@ from p5.integration import __main__ as cli
 from p5.integration import pipeline as pipeline_module
 from p5.integration.pipeline import (
     FAILSAFE_REASON,
+    STOP_NOT_EMITTED_REASON,
     FrameInput,
     Pipeline,
     frames_from_manifest,
@@ -355,6 +356,26 @@ def test_failure_needs_the_road_confirmed_again(tmp_path, policy_class):
     assert traces[4].decision["estado_anterior"] == "FAULT"
 
 
+@pytest.mark.parametrize("policy_class", [FailingOncePolicy, InvalidSpeedOncePolicy])
+def test_restart_leaves_the_policy_as_a_detector_error_does(tmp_path, policy_class):
+    # Si B1 cambia su reinicio por error, esta prueba avisa que el del recorrido quedo distinto.
+    image = image_file(tmp_path)
+
+    by_detector = make_pipeline(FakeSession())
+    run(by_detector, image, 3)
+    by_detector.process(frame_input(tmp_path / "missing.png", 3))
+
+    broken = real_policy(policy_class)
+    broken.fail_at = 3
+    by_failure = Pipeline(YoloxDetector(FakeSession()), broken, VirtualControlAdapter())
+    run(by_failure, image, 4)
+
+    ignored = {"ultimo_t_ms"}
+    assert broken.memoria.model_dump(exclude=ignored) == by_detector._policy.memoria.model_dump(
+        exclude=ignored
+    )
+
+
 def test_a_failed_stop_cancels_motion_and_keeps_the_path_stopped(tmp_path, caplog):
     image = image_file(tmp_path)
     adapter = FailingAdapter()
@@ -362,15 +383,19 @@ def test_a_failed_stop_cancels_motion_and_keeps_the_path_stopped(tmp_path, caplo
     assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
 
     adapter.broken = True
-    with caplog.at_level(logging.ERROR):
+    with caplog.at_level(logging.WARNING):
         failed = pipeline.process(frame_input(image, 3))
 
     assert adapter.last_command is None
+    assert [c.frame_id for c in adapter.cancelled] == ["seq01-0002"]
+    assert adapter.history[-1].direction == "forward"
+    assert "virtual_control_cancel" in caplog.text
     assert failed.command["direction"] == "stop"
     assert failed.command["speed"] == 0.0
     assert failed.command["steering"] == 0.0
     assert failed.command["frame_id"] == "seq01-0003"
-    assert failed.command["reason_code"] == FAILSAFE_REASON
+    # La traza distingue este STOP de uno que el adaptador si recibio.
+    assert failed.command["reason_code"] == STOP_NOT_EMITTED_REASON
     assert [error["stage"] for error in failed.errors] == ["adapter", "failsafe"]
     assert "integration_error stage=failsafe" in caplog.text
     assert json.loads(failed.to_json())["command"]["timestamp"] is None
@@ -574,6 +599,34 @@ def test_cli_fails_when_a_frame_fails_but_keeps_the_evidence(tmp_path, monkeypat
     assert lines
     assert all(line["command"]["direction"] == "stop" for line in lines)
     assert all(line["errors"][0]["stage"] == "detector" for line in lines)
+
+
+def test_cli_never_overwrites_an_existing_trace(tmp_path, monkeypatch, caplog):
+    dataset = cli_dataset(tmp_path)
+    output = tmp_path / "traza.jsonl"
+    output.write_bytes(b"evidencia anterior\n")
+    session = FakeSession()
+    fake_weights(monkeypatch, session)
+
+    with caplog.at_level(logging.ERROR):
+        code = cli.main(cli_arguments(dataset, output))
+
+    assert code == 1
+    assert output.read_bytes() == b"evidencia anterior\n"
+    assert "integration_error stage=output" in caplog.text
+    assert session.tensors == []
+
+
+def test_cli_trace_uses_the_same_line_ending_on_every_platform(tmp_path, monkeypatch):
+    dataset = cli_dataset(tmp_path)
+    output = tmp_path / "traza.jsonl"
+    fake_weights(monkeypatch, FakeSession())
+
+    assert cli.main(cli_arguments(dataset, output, "--sequence", first_sequence(dataset))) == 0
+
+    content = output.read_bytes()
+    assert content.endswith(b"\n")
+    assert b"\r" not in content
 
 
 def test_cli_startup_failure_emits_no_commands(tmp_path, monkeypatch, caplog):

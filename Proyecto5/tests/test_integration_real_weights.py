@@ -54,12 +54,13 @@ def test_real_images_cross_the_whole_path_with_the_same_frame(tmp_path, sequence
         assert trace["command"]["frame_id"] == row["frame_id"]
 
 
-def test_real_person_in_the_center_is_not_given_a_clear_road(tmp_path):
+def test_real_person_in_the_center_is_detected_in_some_frames(tmp_path):
     _code, traces = traverse("seq06", tmp_path / "traza.jsonl")
 
     rows = {row["frame_id"]: row for row in load_manifest(MANIFEST)}
     center = [t for t in traces if rows[t["frame_id"]]["road_state"] == "centro"]
-    # El detector real debe ver a la persona y frenar en alguno de esos cuadros.
+    # Solo exige verla y frenar en alguno de esos cuadros. No garantiza que todos eviten
+    # FORWARD: seq06-0036 y seq06-0038 avanzan. Ver "Hallazgos" en docs/B3-01_RECORRIDO.md.
     assert center
     assert any(t["perception"]["detections"] for t in center)
     assert any(t["decision"]["estado"] in {"BLOCKED", "CAUTION"} for t in center)

@@ -51,7 +51,7 @@ El segundo comando muestra el recorrido de un cuadro.
 Opciones:
 
 - `--sequence`: sin ella, recorre todo el manifiesto.
-- `--output`: cualquier ruta. Crea las carpetas que falten. resultados/ no se versiona.
+- `--output`: cualquier ruta. Crea las carpetas que falten. Si el archivo ya existe, termina con código 1 y no lo toca. resultados/ no se versiona.
 - `--weights`: models/yolox_tiny.onnx por defecto.
 - `--policy-config`: ../Proyecto3/config/politica.yaml por defecto.
 
@@ -103,6 +103,7 @@ Una línea JSON por cuadro. Este es el cuadro seq02-0003 real, con los campos la
 - `t_capture_ms` es relativo al inicio de la secuencia; `timestamp` es la hora en que el adaptador emitió el comando, en segundos Unix. La traza es lo que relaciona ambos.
 - `decision` es `null` solo si la política falló y no llegó a decidir.
 - La traza siempre es JSON estricto: un valor no finito se guarda como `null` y se registra en `errors`.
+- Usa fin de línea LF en todos los sistemas. Aun así, dos corridas no dan el mismo hash: `timestamp` cambia y `image` usa la ruta del sistema.
 
 ## Conversión de la decisión al comando
 
@@ -131,11 +132,12 @@ Cada fallo se registra en el log con `integration_error stage=<etapa> frame_id=<
 | `adapter` | El adaptador rechaza la decisión o falla | Comando con `FALLO_INTEGRACION`. La vía hay que volver a confirmarla |
 | `failsafe` | Tampoco se pudo emitir el STOP de respaldo | El comando vigente se anula y este `Pipeline` no vuelve a emitir movimiento |
 | `trace` | Hay un número no finito en la traza | Ese valor se guarda como `null`, y `detail` indica en qué campo estaba |
+| `output` | El archivo de salida ya existe | Fin de la corrida antes de procesar ningún cuadro. La traza anterior no cambia |
 | `output` | No se puede escribir la traza | STOP con `FALLO_INTEGRACION` y fin de la corrida. Solo va al log, porque esa línea no se pudo guardar |
 
 Volver a confirmar la vía significa que la política reinicia sus zonas: harán falta 3 cuadros libres para avanzar.
 
-Con `stage=failsafe`, el adaptador no llegó a generar el comando: la traza lo muestra como STOP con `timestamp: null`, y `last_command` del adaptador queda en `None`. Para volver a moverse hay que crear otro `Pipeline`. El rearme controlado es de B2-03 (#6).
+Con `stage=failsafe`, el adaptador no llegó a generar el comando: la traza lo muestra como STOP con `reason_code: STOP_NO_EMITIDO` y `timestamp: null`. `last_command` del adaptador queda en `None`, y el comando anulado pasa a `cancelled` y al log como `virtual_control_cancel`. Para volver a moverse hay que crear otro `Pipeline`. El rearme controlado es de B2-03 (#6).
 
 Códigos de salida:
 
@@ -201,7 +203,10 @@ Este PR no cambia la política ni sus umbrales. Decidir si ajustarlos correspond
 
 ## Límites conocidos
 
-- **Vigencia del comando:** `valido_hasta_ms` queda en la traza, pero el adaptador todavía no detiene un comando vencido. Es de B2-02 (#5).
+- **Vigencia del comando:** `valido_hasta_ms` queda en la traza, pero no llega al adaptador, que todavía no detiene un comando vencido. Es de B2-02 (#5).
+- **Reloj:** `timestamp` usa el reloj de pared del adaptador. C8 necesita un reloj que se pueda avanzar en pruebas; también es de B2-02 (#5).
+- **Identificación de la corrida:** la traza no incluye `run_id`, commit, SHA-256 del modelo y del manifiesto, umbrales ni runtime. Solo guarda `config_sha256` de la política. Queda para B3-03 (#9).
+- **Reinicio de la política:** el recorrido reescribe `memoria` de `PoliticaDecision` porque la política no expone un método para reiniciarse. Una prueba comprueba que el resultado coincide con el reinicio por error del detector, salvo `ultimo_t_ms`.
 - **Emergencia y cierre:** no hay emergencia enclavada, rearme ni STOP final al cerrar. Son de B2-03 (#6).
 - **Motores:** el adaptador es virtual. Nada de este recorrido llama a las rutas de motores del carro.
 - **Hardware:** se probó con imágenes capturadas por el carro, pero no en tiempo real ni en su hardware.

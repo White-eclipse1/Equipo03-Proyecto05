@@ -43,7 +43,7 @@ No existe activación de motores físicos en B2-01.
 
 Cada comando queda en el historial del adaptador, se guarda como last_command y genera un evento mediante logging.
 
-`cancel()` deja last_command en None sin generar un comando. Es el último recurso cuando un STOP no se pudo emitir.
+`cancel()` deja last_command en None sin generar un comando. Es el último recurso cuando un STOP no se pudo emitir. El comando anulado queda en cancelled, no en el historial, que solo guarda comandos emitidos, y genera un evento `virtual_control_cancel` en el log.
 
 ## Integración
 

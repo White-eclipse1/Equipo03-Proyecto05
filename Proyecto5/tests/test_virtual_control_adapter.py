@@ -133,10 +133,20 @@ def test_cancel_clears_the_active_command():
         )
     )
 
+    forward = adapter.last_command
     adapter.cancel()
 
     assert adapter.last_command is None
     assert len(adapter.history) == 1
+    assert adapter.cancelled == (forward,)
+
+
+def test_cancel_without_an_active_command_records_nothing():
+    adapter = VirtualControlAdapter()
+
+    adapter.cancel()
+
+    assert adapter.cancelled == ()
 
 
 def test_stop_ignores_requested_steering():
