@@ -1,0 +1,14 @@
+{
+  "base_commit": "b35f8b418d8d25dbd403b0f406a02e4f98d34ed3",
+  "con_obstaculo": 0,
+  "despejados": 0,
+  "errores": 0,
+  "escenarios": [],
+  "frames_ajuste": 70,
+  "frames_evaluacion": 0,
+  "frames_total": 70,
+  "frozen_at": "2026-11-04T02:05:33+00:00",
+  "manifest_sha256": "b4029c40f0a483139ca74d858f12a9a518d65ab7af47674dd4924994ad8b453c",
+  "secuencias_evaluacion": 0,
+  "version": "v1"
+}
