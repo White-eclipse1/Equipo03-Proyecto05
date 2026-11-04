@@ -143,6 +143,7 @@ def test_every_trace_serializes_to_strict_json(tmp_path):
         "decision",
         "command",
         "errors",
+        "watchdog",
     }
     assert payload["decision"]["reason_code"] == trace.decision["reason_code"]
 

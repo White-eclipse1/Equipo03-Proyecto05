@@ -96,9 +96,12 @@ Una línea JSON por cuadro. Este es el cuadro seq02-0003 real, con los campos la
     "reason_code": "EVASION_IZQUIERDA",
     "valid_until_ms": 1606.0
   },
-  "errors": []
+  "errors": [],
+  "watchdog": null
 }
 ```
+
+`watchdog` solo tiene valor con `now_ms`, si el comando anterior ya había vencido. Ver [B2-02_WATCHDOG.md](B2-02_WATCHDOG.md).
 
 - `frame_id` es el mismo en cada etapa.
 - `t_capture_ms` es relativo al inicio de la secuencia; `timestamp` es la hora en que el adaptador emitió el comando, en segundos Unix. La traza es lo que relaciona ambos.

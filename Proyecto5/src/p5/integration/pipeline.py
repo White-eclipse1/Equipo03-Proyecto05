@@ -53,6 +53,22 @@ class FrameInput:
 
 
 @dataclass(frozen=True)
+class WatchdogEvent:
+    """Un comando que vencio antes de que llegara un cuadro. No es decision de ningun cuadro."""
+
+    # None si el reloj no era finito: ver `errors`.
+    t_ms: float | None
+    expired_frame_id: str
+    expired_decision_id: str
+    valid_until_ms: float
+    command: dict[str, Any]
+    errors: tuple[dict[str, str], ...]
+
+    def to_json(self) -> str:
+        return json.dumps(asdict(self), allow_nan=False)
+
+
+@dataclass(frozen=True)
 class FrameTrace:
     """Lo que ocurrio con un cuadro en cada etapa."""
 
@@ -66,22 +82,8 @@ class FrameTrace:
     decision: dict[str, Any] | None
     command: dict[str, Any]
     errors: tuple[dict[str, str], ...]
-
-    def to_json(self) -> str:
-        return json.dumps(asdict(self), allow_nan=False)
-
-
-@dataclass(frozen=True)
-class WatchdogEvent:
-    """Un comando que vencio sin que llegara un cuadro. No pertenece a ningun cuadro nuevo."""
-
-    # None si el reloj no era finito: ver `errors`.
-    t_ms: float | None
-    expired_frame_id: str
-    expired_decision_id: str
-    valid_until_ms: float
-    command: dict[str, Any]
-    errors: tuple[dict[str, str], ...]
+    # El comando anterior ya habia vencido cuando llego este cuadro.
+    watchdog: WatchdogEvent | None = None
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), allow_nan=False)
@@ -140,22 +142,28 @@ class Pipeline:
     def process(self, frame: FrameInput, *, now_ms: float | None = None) -> FrameTrace:
         """Lleva un cuadro por todo el recorrido.
 
-        Con `now_ms`, en el reloj de la secuencia, rechaza el cuadro si ya es demasiado viejo.
-        Sin el, se reproduce la secuencia sin comprobar su antiguedad.
+        Con `now_ms`, en el reloj de la secuencia, primero detiene un comando que ya vencio: un
+        cuadro nuevo no lo perdona. Despues rechaza el cuadro si es demasiado viejo o si viene
+        del futuro. Sin `now_ms`, se reproduce la secuencia sin comprobar el tiempo.
         """
         errors: list[dict[str, str]] = []
-        if now_ms is not None and self._is_stale(frame, now_ms):
-            detail = f"cuadro vencido: capturado en {frame.t_capture_ms}, ahora {now_ms}"
-            _record(errors, "stale", frame.frame_id, detail)
-            self._restart_confirmation(frame.sequence_id)
-            perception = _failed_perception(frame, detail)
-            command = self._stop(frame.frame_id, _decision_id(frame), errors, STALE_FRAME_REASON)
-            return self._trace(frame, perception, None, command, errors)
+        watchdog = None
+        if now_ms is not None:
+            watchdog = self.tick(now_ms)
+            if self._is_stale(frame, now_ms):
+                detail = f"cuadro vencido: capturado en {frame.t_capture_ms}, ahora {now_ms}"
+                _record(errors, "stale", frame.frame_id, detail)
+                self._restart_confirmation(frame.sequence_id)
+                perception = _failed_perception(frame, detail)
+                command = self._stop(
+                    frame.frame_id, _decision_id(frame), errors, STALE_FRAME_REASON
+                )
+                return self._trace(frame, perception, None, command, errors, watchdog)
 
         perception = self._perceive(frame, errors)
         decision = self._decide(frame, perception, errors)
         command = self._command(frame, decision, errors)
-        return self._trace(frame, perception, decision, command, errors)
+        return self._trace(frame, perception, decision, command, errors, watchdog)
 
     def tick(self, now_ms: float) -> WatchdogEvent | None:
         """Avisa al recorrido que paso el tiempo, llegue o no un cuadro.
@@ -194,7 +202,9 @@ class Pipeline:
     def _is_stale(self, frame: FrameInput, now_ms: float) -> bool:
         # Mismo limite que la vigencia de un comando: `vigencia_comando_ms` de la politica.
         limit = self._policy.config.temporal.vigencia_comando_ms
-        return not isfinite(now_ms) or now_ms - frame.t_capture_ms >= limit
+        age = now_ms - frame.t_capture_ms
+        # Una hora futura no es confiable: extenderia la vigencia del comando que genere.
+        return not isfinite(now_ms) or age < 0 or age >= limit
 
     def _trace(
         self,
@@ -203,6 +213,7 @@ class Pipeline:
         decision: Decision | None,
         command: dict[str, Any],
         errors: list[dict[str, str]],
+        watchdog: WatchdogEvent | None,
     ) -> FrameTrace:
         replaced: list[str] = []
         fields = _finite_only(
@@ -223,6 +234,7 @@ class Pipeline:
             frame_id=frame.frame_id,
             image=str(frame.image_path),
             errors=tuple(errors),
+            watchdog=watchdog,
             **fields,
         )
 

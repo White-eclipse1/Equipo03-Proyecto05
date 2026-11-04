@@ -244,7 +244,13 @@ def test_invalid_clock_stops_the_motion():
 
 @pytest.mark.parametrize(
     ("age_ms", "stale"),
-    [(VALIDITY_MS - 1, False), (VALIDITY_MS, True), (VALIDITY_MS + 1, True)],
+    [
+        (-1.0, True),
+        (0.0, False),
+        (VALIDITY_MS - 1, False),
+        (VALIDITY_MS, True),
+        (VALIDITY_MS + 1, True),
+    ],
 )
 def test_frame_expires_exactly_at_the_limit(age_ms, stale):
     pipeline = moving_pipeline()
@@ -303,6 +309,140 @@ def test_invalid_clock_rejects_the_frame():
 
     assert trace.command["reason_code"] == "CUADRO_VENCIDO"
     assert json.loads(trace.to_json())["errors"][0]["stage"] == "stale"
+
+
+# Cuadro con hora futura: no puede extender la vigencia
+
+
+def test_frame_from_the_future_stops_and_does_not_extend_the_validity():
+    detector = EmptySceneDetector()
+    pipeline = moving_pipeline(detector=detector)
+    reads = len(detector.reads)
+    now = frame(4).t_capture_ms
+    an_hour_ahead = now + 3_600_000.0
+
+    trace = pipeline.process(frame(4, t_ms=an_hour_ahead), now_ms=now)
+
+    assert len(detector.reads) == reads
+    assert trace.decision is None
+    assert trace.command["direction"] == "stop"
+    assert trace.command["reason_code"] == "CUADRO_VENCIDO"
+    assert [error["stage"] for error in trace.errors] == ["stale"]
+    assert pipeline.adapter.last_command.direction == "stop"
+    assert pipeline.adapter.last_command.valid_until_ms is None
+
+
+def test_frame_from_the_future_does_not_block_the_next_frames():
+    pipeline = moving_pipeline()
+    now = frame(4).t_capture_ms
+    pipeline.process(frame(4, t_ms=now + 3_600_000.0), now_ms=now)
+
+    traces = [
+        pipeline.process(frame(number), now_ms=frame(number).t_capture_ms) for number in range(5, 8)
+    ]
+
+    # Su hora nunca llego a la politica: los siguientes no quedan fuera de orden.
+    assert [trace.errors for trace in traces] == [(), (), ()]
+    assert [trace.command["direction"] for trace in traces] == ["stop", "stop", "forward"]
+
+
+# Un cuadro nuevo no perdona un comando vencido
+
+
+def test_new_frame_does_not_forgive_an_expired_command():
+    pipeline = moving_pipeline()
+    limit = 3 * PERIOD_MS + VALIDITY_MS
+    # Dos segundos sin percepcion, y nadie llamo a `tick` en ese tiempo.
+    now = 3 * PERIOD_MS + 2000.0
+
+    trace = pipeline.process(frame(4, t_ms=now), now_ms=now)
+
+    reasons = [command.reason_code for command in pipeline.adapter.history]
+    assert "WATCHDOG_VENCIDO" in reasons
+    assert trace.command["direction"] == "stop"
+    assert pipeline.adapter.last_command.direction == "stop"
+    # El vencimiento queda registrado en la traza del cuadro que lo descubrio.
+    assert trace.watchdog.t_ms == now
+    assert trace.watchdog.expired_frame_id == "seq-0003"
+    assert trace.watchdog.valid_until_ms == limit
+    payload = json.loads(trace.to_json())
+    assert payload["watchdog"]["command"]["reason_code"] == "WATCHDOG_VENCIDO"
+
+
+def test_road_must_be_confirmed_again_after_a_frame_finds_the_expiry():
+    pipeline = moving_pipeline()
+    now = 3 * PERIOD_MS + 2000.0
+
+    directions = [
+        pipeline.process(frame(number, now + number), now_ms=now + number).command["direction"]
+        for number in range(4, 7)
+    ]
+
+    assert directions == ["stop", "stop", "forward"]
+
+
+def test_frame_before_the_limit_keeps_moving_without_an_event():
+    pipeline = moving_pipeline()
+    now = 3 * PERIOD_MS + VALIDITY_MS - 1
+
+    trace = pipeline.process(frame(4, t_ms=now), now_ms=now)
+
+    assert trace.command["direction"] == "forward"
+    assert trace.watchdog is None
+    assert json.loads(trace.to_json())["watchdog"] is None
+
+
+def test_stale_frame_also_reports_the_expired_command():
+    pipeline = moving_pipeline()
+    now = 3 * PERIOD_MS + 2000.0
+
+    trace = pipeline.process(frame(4), now_ms=now)
+
+    reasons = [command.reason_code for command in pipeline.adapter.history]
+    assert reasons[-2:] == ["WATCHDOG_VENCIDO", "CUADRO_VENCIDO"]
+    assert trace.command["reason_code"] == "CUADRO_VENCIDO"
+    assert trace.watchdog.expired_frame_id == "seq-0003"
+
+
+def test_invalid_clock_with_a_frame_reports_the_expired_command():
+    pipeline = moving_pipeline()
+
+    trace = pipeline.process(frame(4), now_ms=float("nan"))
+
+    assert trace.watchdog.t_ms is None
+    assert json.loads(trace.to_json(), parse_constant=pytest.fail)["watchdog"]["t_ms"] is None
+
+
+def test_failed_stop_found_by_a_frame_keeps_the_path_halted():
+    class BrokenAdapter(VirtualControlAdapter):
+        broken = False
+
+        def apply(self, decision):
+            if self.broken:
+                raise RuntimeError("adaptador caido")
+            return super().apply(decision)
+
+    adapter = BrokenAdapter()
+    pipeline = moving_pipeline(adapter=adapter)
+    adapter.broken = True
+    now = 3 * PERIOD_MS + 2000.0
+
+    trace = pipeline.process(frame(4, t_ms=now), now_ms=now)
+
+    assert pipeline.halted is True
+    assert adapter.last_command is None
+    assert trace.watchdog.command["reason_code"] == "STOP_NO_EMITIDO"
+    assert [error["stage"] for error in trace.watchdog.errors] == ["failsafe"]
+    assert trace.command["reason_code"] == "STOP_NO_EMITIDO"
+
+
+def test_replay_without_a_clock_does_not_use_the_watchdog():
+    pipeline = moving_pipeline()
+
+    trace = pipeline.process(frame(4, t_ms=3 * PERIOD_MS + 2000.0))
+
+    assert trace.command["direction"] == "forward"
+    assert trace.watchdog is None
 
 
 # C8 completo y reproducible
