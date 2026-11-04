@@ -79,3 +79,31 @@ Desde `Proyecto5`:
 - `python -m ruff check .`
 - `python -m ruff format --check .`
 - `git diff --check`
+
+## Notas de integración tras review
+
+`t_capture_ms` es relativo al inicio de la secuencia. `clock_ms` debe usar el mismo dominio temporal; no debe compararse directamente con epoch o reloj de pared.
+
+En el replay normal de secuencias grabadas, el espacio entre timestamps no se interpreta como silencio de una aplicación en vivo. Por eso `eventos_watchdog` permanece vacío y no se generan STOP artificiales entre capturas.
+
+C8 prueba el tiempo vivo de forma determinista usando `Pipeline`, política real, detector determinista y un reloj controlado. El recorrido es:
+
+`fuente sintética -> detector determinista -> política real -> Pipeline -> adaptador -> comando`
+
+Cuando vence el movimiento, `Pipeline.check_watchdog()` genera STOP sin recibir otro frame y reinicia la confirmación de la vía. Los cuadros vencidos o futuros se rechazan antes del detector y de la política.
+
+Una futura aplicación en vivo debe llamar periódicamente a `Pipeline.check_watchdog()` aunque no lleguen frames.
+
+### PowerShell
+
+`python -m pytest -q`
+`python -m ruff check .`
+`python -m ruff format --check .`
+`git diff --check`
+
+### Linux
+
+`python -m pytest -q`
+`python -m ruff check .`
+`python -m ruff format --check .`
+`git diff --check`

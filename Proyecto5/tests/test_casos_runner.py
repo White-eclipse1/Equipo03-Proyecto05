@@ -536,6 +536,13 @@ def test_c8_watchdog_is_reproducible(rows, config):
     assert c8["resultado"] == "PASA"
     assert c8["plazo_ms"] == 500
 
+    # C8 debe atravesar el Pipeline y la pol?tica real, no fabricar
+    # ControlDecision directamente sobre el adaptador.
+    assert len(c8["decisiones"]) >= 3
+    assert c8["decisiones"][0]["frame_id"].startswith("c8-")
+    assert c8["decisiones"][0]["cuadro"]["status"] == "ok"
+    assert any(decision["accion"] == "FORWARD" for decision in c8["decisiones"])
+
     commands = c8["comandos"]
 
     assert commands[0]["evento"] == "movimiento_inicial"
@@ -547,10 +554,12 @@ def test_c8_watchdog_is_reproducible(rows, config):
 
     assert commands[2]["evento"] == "cuadro_vencido"
     assert commands[2]["direction"] == "stop"
-    assert commands[2]["reason_code"] == "watchdog_timeout"
+    assert commands[2]["reason_code"] == "CUADRO_VENCIDO"
+
+    assert c8["decisiones"][-1]["errores"][0]["stage"] == "stale"
 
 
-def test_real_runner_watchdog_stops_when_frame_stream_ends(rows, config):
+def test_real_runner_does_not_treat_capture_spacing_as_live_watchdog(rows, config):
     sequence = [row for row in rows if row["sequence_id"] == "seq01"][:3]
 
     case = copy.deepcopy(case_by_id(load_cases(CASES), "C1"))
@@ -567,17 +576,6 @@ def test_real_runner_watchdog_stops_when_frame_stream_ends(rows, config):
     assert len(result["decisiones"]) == 3
     assert result["decisiones"][-1]["comando"]["direction"] == "forward"
 
-    events = result["eventos_watchdog"]
-
-    assert len(events) == 1
-
-    stop = events[0]
-
-    assert stop["direction"] == "stop"
-    assert stop["speed"] == 0.0
-    assert stop["reason_code"] == "watchdog_timeout"
-    assert stop["frame_id"] == sequence[-1]["frame_id"]
-
-    expected_deadline = sequence[-1]["t_capture_ms"] + config[0].temporal.vigencia_comando_ms
-
-    assert stop["at_ms"] == expected_deadline
+    # El intervalo de captura del dataset no representa silencio de una
+    # aplicaci?n en vivo. El watchdog temporal se prueba aparte en C8.
+    assert result["eventos_watchdog"] == []

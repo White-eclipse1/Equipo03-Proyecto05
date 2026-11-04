@@ -39,6 +39,12 @@ class VirtualControlAdapter:
         """Comandos anulados por cancel. El historial solo tiene comandos emitidos."""
         return tuple(self._cancelled)
 
+    def current_time_ms(self) -> float | None:
+        """Devuelve el reloj temporal del adaptador, si existe."""
+        if self._clock_ms is None:
+            return None
+        return self._clock_ms()
+
     def apply(self, decision: ControlDecision) -> ControlCommand:
         if decision.action == Action.STOP:
             command = ControlCommand(
@@ -141,18 +147,25 @@ class VirtualControlAdapter:
 
     def _effective_valid_until(self, decision: ControlDecision) -> float | None:
         if decision.valid_until_ms is not None:
+            self._validate_valid_until(decision.valid_until_ms)
             return decision.valid_until_ms
 
         if self._timeout_ms is None or decision.t_capture_ms is None:
             return None
 
-        return decision.t_capture_ms + self._timeout_ms
+        valid_until_ms = decision.t_capture_ms + self._timeout_ms
+        self._validate_valid_until(valid_until_ms)
+        return valid_until_ms
 
     def _is_expired(self, valid_until_ms: float | None) -> bool:
         if self._clock_ms is None or valid_until_ms is None:
             return False
 
-        return self._clock_ms() >= valid_until_ms
+        if not isfinite(valid_until_ms):
+            return True
+
+        now_ms = self._clock_ms()
+        return not isfinite(now_ms) or now_ms >= valid_until_ms
 
     def _record(self, command: ControlCommand) -> ControlCommand:
         self._last_command = command
@@ -180,6 +193,11 @@ class VirtualControlAdapter:
     def _validate_timeout(timeout_ms: float) -> None:
         if not isfinite(timeout_ms) or timeout_ms <= 0:
             raise ValueError("timeout_ms must be finite and greater than 0")
+
+    @staticmethod
+    def _validate_valid_until(valid_until_ms: float) -> None:
+        if not isfinite(valid_until_ms):
+            raise ValueError("valid_until_ms must be finite")
 
     @classmethod
     def _resolve_steering(cls, decision: ControlDecision) -> float:

@@ -524,3 +524,49 @@ def test_watchdog_does_not_repeat_stop_after_timeout():
 def test_invalid_timeout_is_rejected(invalid_timeout):
     with pytest.raises(ValueError, match="timeout_ms"):
         VirtualControlAdapter(timeout_ms=invalid_timeout)
+
+
+def test_non_finite_clock_expires_active_motion():
+    now = {"ms": 100.0}
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+
+    moving = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-nan-clock",
+            decision_id="decision-nan-clock",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=100.0,
+            valid_until_ms=500.0,
+        )
+    )
+
+    assert moving.direction == "forward"
+
+    now["ms"] = float("nan")
+
+    stop = adapter.check_watchdog()
+
+    assert stop is not None
+    assert stop.direction == "stop"
+    assert stop.reason_code == "watchdog_timeout"
+
+
+def test_non_finite_valid_until_is_rejected():
+    adapter = VirtualControlAdapter(clock_ms=lambda: 100.0)
+
+    with pytest.raises(ValueError, match="valid_until_ms"):
+        adapter.apply(
+            ControlDecision(
+                action=Action.FORWARD,
+                requested_speed=0.5,
+                frame_id="frame-nan-limit",
+                decision_id="decision-nan-limit",
+                reason_code="clear_path",
+                requested_steering=0.0,
+                t_capture_ms=100.0,
+                valid_until_ms=float("nan"),
+            )
+        )

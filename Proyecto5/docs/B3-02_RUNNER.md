@@ -127,7 +127,7 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 ## Límites conocidos
 
-- C8 aplica la vigencia del comando mediante el watchdog de B2 y un reloj determinista, sin esperar tiempo real.
+- Las secuencias grabadas C1-C5 y C7 no interpretan el intervalo entre timestamps como silencio de una aplicaci?n en vivo. C8 prueba la expiraci?n temporal por separado mediante `Pipeline`, pol?tica real y un reloj determinista.
 - Los plazos se miden en cuadros del recorrido, no en tiempo físico de frenado.
 - `seq01`, `seq03` y `seq04` no tienen un tramo que cambie de libre a ocupado, y C2 y C5 empiezan con la persona ya en su lugar.
 - Las expectativas se escribieron después de ver cómo se comporta el sistema en estas secuencias, durante la captura. Su base es la geometría de las etiquetas y las reglas de la política.
