@@ -1,6 +1,8 @@
 import csv
 import json
 import os
+import subprocess
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 
 import numpy as np
@@ -106,6 +108,49 @@ def test_summary_can_be_recalculated_from_the_individual_runs():
     assert total["media"] == pytest.approx(50.5)
 
 
+def fake_rows(warmups, runs, *, valid_warmups=None):
+    valid_warmups = warmups if valid_warmups is None else valid_warmups
+    rows = []
+    for index in range(warmups):
+        rows.append(
+            {
+                "fase": "calentamiento",
+                "valido": index < valid_warmups,
+                "ms_total": 1.0,
+                **dict.fromkeys(STAGES, 0.1),
+            }
+        )
+    for _ in range(runs):
+        rows.append(
+            {"fase": "medicion", "valido": True, "ms_total": 1.0, **dict.fromkeys(STAGES, 0.1)}
+        )
+    return rows
+
+
+def test_minimums_hold_with_valid_warmups_and_data_in_every_stage():
+    assert summarize(fake_rows(MIN_WARMUPS, MIN_RUNS))["cumple_minimos"] is True
+
+
+def test_failed_warmups_do_not_count_for_the_minimum():
+    summary = summarize(fake_rows(MIN_WARMUPS, MIN_RUNS, valid_warmups=MIN_WARMUPS - 1))
+
+    assert summary["calentamientos"] == MIN_WARMUPS
+    assert summary["calentamientos_validos"] == MIN_WARMUPS - 1
+    assert summary["cumple_minimos"] is False
+
+
+@pytest.mark.parametrize("stage", STAGES)
+def test_a_stage_without_data_does_not_meet_the_minimums(stage):
+    rows = fake_rows(MIN_WARMUPS, MIN_RUNS)
+    for row in rows:
+        row[stage] = None
+
+    summary = summarize(rows)
+
+    assert summary["etapas"][stage]["n"] == 0
+    assert summary["cumple_minimos"] is False
+
+
 def test_failures_are_kept_apart_from_valid_runs(tmp_path):
     image = image_file(tmp_path)
     frames = frames_for(image, 4)
@@ -132,6 +177,31 @@ def test_failures_are_kept_apart_from_valid_runs(tmp_path):
     assert summary["mediciones_validas"] == 3
     assert summary["mediciones_con_error"] == 1
     assert summary["etapas"]["ms_total"]["n"] == 3
+
+
+def test_error_messages_never_expose_the_folder_of_the_image(tmp_path):
+    # El mensaje de un OSError de Windows trae la ruta con `repr`, con barras dobles.
+    missing = tmp_path / "missing.png"
+    pipeline, clock = timed_pipeline(FakeSession())
+    frame = FrameInput(
+        sequence_id="seq01",
+        frame_id="seq01-0000",
+        t_capture_ms=0.0,
+        image_size=(416, 416),
+        image_path=missing,
+    )
+    real = pipeline.process
+
+    def fail_with_repr(_frame):
+        raise OSError(f"[Errno 2] No such file: {str(missing)!r} y {missing}")
+
+    pipeline.process = fail_with_repr
+    rows = measure(pipeline, clock, [frame], warmups=0, runs=1)
+    pipeline.process = real
+
+    assert "missing.png" in rows[0]["error"]
+    assert str(tmp_path) not in rows[0]["error"]
+    assert repr(str(tmp_path))[1:-1] not in rows[0]["error"]
 
 
 def test_unexpected_exception_is_a_failed_run_and_the_benchmark_goes_on(tmp_path):
@@ -380,6 +450,54 @@ def test_cli_checks_the_images_before_measuring(tmp_path, monkeypatch):
 
     assert not output.exists()
     assert session.tensors == []
+
+
+def test_cli_fails_at_startup_if_the_conditions_cannot_be_collected(
+    tmp_path, fake_weights, monkeypatch, caplog
+):
+    session = FakeSession()
+    fake_weights(session)
+    output = tmp_path / "salida"
+
+    def missing(_name):
+        raise PackageNotFoundError("opencv-python-headless")
+
+    monkeypatch.setattr(cli, "version", missing)
+
+    assert cli.main(arguments(small_dataset(tmp_path), output)) == 1
+
+    assert "benchmark_error stage=startup" in caplog.text
+    assert not output.exists()
+    assert session.tensors == []
+
+
+def test_commit_is_the_one_of_the_imported_code(tmp_path, monkeypatch):
+    expected = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+    ).stdout.strip()
+    other = tmp_path / "otro"
+    other.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=other, check=True)
+    monkeypatch.chdir(other)
+
+    assert cli.code_version()["commit"] == expected
+
+
+def test_untracked_code_counts_as_a_change_but_new_evidence_does_not(monkeypatch):
+    calls = {}
+
+    def fake_git(*arguments):
+        calls[arguments] = True
+        if arguments[0] == "rev-parse":
+            return "abc"
+        return "?? src/p5/nuevo.py" if "--" in arguments else ""
+
+    monkeypatch.setattr(cli, "_git", fake_git)
+
+    assert cli.code_version()["cambios_sin_commit"] is True
+    untracked = next(call for call in calls if "--" in call)
+    assert untracked[-1] == "../.."
+    assert Path(cli.__file__).resolve().parents[2].name == "src"
 
 
 def test_images_that_differ_from_the_manifest_are_rejected(tmp_path):

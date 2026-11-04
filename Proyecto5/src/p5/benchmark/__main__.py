@@ -9,7 +9,7 @@ import platform
 import subprocess
 import sys
 from datetime import datetime
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from time import perf_counter_ns
 from typing import Any
@@ -22,7 +22,7 @@ from p3.policy.politica import PoliticaDecision
 
 from p5.benchmark.timing import COLUMNS, MIN_RUNS, MIN_WARMUPS, instrument, measure, summarize
 from p5.control.adapter import VirtualControlAdapter
-from p5.dataset.paquete import load_manifest
+from p5.dataset.paquete import validate_package
 from p5.detector.weights import (
     DEFAULT_WEIGHTS_PATH,
     WEIGHTS_SHA256,
@@ -40,11 +40,10 @@ DEFAULT_RUNS = 200
 
 
 def check_images(manifest: Path) -> None:
-    """Comprueba las imagenes medidas. Asi el disco tampoco pesa mas en la primera vuelta."""
-    for row in load_manifest(manifest):
-        digest = hashlib.sha256((manifest.parent / row["image"]).read_bytes()).hexdigest()
-        if digest != row["sha256"]:
-            raise ValueError(f"SHA-256 distinto al del manifiesto en {row['frame_id']}")
+    """Valida el paquete congelado. Asi el disco tampoco pesa mas en la primera vuelta."""
+    errors = validate_package(manifest.parent).errors
+    if errors:
+        raise ValueError(f"paquete no valido ({len(errors)} errores): {errors[0]}")
 
 
 def _cpu_name() -> str:
@@ -104,7 +103,13 @@ def hardware() -> dict[str, Any]:
 def _git(*arguments: str) -> str | None:
     try:
         result = subprocess.run(
-            ["git", *arguments], capture_output=True, text=True, timeout=10, check=True
+            ["git", *arguments],
+            # Junto al codigo importado: no importa desde donde se corra el comando.
+            cwd=Path(__file__).resolve().parent,
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=True,
         )
     except (OSError, subprocess.SubprocessError):
         return None
@@ -112,10 +117,25 @@ def _git(*arguments: str) -> str | None:
 
 
 def code_version() -> dict[str, Any]:
-    changes = _git("status", "--porcelain", "--untracked-files=no")
+    tracked = _git("status", "--porcelain", "--untracked-files=no")
+    # Un modulo nuevo sin versionar tambien cambia lo que se mide; la evidencia nueva no.
+    new_code = _git("status", "--porcelain", "--untracked-files=all", "--", "../..")
     return {
         "commit": _git("rev-parse", "HEAD"),
-        "cambios_sin_commit": None if changes is None else bool(changes),
+        "cambios_sin_commit": None
+        if tracked is None or new_code is None
+        else bool(tracked or new_code),
+    }
+
+
+def runtime(detector: YoloxDetector) -> dict[str, Any]:
+    return {
+        "python": platform.python_version(),
+        "onnxruntime": onnxruntime.__version__,
+        "providers_sesion": detector._session.get_providers(),
+        "numpy": np.__version__,
+        "opencv": version("opencv-python-headless"),
+        "pydantic": version("pydantic"),
     }
 
 
@@ -170,7 +190,20 @@ def main(argv: list[str] | None = None) -> int:
         start = perf_counter_ns()
         detector = YoloxDetector.from_weights(args.weights)
         load_ms = (perf_counter_ns() - start) / 1e6
-    except (WeightsError, DetectorError, OSError, ValueError, yaml.YAMLError) as failure:
+        # Antes de medir: un fallo aqui no debe costar una medicion ya hecha.
+        conditions = {
+            "hardware": hardware(),
+            "runtime": runtime(detector),
+            "codigo": code_version(),
+        }
+    except (
+        WeightsError,
+        DetectorError,
+        OSError,
+        ValueError,
+        PackageNotFoundError,
+        yaml.YAMLError,
+    ) as failure:
         logger.error("benchmark_error stage=startup detail=%s", failure)
         return 1
 
@@ -187,15 +220,8 @@ def main(argv: list[str] | None = None) -> int:
         "schema_version": 1,
         "tarea": "A3-03 (#18)",
         "fecha": started_at,
-        "hardware": hardware(),
-        "runtime": {
-            "python": platform.python_version(),
-            "onnxruntime": onnxruntime.__version__,
-            "providers_sesion": detector._session.get_providers(),
-            "numpy": np.__version__,
-            "opencv": version("opencv-python-headless"),
-            "pydantic": version("pydantic"),
-        },
+        "hardware": conditions["hardware"],
+        "runtime": conditions["runtime"],
         "detector": {
             "nombre": "YOLOX-Tiny",
             "archivo": args.weights.name,
@@ -209,7 +235,7 @@ def main(argv: list[str] | None = None) -> int:
             "cuadros": len(frames),
         },
         "politica": {"config_sha256": config_sha256},
-        "codigo": code_version(),
+        "codigo": conditions["codigo"],
         "medicion": {
             "incluye": "Pipeline.process: leer y decodificar la imagen, preprocesar, inferir, "
             "posprocesar, decidir y generar el comando virtual",

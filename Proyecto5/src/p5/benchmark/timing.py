@@ -3,6 +3,7 @@
 from collections.abc import Callable, Sequence
 from dataclasses import replace
 from functools import wraps
+from pathlib import Path
 from time import perf_counter_ns
 from typing import Any
 
@@ -113,11 +114,17 @@ def measure(
                 **{stage: clock.get(stage) for stage in STAGES},
                 "valido": not failure,
                 "accion": trace.decision["accion"] if trace and trace.decision else "",
-                # Los mensajes del detector citan la ruta, que puede incluir la carpeta personal.
-                "error": failure.replace(str(frame.image_path), frame.image_path.name),
+                "error": _without_local_path(failure, frame.image_path),
             }
         )
     return rows
+
+
+def _without_local_path(message: str, path: Path) -> str:
+    """Los errores citan la ruta, a veces con `repr`, y puede incluir la carpeta personal."""
+    for form in (repr(str(path))[1:-1], str(path)):
+        message = message.replace(form, path.name)
+    return message
 
 
 def _statistics(values: list[float]) -> dict[str, float | int | None]:
@@ -136,17 +143,22 @@ def _statistics(values: list[float]) -> dict[str, float | int | None]:
 
 def summarize(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
     """Cifras de las mediciones validas. Los calentamientos y los fallos no entran."""
-    warmups = sum(row["fase"] == WARMUP for row in rows)
+    warmups = [row for row in rows if row["fase"] == WARMUP]
+    valid_warmups = sum(row["valido"] for row in warmups)
     measured = [row for row in rows if row["fase"] == MEASUREMENT]
     valid = [row for row in measured if row["valido"]]
+    stages = {
+        stage: _statistics([row[stage] for row in valid if row[stage] is not None])
+        for stage in (TOTAL, *STAGES)
+    }
     return {
-        "calentamientos": warmups,
+        "calentamientos": len(warmups),
+        "calentamientos_validos": valid_warmups,
         "mediciones": len(measured),
         "mediciones_validas": len(valid),
         "mediciones_con_error": len(measured) - len(valid),
-        "cumple_minimos": warmups >= MIN_WARMUPS and len(valid) >= MIN_RUNS,
-        "etapas": {
-            stage: _statistics([row[stage] for row in valid if row[stage] is not None])
-            for stage in (TOTAL, *STAGES)
-        },
+        # Un calentamiento fallido no calienta el modelo, y una etapa sin datos no se midio.
+        "cumple_minimos": valid_warmups >= MIN_WARMUPS
+        and all(numbers["n"] >= MIN_RUNS for numbers in stages.values()),
+        "etapas": stages,
     }

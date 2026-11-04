@@ -3,10 +3,13 @@
 import csv
 import hashlib
 import json
+import statistics
+from itertools import pairwise
 from pathlib import Path
 
 import numpy as np
 import pytest
+import yaml
 
 from p5.benchmark.timing import COLUMNS, MIN_RUNS, MIN_WARMUPS, STAGES, TOTAL
 from p5.detector.weights import WEIGHTS_SHA256, WEIGHTS_SIZE
@@ -17,6 +20,7 @@ OFFICIAL = EVIDENCE / "A3-03"
 RUNS = [OFFICIAL, EVIDENCE / "A3-03-programas-abiertos"]
 MANIFEST = ROOT / "data" / "p5-eval-v1" / "manifiesto.jsonl"
 DOC = ROOT / "docs" / "A3-03_BENCHMARK.md"
+POLICY = ROOT.parent / "Proyecto3" / "config" / "politica.yaml"
 
 
 def load(folder):
@@ -64,6 +68,7 @@ def test_timings_are_the_exported_file_and_meet_the_minimums(folder):
     assert [int(row["indice"]) for row in rows] == list(range(len(rows)))
     valid = [row for row in rows if row["fase"] == "medicion" and row["valido"] == "True"]
     assert len(valid) >= MIN_RUNS
+    assert sum(r["fase"] == "calentamiento" and r["valido"] == "True" for r in rows) >= MIN_WARMUPS
     assert evidence["resumen"]["cumple_minimos"] is True
 
 
@@ -102,3 +107,34 @@ def test_document_reports_the_official_figures():
         assert f"{numbers['p50']:.2f}" in row
         assert f"{numbers['p95']:.2f}" in row
         assert f"{numbers['maximo']:.2f}" in row
+
+
+def test_document_compares_the_official_figures_with_the_deadlines():
+    evidence, _rows = load(OFFICIAL)
+    document = DOC.read_text(encoding="utf-8").split("### Contraste con los plazos", 1)[1]
+    document = document.split("###", 1)[0]
+    total = evidence["resumen"]["etapas"]["ms_total"]
+    inference = evidence["resumen"]["etapas"]["ms_inferencia"]
+    config = yaml.safe_load(POLICY.read_text(encoding="utf-8"))
+    validity = config["temporal"]["vigencia_comando_ms"]
+
+    sequences = {}
+    for line in MANIFEST.read_text(encoding="ascii").splitlines():
+        row = json.loads(line)
+        sequences.setdefault(row["sequence_id"], []).append(row["t_capture_ms"])
+    gaps = [b - a for times in sequences.values() for a, b in pairwise(times)]
+
+    assert f"{total['p95']:.2f} ms" in document
+    assert f"{total['maximo']:.2f} ms" in document
+    assert f"{inference['p95']:.2f} ms" in document
+    assert f"{validity} ms" in document
+    assert f"{len(gaps)} huecos" in document
+    assert f"{min(gaps)} a {max(gaps)} ms" in document
+    assert f"mediana {statistics.median(gaps):.0f} ms" in document
+    assert f"{sum(gap > validity for gap in gaps)} de {len(gaps)}" in document
+
+
+def test_document_reports_the_size_of_the_model():
+    document = DOC.read_text(encoding="utf-8").split("## Resultados", 1)[1]
+
+    assert f"{WEIGHTS_SIZE:,}".replace(",", " ") + " bytes" in document

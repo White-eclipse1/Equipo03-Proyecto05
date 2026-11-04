@@ -36,9 +36,9 @@ Cada corrida es una llamada a `Pipeline.process`, el mismo recorrido de B3-01. L
 
 ## Protocolo
 
-1. Comprueba que la carpeta de salida no exista, y el SHA-256 de los pesos y de cada imagen del manifiesto.
+1. Comprueba que la carpeta de salida no exista, el SHA-256 de los pesos y el paquete completo con `validate_package`, incluidas sus imágenes.
 2. Carga la sesión con las opciones por defecto de ONNX Runtime, igual que la aplicación.
-3. Ejecuta los calentamientos: al menos 10, marcados `calentamiento` y excluidos de las cifras.
+3. Ejecuta los calentamientos: al menos 10 válidos, marcados `calentamiento` y excluidos de las cifras.
 4. Ejecuta las mediciones: al menos 100, marcadas `medicion`. Por defecto son 200.
 
 Las imágenes se recorren en el orden del manifiesto. Con 210 corridas y 128 cuadros, todos los cuadros entran en la medición. Al dar otra vuelta, los tiempos de captura se desplazan para que la política los siga aceptando.
@@ -88,7 +88,7 @@ Una etapa que no llegó a ejecutarse queda vacía, no en cero.
 ### benchmark.json
 
 - **Condiciones:** `hardware`, `runtime`, `detector`, `dataset`, `politica`, `codigo` y `medicion`.
-- **`codigo.cambios_sin_commit`:** debe ser `false` en una medición oficial.
+- **`codigo.cambios_sin_commit`:** debe ser `false` en una medición oficial. Considera los archivos versionados y el código nuevo de src/.
 - **`salida_fisica`:** `false`, porque el adaptador es virtual.
 - **`resumen`:** conteos, y `p50`, `p95`, `maximo`, `minimo` y `media` por etapa.
 - **`tiempos`:** nombre, SHA-256 y número de filas de tiempos.csv.
@@ -103,8 +103,8 @@ Una corrida con un error del recorrido, o con una excepción inesperada, queda c
 
 Códigos de salida:
 
-- **0:** se cumplen los mínimos de calentamientos y de mediciones válidas.
-- **1 con resultados:** no hubo suficientes mediciones válidas. Los archivos se conservan como evidencia.
+- **0:** hay al menos 10 calentamientos y 100 mediciones válidos, con datos en todas las etapas.
+- **1 con resultados:** no se cumplen esos mínimos. Los archivos se conservan como evidencia.
 - **1 sin resultados:** falló el arranque (`benchmark_error stage=startup`), por ejemplo porque la carpeta ya existe o un SHA-256 no coincide.
 
 ## Verificación
@@ -134,7 +134,7 @@ Medición oficial en [evidencias/A3-03/](../evidencias/A3-03/), desde el commit 
 | CPU | AMD Ryzen 5 5625U, 12 núcleos lógicos, 16 GB de RAM |
 | Sistema | Windows 11, x86-64, conectado a la corriente, plan de energía Equilibrado |
 | Runtime | Python 3.12.16, onnxruntime 1.31.1 con solo CPUExecutionProvider, opciones por defecto |
-| Detector | YOLOX-Tiny, SHA-256 `427cc366…b0f7` |
+| Detector | YOLOX-Tiny, 20 219 662 bytes, SHA-256 `427cc366…b0f7` |
 | Imágenes | p5-eval-v1, 400x296 |
 | Carga del modelo | 140 ms, fuera de las cifras |
 
@@ -148,22 +148,45 @@ Medición oficial en [evidencias/A3-03/](../evidencias/A3-03/), desde el commit 
 | `ms_politica` | 0.25 | 0.43 | 4.41 |
 | `ms_control` | 0.03 | 0.04 | 0.13 |
 
+### Contraste con los plazos
+
+| Plazo | Valor | Comparación | Resultado |
+|---|---:|---|---|
+| Vigencia del comando (`vigencia_comando_ms`) | 500 ms | p95 total 107.88 ms y máximo total 139.22 ms | El cómputo cabe |
+| Periodo declarado en la política, a 10 FPS | 100 ms | p95 de inferencia 95.40 ms; p95 total 107.88 ms y máximo total 139.22 ms | La inferencia cabe por poco en su p95; el total no |
+| Ritmo de entrada real | 122 huecos, de 500 a 2843 ms, mediana 525 ms | Vigencia de 500 ms: la superan 120 de 122 huecos, y los otros 2 miden justo 500 ms | **La entrada no cabe** |
+
+La regla de [politica.md](../../Proyecto3/docs/politica.md) pide subir `vigencia_comando_ms` o bajar los FPS si el p95 de inferencia supera el periodo de entrada. Con el ritmo de p5-eval-v1 eso no ocurre: 95.40 ms contra al menos 500 ms.
+
+El problema es otro. Cuando #5 aplique la vigencia, a este ritmo cada comando de movimiento vencerá antes de que el siguiente cuadro produzca otro, así que el carro se detendría entre cuadros. Además, la vigencia ya no cubre ningún cuadro perdido, porque esa cuenta de la política supone 10 FPS.
+
+**Falta una decisión de B1 y B2:** subir la vigencia, capturar más rápido o aceptar ese comportamiento. Este benchmark no la toma. El periodo de 500 ms es el valor por defecto de `--interval-ms` en la captura de A2, y el cómputo no es lo que limita: el peor total observado permite unos 7 cuadros por segundo.
+
 ### Variación entre corridas
 
-El tiempo cambia bastante de una corrida a otra en este equipo, con el mismo código y las mismas imágenes. Por eso no conviene citar el p50 oficial sin este contexto:
+El tiempo cambia bastante en este equipo, con el mismo código y las mismas imágenes. Por eso no conviene citar el p50 oficial sin este contexto.
 
-| Corrida | Condiciones | p50 total (ms) | p95 total (ms) | Máximo (ms) | ¿En el repositorio? |
-|---|---|---:|---:|---:|---|
-| Prueba previa | Programas abiertos sin revisar, código sin commit | 42.77 | 50.13 | 79.77 | No |
-| Primera desde `dacaa56` | Otros programas abiertos, justo después de instalar el paquete | 51.20 | 92.02 | 173.26 | Sí, A3-03-programas-abiertos |
-| **Oficial** | Binding of Isaac, Steam, Epic Games Launcher y ProtonVPN cerrados | **62.86** | **107.88** | **139.22** | Sí, A3-03 |
-| Diagnóstico | Igual que la oficial, muestreando el CPU | 68.04 | 107.79 | 156.99 | No |
+| Corrida | Condiciones | p50 total (ms) | p95 total (ms) | Máximo (ms) |
+|---|---|---:|---:|---:|
+| A3-03-programas-abiertos | Otros programas abiertos, justo después de instalar el paquete | 51.20 | 92.02 | 173.26 |
+| **A3-03 (oficial)** | Binding of Isaac, Steam, Epic Games Launcher y ProtonVPN cerrados | **62.86** | **107.88** | **139.22** |
 
-La corrida oficial se eligió antes de conocer su resultado, para no quedarse con la cifra más favorable.
+La corrida oficial se eligió antes de conocer su resultado, para no quedarse con la cifra más favorable. Cerrar esos programas no mejoró los tiempos, así que no explican la variación. Docker Desktop y el navegador seguían abiertos en la oficial.
 
-Cerrar esos programas no mejoró los tiempos, así que no explican la variación. En la corrida de diagnóstico, los demás procesos usaron poca CPU. El único muestreo de frecuencia que quedó, a los 18 s, marcó 2010 MHz y 85 % de rendimiento con el CPU al 86 %. Esto es compatible con un límite de temperatura o potencia del laptop, pero **no quedó demostrado**.
+Hubo dos corridas más sin registros versionados, así que no se usan como evidencia.
 
-Estas cifras describen este laptop en estas corridas: no son un valor estable del sistema. Docker Desktop y el navegador seguían abiertos en la oficial y en el diagnóstico.
+### Variación dentro de cada corrida
+
+Las corridas también cambian mientras miden, y el p50 global mezcla esos momentos. p50 total, en milisegundos, por cada 50 mediciones:
+
+| Corrida | 1.ª | 2.ª | 3.ª | 4.ª |
+|---|---:|---:|---:|---:|
+| A3-03 (oficial) | 54.4 | 54.8 | 67.2 | 75.6 |
+| A3-03-programas-abiertos | 58.8 | 61.8 | 46.8 | 46.4 |
+
+La causa no quedó demostrada. Un límite de temperatura o potencia del laptop es una explicación posible, pero benchmark.json no registra esos datos. En la revisión del PR se reportó una corrida en otra PC con p50 18.66 ms, p95 20.59 ms y máximo 21.61 ms, sin esta dispersión. Eso apunta al equipo, aunque no lo demuestra, y esa corrida no está en el repositorio.
+
+Estas cifras describen este laptop en estas corridas: no son un valor estable del sistema.
 
 ## Límites conocidos
 
@@ -171,4 +194,5 @@ Estas cifras describen este laptop en estas corridas: no son un valor estable de
 - **Hardware:** se midió en un laptop. Si la demostración corre en otro equipo, como la Raspberry del Proyecto 4, hay que repetir ahí la medición.
 - **Tiempo del sistema completo:** no incluye la captura de la cámara ni el envío al carro. `ms_total` es el tiempo local.
 - **Regla de vigencia:** el adaptador todavía no aplica `valido_hasta_ms` (#5). Si #5 o #6 cambian el adaptador, `ms_control` puede cambiar.
+- **Commit de la evidencia:** las mediciones citan `dacaa56`, así que este PR debe fusionarse con merge commit para que ese commit quede en `main`. Las correcciones posteriores del comando afectan las validaciones y el resumen, no el recorrido ni los cronómetros, y `calentamientos_validos` no existe en esos archivos.
 - **Política:** las decisiones no se evalúan aquí; eso es de B3-02 (#8).
