@@ -1,0 +1,133 @@
+# Casos C1-C10 del Proyecto 5 (B3-02; E5).
+#
+# real:      corre una secuencia de un paquete congelado por el detector y la politica.
+#            Cada cuadro se compara con `allowed_actions` del manifiesto, y ademas con las
+#            reglas de abajo. Los cuadros se cuentan desde 1 dentro de la secuencia.
+# sintetico: reutiliza un caso de politica con detecciones sinteticas. No acredita al detector.
+# pendiente: declara el caso, pero todavia no se puede ejecutar. Hace fallar al runner.
+#
+# Reglas:
+#   alguna:   en ese rango debe aparecer al menos una de esas acciones.
+#   reaccion: en los `plazo_cuadros` cuadros que empiezan en `desde`, incluido ese, debe aparecer
+#             una de esas acciones con la via en estado BLOCKED. Plazo 2 desde el cuadro 30 son
+#             los cuadros 30 y 31. El STOP de arranque no cuenta como reaccion.
+#   direccion_min / direccion_max: limites de la direccion en toda la secuencia.
+#             Negativo es izquierda y positivo es derecha.
+#
+# Las expectativas salen de la geometria de las etiquetas y de las reglas de la politica, no
+# de lo que el sistema ya hace. Cambiar una para que un caso pase invalida la evidencia.
+schema_version: 1
+
+casos:
+  - id: C1
+    tipo: real
+    nombre: Secuencia despejada con percepcion valida
+    secuencia: seq01
+    estado_inicial: Politica recien creada, con las zonas desconocidas
+    justificacion: >-
+      No hay obstaculos. La politica confirma la via en 3 cuadros libres, asi que desde el
+      tercero debe avanzar. Detenerse siempre no cumple este caso.
+    alguna:
+      - {cuadros: [3, 15], acciones: [FORWARD]}
+
+  - id: C2
+    tipo: real
+    nombre: Obstaculo confiable en la zona central
+    secuencia: seq02
+    estado_inicial: Politica recien creada, con la persona ya en el centro
+    justificacion: >-
+      La persona esta en el centro desde el primer cuadro (cuadros 1-8). Avanzar hacia ella es
+      un fallo, y el bloqueo debe confirmarse dentro de cuadros_para_bloquear.
+    reaccion:
+      {desde: 1, plazo_cuadros: 2, acciones: [STOP, EVADE_LEFT, EVADE_RIGHT]}
+
+  - id: C3
+    tipo: real
+    nombre: Obstaculo solo a la izquierda con el centro libre
+    secuencia: seq03
+    estado_inicial: Politica recien creada, con la persona ya a la izquierda
+    justificacion: >-
+      La caja solo ocupa la zona izquierda. Debe permitir avanzar y nunca dirigirse a la
+      izquierda: la direccion no puede ser negativa.
+    alguna:
+      - {cuadros: [3, 12], acciones: [FORWARD, SLOW]}
+    direccion_min: 0.0
+
+  - id: C4
+    tipo: real
+    nombre: Obstaculo solo a la derecha con el centro libre
+    secuencia: seq04
+    estado_inicial: Politica recien creada, con la persona ya a la derecha
+    justificacion: Espejo de C3. Comprueba el signo de la direccion.
+    alguna:
+      - {cuadros: [3, 12], acciones: [FORWARD, SLOW]}
+    direccion_max: 0.0
+
+  - id: C5
+    tipo: real
+    nombre: Varios obstaculos con el centro y la derecha ocupados
+    secuencia: seq05
+    estado_inicial: Politica recien creada, con las dos personas ya en su lugar
+    justificacion: >-
+      Considera el conjunto, no solo el objeto mas confiable. Con el centro y la derecha
+      ocupados, solo se admite detenerse o girar a la izquierda.
+    reaccion:
+      {desde: 1, plazo_cuadros: 2, acciones: [STOP, EVADE_LEFT]}
+
+  - id: C6
+    tipo: sintetico
+    nombre: Deteccion bajo umbral y despues sobre umbral
+    archivo: ../../Proyecto3/casos/politica_c1_c7.yaml
+    caso_origen: C6
+    estado_inicial: Politica recien creada, con la evasion deshabilitada
+    justificacion: >-
+      Se aisla con detecciones sinteticas para controlar la confianza: 0.40 es debil y baja la
+      velocidad, y 0.55 cruza el umbral y bloquea.
+
+  - id: C7
+    tipo: real
+    nombre: Libre, obstaculo persistente y desaparicion
+    secuencia: seq06
+    estado_inicial: Politica recien creada, con la via libre
+    justificacion: >-
+      Libre en los cuadros 1-26, con la persona en el centro en los cuadros 30-44 y libre otra
+      vez desde el 49. Debe avanzar, reaccionar al bloqueo sin alternar por un solo cuadro y
+      volver a moverse cuando se libera la via.
+    alguna:
+      - {cuadros: [3, 26], acciones: [FORWARD]}
+      - {cuadros: [49, 50], acciones: [FORWARD, SLOW]}
+    reaccion:
+      {desde: 30, plazo_cuadros: 2, acciones: [STOP, EVADE_LEFT, EVADE_RIGHT]}
+
+  - id: C8
+    tipo: pendiente
+    nombre: Perdida de percepcion y cuadro vencido
+    bloqueado_por: ["#5"]
+    plazo_ms: 500
+    estado_inicial: Avanzando con percepcion valida
+    entrada: Se dejan de entregar cuadros, avanza el reloj y luego llega un cuadro vencido
+    esperado: >-
+      STOP por watchdog dentro del plazo, sin necesitar otro cuadro, y rechazo del cuadro
+      vencido sin reiniciar el movimiento.
+
+  - id: C9
+    tipo: pendiente
+    nombre: Fallo del detector
+    bloqueado_por: ["#6"]
+    plazo_ms: 500
+    estado_inicial: Avanzando con percepcion valida
+    entrada: Excepcion o timeout del detector, y una salida invalida o imagen ilegible
+    esperado: >-
+      Error registrado y STOP, sin comando de avance residual ni confundirlo con escena
+      despejada.
+
+  - id: C10
+    tipo: pendiente
+    nombre: Emergencia, rearme y cierre controlado
+    bloqueado_por: ["#6"]
+    plazo_ms: 500
+    estado_inicial: Avanzando con percepcion valida
+    entrada: Emergencia durante el avance, cuadros despejados, rearme explicito y cierre
+    esperado: >-
+      STOP inmediato, parado sin rearme, reanudacion solo con rearme valido y percepcion
+      fresca, y STOP al cerrar.
