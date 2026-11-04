@@ -71,6 +71,99 @@ def test_left_and_right_generate_expected_steering():
     assert right.steering == 1.0
 
 
+@pytest.mark.parametrize(
+    ("action", "requested"),
+    [(Action.LEFT, -0.5), (Action.RIGHT, 0.5), (Action.RIGHT, 1.0), (Action.FORWARD, 0.0)],
+)
+def test_requested_steering_is_respected(action, requested):
+    command = VirtualControlAdapter().apply(
+        ControlDecision(
+            action=action,
+            requested_speed=0.2,
+            frame_id="frame-010",
+            decision_id="decision-010",
+            reason_code="evade",
+            requested_steering=requested,
+        )
+    )
+
+    assert command.steering == requested
+
+
+@pytest.mark.parametrize(
+    ("action", "requested"),
+    [
+        (Action.RIGHT, 1.5),
+        (Action.LEFT, -1.5),
+        (Action.RIGHT, float("nan")),
+        (Action.LEFT, float("inf")),
+        (Action.LEFT, 0.5),
+        (Action.RIGHT, -0.5),
+        (Action.RIGHT, 0.0),
+        (Action.FORWARD, 0.5),
+    ],
+)
+def test_invalid_requested_steering_is_rejected(action, requested):
+    adapter = VirtualControlAdapter()
+
+    with pytest.raises(ValueError):
+        adapter.apply(
+            ControlDecision(
+                action=action,
+                requested_speed=0.2,
+                frame_id="frame-011",
+                decision_id="decision-011",
+                reason_code="evade",
+                requested_steering=requested,
+            )
+        )
+
+    assert adapter.last_command is None
+
+
+def test_cancel_clears_the_active_command():
+    adapter = VirtualControlAdapter()
+    adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-013",
+            decision_id="decision-013",
+            reason_code="clear",
+        )
+    )
+
+    forward = adapter.last_command
+    adapter.cancel()
+
+    assert adapter.last_command is None
+    assert len(adapter.history) == 1
+    assert adapter.cancelled == (forward,)
+
+
+def test_cancel_without_an_active_command_records_nothing():
+    adapter = VirtualControlAdapter()
+
+    adapter.cancel()
+
+    assert adapter.cancelled == ()
+
+
+def test_stop_ignores_requested_steering():
+    command = VirtualControlAdapter().apply(
+        ControlDecision(
+            action=Action.STOP,
+            requested_speed=0.0,
+            frame_id="frame-012",
+            decision_id="decision-012",
+            reason_code="stop",
+            requested_steering=0.5,
+        )
+    )
+
+    assert command.steering == 0.0
+
+
 def test_stop_cancels_previous_motion_command():
     adapter = VirtualControlAdapter()
 

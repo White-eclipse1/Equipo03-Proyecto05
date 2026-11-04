@@ -12,17 +12,21 @@ dependencies = [
     "onnxruntime==1.31.1",
     # Headless: sin dependencias de GUI. Mismo redimensionado que usa YOLOX.
     "opencv-python-headless==5.0.0.93",
+    # El recorrido usa el contrato y la politica de `Proyecto3/src/p3/policy`:
+    # mismas versiones que `Proyecto3/pyproject.toml`.
+    "pydantic==2.13.5",
+    "pyyaml==6.0.3",
 ]
 
 [project.optional-dependencies]
 dev = [
-    # Las pruebas validan contra el contrato y la politica de `Proyecto3/src/p3/policy`:
-    # mismas versiones que `Proyecto3/pyproject.toml`.
-    "pydantic==2.13.5",
-    "pyyaml==6.0.3",
     "pytest==9.1.1",
     "ruff==0.16.8",
 ]
+
+[tool.hatch.build]
+# `pip install -e .` deja importable `p3` sin instalar sus dependencias, que P5 no usa.
+dev-mode-dirs = ["src", "../Proyecto3/src"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/p5"]

@@ -13,6 +13,7 @@ class VirtualControlAdapter:
     def __init__(self) -> None:
         self._last_command: ControlCommand | None = None
         self._history: list[ControlCommand] = []
+        self._cancelled: list[ControlCommand] = []
 
     @property
     def last_command(self) -> ControlCommand | None:
@@ -21,6 +22,11 @@ class VirtualControlAdapter:
     @property
     def history(self) -> tuple[ControlCommand, ...]:
         return tuple(self._history)
+
+    @property
+    def cancelled(self) -> tuple[ControlCommand, ...]:
+        """Comandos anulados por `cancel`. El historial solo tiene comandos emitidos."""
+        return tuple(self._cancelled)
 
     def apply(self, decision: ControlDecision) -> ControlCommand:
         if decision.action == Action.STOP:
@@ -40,7 +46,7 @@ class VirtualControlAdapter:
         command = ControlCommand(
             speed=decision.requested_speed,
             direction=decision.action.value,
-            steering=self._steering_for(decision.action),
+            steering=self._resolve_steering(decision),
             timestamp=time(),
             frame_id=decision.frame_id,
             decision_id=decision.decision_id,
@@ -48,6 +54,20 @@ class VirtualControlAdapter:
         )
 
         return self._record(command)
+
+    def cancel(self) -> None:
+        """Anula el comando vigente sin generar otro, si un STOP no se pudo emitir."""
+        command = self._last_command
+        self._last_command = None
+        if command is None:
+            return
+        self._cancelled.append(command)
+        logger.warning(
+            "virtual_control_cancel direction=%s frame_id=%s decision_id=%s",
+            command.direction,
+            command.frame_id,
+            command.decision_id,
+        )
 
     def _record(self, command: ControlCommand) -> ControlCommand:
         self._last_command = command
@@ -70,6 +90,18 @@ class VirtualControlAdapter:
     def _validate_speed(speed: float) -> None:
         if not isfinite(speed) or not 0.0 <= speed <= 1.0:
             raise ValueError("requested_speed must be finite and between 0.0 and 1.0")
+
+    @classmethod
+    def _resolve_steering(cls, decision: ControlDecision) -> float:
+        steering = decision.requested_steering
+        if steering is None:
+            return cls._steering_for(decision.action)
+        if not isfinite(steering) or not -1.0 <= steering <= 1.0:
+            raise ValueError("requested_steering must be finite and between -1.0 and 1.0")
+        expected = cls._steering_for(decision.action)
+        if (steering > 0) - (steering < 0) != (expected > 0) - (expected < 0):
+            raise ValueError("requested_steering does not match the action direction")
+        return steering
 
     @staticmethod
     def _steering_for(action: Action) -> float:
