@@ -1,0 +1,1028 @@
+[
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0001",
+    "image": "secuencias/seq01/seq01-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "1a442d34eb5343453e8d24bb1c7b48ab58bc2902c6cdb36f13381bd290acb606",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0004",
+    "image": "secuencias/seq01/seq01-0004.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "2761994d142b438a8bc3c915551cfaf75c89b27246702af8efc31b7acd737c24",
+    "split": "evaluacion",
+    "t_capture_ms": 1631
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0007",
+    "image": "secuencias/seq01/seq01-0007.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "99ccf1622063685ebf85fc203e793b65d38d6426f0645a2457ca673c5d25a7eb",
+    "split": "evaluacion",
+    "t_capture_ms": 3213
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0010",
+    "image": "secuencias/seq01/seq01-0010.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "6319feeb0bca909d32e27d57c552848e7cbe108c51f1e31e0bdc340fbb4dfeab",
+    "split": "evaluacion",
+    "t_capture_ms": 5990
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0013",
+    "image": "secuencias/seq01/seq01-0013.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "d2c061cc73575744086b5042216e56833336853f00df67f9760b440395f5dc20",
+    "split": "evaluacion",
+    "t_capture_ms": 7566
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq01-0015",
+    "image": "secuencias/seq01/seq01-0015.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C1",
+    "sequence_id": "seq01",
+    "sha256": "52fb4eab60d696c499e2be1993d2040f1b0a0e7911cdd5f3851463b2ed42ca2f",
+    "split": "evaluacion",
+    "t_capture_ms": 8626
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          222,
+          69,
+          280,
+          203
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq02-0001",
+    "image": "secuencias/seq02/seq02-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "centro",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "de5d68269a9d172fcb7a02514ed6a8363221326bd6eb2ff435f11fa9c64e1e14",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          222,
+          72,
+          272,
+          206
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq02-0006",
+    "image": "secuencias/seq02/seq02-0006.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "centro",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "534a71f43b9715b10d61b3050b43c744ddcf08cf0e9c1f27191d42a5966e984a",
+    "split": "evaluacion",
+    "t_capture_ms": 4980
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          59,
+          78,
+          108,
+          209
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq02-0010",
+    "image": "secuencias/seq02/seq02-0010.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "50ca4dd364ec1446013917586c21c8d5e03ec47d20aed0e061f146ce83cda1da",
+    "split": "evaluacion",
+    "t_capture_ms": 8126
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          0,
+          87,
+          42,
+          200
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq02-0015",
+    "image": "secuencias/seq02/seq02-0015.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "162ab17747ac9fcb5ab783f49d59d429788b3bf9021ab8f7b0d85551484edd05",
+    "split": "evaluacion",
+    "t_capture_ms": 12003
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq02-0020",
+    "image": "secuencias/seq02/seq02-0020.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "ac84bac920774274f286a1cba211e5beb435d03811a48ad154f2710c95fe2854",
+    "split": "evaluacion",
+    "t_capture_ms": 14629
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq02-0024",
+    "image": "secuencias/seq02/seq02-0024.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C2",
+    "sequence_id": "seq02",
+    "sha256": "bb41ac9e44bca5470924fef4a947b7049f0b70490a2de0e2d53c1f8d7bd43f1f",
+    "split": "evaluacion",
+    "t_capture_ms": 16778
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          12,
+          118,
+          38,
+          180
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0001",
+    "image": "secuencias/seq03/seq03-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "9d36742b622a20c221ba7398b4395e97b5464fd2e091b6f3bdd7fde848110833",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          62,
+          108,
+          92,
+          181
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0003",
+    "image": "secuencias/seq03/seq03-0003.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "60ce76fe293cb14bbdb83ee3e8c9966a19afec266f0f1561db384e810f443aad",
+    "split": "evaluacion",
+    "t_capture_ms": 1052
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          68,
+          112,
+          97,
+          182
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0005",
+    "image": "secuencias/seq03/seq03-0005.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "d35cf04fe3f606f0c04f63331aea1f0eab4a45884b3d6853672f771cc5a72bf2",
+    "split": "evaluacion",
+    "t_capture_ms": 2091
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          60,
+          110,
+          88,
+          182
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0008",
+    "image": "secuencias/seq03/seq03-0008.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "7b381d9384983a3295ad10f8ff6999635846d95e4ed67cbab5094bbfdbf48651",
+    "split": "evaluacion",
+    "t_capture_ms": 3674
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          56,
+          104,
+          90,
+          182
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0010",
+    "image": "secuencias/seq03/seq03-0010.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "159e06f255e92b821180983b4bafa34da0539bc1389de5f6efef3dd0e6d95774",
+    "split": "evaluacion",
+    "t_capture_ms": 4756
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          60,
+          104,
+          90,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0012",
+    "image": "secuencias/seq03/seq03-0012.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "0fb0adf97225790edfc6da1a5d7262bc815686849383f78565e740c246dd3562",
+    "split": "evaluacion",
+    "t_capture_ms": 5774
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          306,
+          106,
+          337,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0001",
+    "image": "secuencias/seq04/seq04-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "4bede9430b33e2c73568a18a4522f556d0808332cc7c5866ec417838dc0baa29",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          306,
+          106,
+          338,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0003",
+    "image": "secuencias/seq04/seq04-0003.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "724c7c2ada22dc0ce0545bd5e2fbd856adf7143c877f54d7b4fdecf8d9a0edae",
+    "split": "evaluacion",
+    "t_capture_ms": 2208
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          307,
+          106,
+          338,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0005",
+    "image": "secuencias/seq04/seq04-0005.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "06d175d2bc30e23d5fd7ffea744e5e76aeca0c249af0f2234bd06a900436d4f8",
+    "split": "evaluacion",
+    "t_capture_ms": 3267
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          298,
+          104,
+          333,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0008",
+    "image": "secuencias/seq04/seq04-0008.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "312ca5dca4f5dd6854a734dcfebda391022819c356f897431a747f7ff5c53a3a",
+    "split": "evaluacion",
+    "t_capture_ms": 6838
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          305,
+          106,
+          337,
+          183
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0010",
+    "image": "secuencias/seq04/seq04-0010.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "455539898bbd6b9968d07bb2ee1e646add31bf56174aaa721cdb6e23b01a3ca7",
+    "split": "evaluacion",
+    "t_capture_ms": 7885
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          306,
+          108,
+          333,
+          182
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq04-0012",
+    "image": "secuencias/seq04/seq04-0012.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_derecha",
+    "scenario": "C4",
+    "sequence_id": "seq04",
+    "sha256": "1022c1f9fce6e6c6dc8c06b853d66f30a0842b673ae87bdcde89c980287b8fb6",
+    "split": "evaluacion",
+    "t_capture_ms": 8943
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          142,
+          2,
+          200,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          267,
+          3,
+          324,
+          139
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0001",
+    "image": "secuencias/seq05/seq05-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "2c612d3684e67d311c3f950cf64a6d3a6183e61f5793a355b08e19c9a7fd8e2f",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          147,
+          2,
+          202,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          264,
+          5,
+          314,
+          142
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0004",
+    "image": "secuencias/seq05/seq05-0004.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "b612052e83322f073d6373c64560ffdc8eb48461a3ef932bf2235a691186fcd8",
+    "split": "evaluacion",
+    "t_capture_ms": 2471
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          147,
+          3,
+          202,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          278,
+          3,
+          324,
+          139
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0007",
+    "image": "secuencias/seq05/seq05-0007.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "3d8dfded5df827bc8b8b00b209282468c84bfcc7359e54d2326097f794a6b586",
+    "split": "evaluacion",
+    "t_capture_ms": 6460
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          150,
+          2,
+          203,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          274,
+          2,
+          322,
+          139
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0010",
+    "image": "secuencias/seq05/seq05-0010.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "5f7ff5188117ad3404514f3bcc287fcc9575b8b91d1f89df5b86bca8bedcb681",
+    "split": "evaluacion",
+    "t_capture_ms": 8980
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          147,
+          3,
+          202,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          278,
+          3,
+          322,
+          140
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0013",
+    "image": "secuencias/seq05/seq05-0013.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "b3365573fb1979c7770ec2b2f07135dff3e69be17526e3b7054d2c520ce8d966",
+    "split": "evaluacion",
+    "t_capture_ms": 11518
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          147,
+          2,
+          202,
+          142
+        ],
+        "class_name": "person"
+      },
+      {
+        "bbox_xyxy": [
+          278,
+          2,
+          322,
+          139
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq05-0015",
+    "image": "secuencias/seq05/seq05-0015.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "varios",
+    "scenario": "C5",
+    "sequence_id": "seq05",
+    "sha256": "5f652a284345ef4463c1f8cb68dbe555da1b8a1ac0ea5d1ff709ded53ccd9623",
+    "split": "evaluacion",
+    "t_capture_ms": 14474
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq06-0001",
+    "image": "secuencias/seq06/seq06-0001.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "d6ebfb5915e4a743cba7908c3b563657af444a30593b3c507c269d7c8c5cbe46",
+    "split": "evaluacion",
+    "t_capture_ms": 0
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq06-0026",
+    "image": "secuencias/seq06/seq06-0026.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "65156bcd9b6e047963c42cedee9cc1484d8d3f2ef57c3aa57fb3c0699fa50d12",
+    "split": "evaluacion",
+    "t_capture_ms": 15528
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          113,
+          0,
+          178,
+          144
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq06-0030",
+    "image": "secuencias/seq06/seq06-0030.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "centro",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "d0ff392dd8293d438015c94122a6b563494845a51760ab9b398ca2bc17b40e03",
+    "split": "evaluacion",
+    "t_capture_ms": 17567
+  },
+  {
+    "allowed_actions": [
+      "STOP",
+      "SLOW",
+      "EVADE_LEFT",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          139,
+          0,
+          183,
+          142
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq06-0038",
+    "image": "secuencias/seq06/seq06-0038.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "centro",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "8226a978c07d00bd494f2ad2c9b1fba3e9e40d54bf6a7a116bb551f6df74a45c",
+    "split": "evaluacion",
+    "t_capture_ms": 22493
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          100,
+          0,
+          139,
+          142
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq06-0045",
+    "image": "secuencias/seq06/seq06-0045.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "2e40109a436fdf9ed5c6328b327332766d84c70e048be495e26cde806b77163f",
+    "split": "evaluacion",
+    "t_capture_ms": 26126
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP"
+    ],
+    "annotations": [],
+    "frame_id": "seq06-0050",
+    "image": "secuencias/seq06/seq06-0050.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "libre",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "d8a58d393418d474cf220c1b41477ebcb63e175dd2284bbcfdc35fa0126e4267",
+    "split": "evaluacion",
+    "t_capture_ms": 29549
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          57,
+          110,
+          97,
+          182
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq03-0006",
+    "image": "secuencias/seq03/seq03-0006.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C3",
+    "sequence_id": "seq03",
+    "sha256": "124c0ba56fc27dc1fd7c9dca387e7404008d57bb621bedc36ec514024812ea62",
+    "split": "evaluacion",
+    "t_capture_ms": 2661
+  },
+  {
+    "allowed_actions": [
+      "FORWARD",
+      "SLOW",
+      "STOP",
+      "EVADE_RIGHT"
+    ],
+    "annotations": [
+      {
+        "bbox_xyxy": [
+          44,
+          0,
+          111,
+          144
+        ],
+        "class_name": "person"
+      }
+    ],
+    "frame_id": "seq06-0028",
+    "image": "secuencias/seq06/seq06-0028.jpg",
+    "image_height": 296,
+    "image_width": 400,
+    "road_state": "lateral_izquierda",
+    "scenario": "C7",
+    "sequence_id": "seq06",
+    "sha256": "5da0547cb85368a716c08f9fb6e73ffd8cf1b076370eeeb06e52a6c56ae8d589",
+    "split": "evaluacion",
+    "t_capture_ms": 16530
+  }
+]

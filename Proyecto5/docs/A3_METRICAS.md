@@ -114,7 +114,22 @@ Fuera del conteo quedaron 80 detecciones de las clases evaluadas bajo el umbral 
 - **Una sola clase real:** no mide `car`, `dog` ni las demás.
 - **Muestra pequeña y correlacionada:** son 91 objetos en cuadros consecutivos, no 91 escenas independientes.
 - **Etiquetas de una sola persona:** la [auditoría independiente de #29](A3-04_AUDITORIA.md) revisó visualmente 38 cuadros y reprodujo las cifras publicadas. Conserva observaciones de seguimiento y no certifica todos los bordes de las cajas; cajas ajustadas de otra forma podrían cambiar algunos pares cerca de IoU 0.50.
-- **Entorno:** medido en Windows con Python 3.13. El proyecto declara 3.12, y entre plataformas los valores podrían variar en los últimos decimales.
+- **Entorno histórico:** medido en Windows con Python 3.13. La repetición con Python 3.12.16 y todas las dependencias fijadas reproduce exactamente las predicciones y métricas; ver [cierre F01](../evidencias/a3-metricas-python312/README.md). Esto no garantiza igualdad en cualquier plataforma.
+
+### Repetición en el entorno soportado — A3-04-F01 (#40)
+
+Seguimiento de [#29](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/29),
+relacionado con #16 y #17. El 4 de noviembre de 2026 se ejecutó nuevamente el
+evaluador existente con inferencia real en Python 3.12.16, ONNX Runtime 1.31.1,
+NumPy 2.5.4 y OpenCV headless 5.0.0.93, verificando todas las versiones del lock.
+
+La [nueva evidencia](../evidencias/a3-metricas-python312/README.md) conserva el
+manifiesto, modelo y umbrales publicados. Resultados: 64 TP, 2 FP, 27 FN,
+precision 0.9696969697, recall 0.7032967033 y F1 0.8152866242, sin errores.
+Predicciones, resultados por cuadro y CSV son idénticos byte a byte a v1.
+En `metricas.json` solo cambia el bloque de metadatos `ejecucion`.
+La evidencia histórica permanece intacta y un recálculo independiente de los
+128 cuadros no encuentra diferencias. No se calibró con evaluación.
 
 ## Verificación
 

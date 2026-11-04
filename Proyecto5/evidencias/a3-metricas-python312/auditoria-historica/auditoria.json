@@ -1,0 +1,1411 @@
+{
+  "audit_commit": "7b4adb45b85483cf0a65e1cf275fa3ba5cc4bede",
+  "audit_script_sha256": "e4201c7fe98ac0c39be0b7af39bf89926a1014ce7104b27212225dfd13ec8a20",
+  "dataset": {
+    "frames": 128,
+    "sequences": {
+      "seq01": 15,
+      "seq02": 24,
+      "seq03": 12,
+      "seq04": 12,
+      "seq05": 15,
+      "seq06": 50
+    },
+    "manifest_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "frozen_base_commit": "54c1aa07d7118e0294b590b85f4f05dd1852098b"
+  },
+  "dataset_inventory_sha256": {
+    "anotaciones.jsonl": "23cb0f87c752d5118d6d50d58cadd1ecfb7bc27422e48e21992c32db6d681ec8",
+    "congelamiento.json": "a25f04c8b0e75ec829408712f139ca020ce9bfe657a955377ad1ad3f7b00f7b9",
+    "manifiesto.jsonl": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "secuencias/seq01/capturas.jsonl": "c1db6fb742fdbf9fd5ba703cc0c7b6657f3ff0465ffbd98e4eaac9fa919b8857",
+    "secuencias/seq01/seq01-0001.jpg": "1a442d34eb5343453e8d24bb1c7b48ab58bc2902c6cdb36f13381bd290acb606",
+    "secuencias/seq01/seq01-0002.jpg": "f7fa42ae2e7dd8ca6f558c4e36fbc78b530c0decc8f7dc723544168869937f0e",
+    "secuencias/seq01/seq01-0003.jpg": "c7ba66d3c924c496005a6e8b14aa2bbb95a9fb6b5f9853ebc66282a4b67d9d06",
+    "secuencias/seq01/seq01-0004.jpg": "2761994d142b438a8bc3c915551cfaf75c89b27246702af8efc31b7acd737c24",
+    "secuencias/seq01/seq01-0005.jpg": "6d0bded9840df084720a25f5997ff0975bd256f36658ce39a20f0a7e49a00464",
+    "secuencias/seq01/seq01-0006.jpg": "5d404362173ca8ded1f60388fe8a296c07d3fd87627009d75464e2e712738e1e",
+    "secuencias/seq01/seq01-0007.jpg": "99ccf1622063685ebf85fc203e793b65d38d6426f0645a2457ca673c5d25a7eb",
+    "secuencias/seq01/seq01-0008.jpg": "2ec1b9477f85f3ca9036e1ed9b260982ba1f6d50e522bd849dc1b1c9adbb7fe5",
+    "secuencias/seq01/seq01-0009.jpg": "6d79858ea16d2ec39497b5a4cf3adcd3f420e0b524d962d869f5cc46a2a26976",
+    "secuencias/seq01/seq01-0010.jpg": "6319feeb0bca909d32e27d57c552848e7cbe108c51f1e31e0bdc340fbb4dfeab",
+    "secuencias/seq01/seq01-0011.jpg": "d2b180bbdd8fbc1fe04df72cae08aa3dcf14974ab8926502017afe8c608c3b9b",
+    "secuencias/seq01/seq01-0012.jpg": "9f6504959a0d6231bed2ec7e7bb93d0b8cc56896c46ab4ebd4259f578110a876",
+    "secuencias/seq01/seq01-0013.jpg": "d2c061cc73575744086b5042216e56833336853f00df67f9760b440395f5dc20",
+    "secuencias/seq01/seq01-0014.jpg": "f17d1c33d892f2239c5df9409e2a02db69b37767bafe37b67d799993c54d142c",
+    "secuencias/seq01/seq01-0015.jpg": "52fb4eab60d696c499e2be1993d2040f1b0a0e7911cdd5f3851463b2ed42ca2f",
+    "secuencias/seq02/capturas.jsonl": "c8fb42f1cc1a3c2990573cedbd8534d1e46025b9430a469f7ff7c91f47736aef",
+    "secuencias/seq02/seq02-0001.jpg": "de5d68269a9d172fcb7a02514ed6a8363221326bd6eb2ff435f11fa9c64e1e14",
+    "secuencias/seq02/seq02-0002.jpg": "d23520aa1671387ea4ca9c12d18435bf7b29abca2bb464525e350c036d1504b3",
+    "secuencias/seq02/seq02-0003.jpg": "488a9378ae3fab107716521fd9f56805b121db46c87fcb5343f4a67fa0a8a9fb",
+    "secuencias/seq02/seq02-0004.jpg": "e9881eaf83a955d3231241ade51ec01a3f17af77116083e579935c25f3d4d9ef",
+    "secuencias/seq02/seq02-0005.jpg": "67f5a5504fbdcd70d6086fc54395916a2fb7bee105c771f8bd9aac9a43c58c76",
+    "secuencias/seq02/seq02-0006.jpg": "534a71f43b9715b10d61b3050b43c744ddcf08cf0e9c1f27191d42a5966e984a",
+    "secuencias/seq02/seq02-0007.jpg": "c53084112ec05ca608ae240a3596c755b1492f9b4b48fdf09b569d736ed63f13",
+    "secuencias/seq02/seq02-0008.jpg": "0d8fe648890caeccee5e06d955c599694058af8275f3d3922f4137c0c1d7f7d3",
+    "secuencias/seq02/seq02-0009.jpg": "3c2a117caf148d1140bb49c28086d49e00d3fe19c099e69283fc8d9f1cd19a9b",
+    "secuencias/seq02/seq02-0010.jpg": "50ca4dd364ec1446013917586c21c8d5e03ec47d20aed0e061f146ce83cda1da",
+    "secuencias/seq02/seq02-0011.jpg": "82e272da92809faa554c121a3701b740551753a858a8d1d3673c06aef93727fc",
+    "secuencias/seq02/seq02-0012.jpg": "ff677f26ae194872ec9abbd7d2fd79fb1f60e7aec99624b7c11adc649d5771e1",
+    "secuencias/seq02/seq02-0013.jpg": "c4f2a35e6c49fa0129d8183a0cb2ef5fa2e0dd938b47b596128d7d299bb9bfa5",
+    "secuencias/seq02/seq02-0014.jpg": "8518bbfd0f78522b8a3f1e2cf5b6948379dcc202c30aa577fe57c87b7f947237",
+    "secuencias/seq02/seq02-0015.jpg": "162ab17747ac9fcb5ab783f49d59d429788b3bf9021ab8f7b0d85551484edd05",
+    "secuencias/seq02/seq02-0016.jpg": "7a017f4ce44572dae41dbc14c0fe130d8906a088587fd3cad1d1a631e3af48e2",
+    "secuencias/seq02/seq02-0017.jpg": "c9d76c97a11b12d396f311ceeb1a350b8ea7a85115849fb2bdfff502a3fa72a0",
+    "secuencias/seq02/seq02-0018.jpg": "26fd1c4a2c4b4b37ccc26d8606e8b58ced0036c9a081d1ddb7ecefad6162d4c6",
+    "secuencias/seq02/seq02-0019.jpg": "e84e0485b99fcd1f75faaf8cbae0cb8889ad73f9c8434f344897e286759c8b25",
+    "secuencias/seq02/seq02-0020.jpg": "ac84bac920774274f286a1cba211e5beb435d03811a48ad154f2710c95fe2854",
+    "secuencias/seq02/seq02-0021.jpg": "e2f8752118486d9eee12b575bb95fe2d0140cd091ad173c839a1a02643da9674",
+    "secuencias/seq02/seq02-0022.jpg": "5bbe3785250bb1605ad53239a9df10a94e9bcc0af4c86570e1cd43196c343e73",
+    "secuencias/seq02/seq02-0023.jpg": "1f4019031e42609765e6b3c38e2436723948518b669df9f2787388da713952c0",
+    "secuencias/seq02/seq02-0024.jpg": "bb41ac9e44bca5470924fef4a947b7049f0b70490a2de0e2d53c1f8d7bd43f1f",
+    "secuencias/seq03/capturas.jsonl": "a3d0fc187e6d605efd5fd8de07fd21b4d8b970df0e76b522b976b9962862bb70",
+    "secuencias/seq03/seq03-0001.jpg": "9d36742b622a20c221ba7398b4395e97b5464fd2e091b6f3bdd7fde848110833",
+    "secuencias/seq03/seq03-0002.jpg": "6febbce1c38aa57e3bc0b971ef0a722b1329fa98aaca9e2fce1e10dabf64c5de",
+    "secuencias/seq03/seq03-0003.jpg": "60ce76fe293cb14bbdb83ee3e8c9966a19afec266f0f1561db384e810f443aad",
+    "secuencias/seq03/seq03-0004.jpg": "8bab857366b2820f5c843ba5ff50d0b71202bea647a6b8d13dc868be53999f2c",
+    "secuencias/seq03/seq03-0005.jpg": "d35cf04fe3f606f0c04f63331aea1f0eab4a45884b3d6853672f771cc5a72bf2",
+    "secuencias/seq03/seq03-0006.jpg": "124c0ba56fc27dc1fd7c9dca387e7404008d57bb621bedc36ec514024812ea62",
+    "secuencias/seq03/seq03-0007.jpg": "7cfff569d5012a33d0cf8929311a8fbdb4d64052ec16e2219d61620583a028cf",
+    "secuencias/seq03/seq03-0008.jpg": "7b381d9384983a3295ad10f8ff6999635846d95e4ed67cbab5094bbfdbf48651",
+    "secuencias/seq03/seq03-0009.jpg": "9cc3d622302ab55c7dd58fc1afc10b385a0a2fc856b0dfd41a519f4298e3ea4e",
+    "secuencias/seq03/seq03-0010.jpg": "159e06f255e92b821180983b4bafa34da0539bc1389de5f6efef3dd0e6d95774",
+    "secuencias/seq03/seq03-0011.jpg": "df2244af89282da2f93c65baf697273a81f58e7ed026d13669ba71c61a5a9866",
+    "secuencias/seq03/seq03-0012.jpg": "0fb0adf97225790edfc6da1a5d7262bc815686849383f78565e740c246dd3562",
+    "secuencias/seq04/capturas.jsonl": "702a0858bc29a1ace5d00cffc87fb909ddcc75ade3124d3bb3f63a4a87041985",
+    "secuencias/seq04/seq04-0001.jpg": "4bede9430b33e2c73568a18a4522f556d0808332cc7c5866ec417838dc0baa29",
+    "secuencias/seq04/seq04-0002.jpg": "eeaf14aca9fc17e1261afb2de8cc3ab18abe1123bfb197e50fc2449b84dd9c04",
+    "secuencias/seq04/seq04-0003.jpg": "724c7c2ada22dc0ce0545bd5e2fbd856adf7143c877f54d7b4fdecf8d9a0edae",
+    "secuencias/seq04/seq04-0004.jpg": "96758f33a63883d87d38723fe2790c510620c5de0f89fb864f28ba575960ee54",
+    "secuencias/seq04/seq04-0005.jpg": "06d175d2bc30e23d5fd7ffea744e5e76aeca0c249af0f2234bd06a900436d4f8",
+    "secuencias/seq04/seq04-0006.jpg": "e6ac330e12a06f06054ae01f51267a2ceb06010a5994b9575456f49d8bc2196a",
+    "secuencias/seq04/seq04-0007.jpg": "9f4678de8ad4cdc6ca1f80c155d11ba9a30d4665842d607029b0de204e545c7f",
+    "secuencias/seq04/seq04-0008.jpg": "312ca5dca4f5dd6854a734dcfebda391022819c356f897431a747f7ff5c53a3a",
+    "secuencias/seq04/seq04-0009.jpg": "a0515332ee8f0124c1f69fff88eefaee6c9db5e3267cbbabe0028a104ad34d85",
+    "secuencias/seq04/seq04-0010.jpg": "455539898bbd6b9968d07bb2ee1e646add31bf56174aaa721cdb6e23b01a3ca7",
+    "secuencias/seq04/seq04-0011.jpg": "cc9eb77c602d1676a3ed4048bc255906f289d03e2b6318c4a4588a172c2d7457",
+    "secuencias/seq04/seq04-0012.jpg": "1022c1f9fce6e6c6dc8c06b853d66f30a0842b673ae87bdcde89c980287b8fb6",
+    "secuencias/seq05/capturas.jsonl": "c553f727bf6db397cb090a7a0b52ceffebc2ec7e0841060c077814a8c4733022",
+    "secuencias/seq05/seq05-0001.jpg": "2c612d3684e67d311c3f950cf64a6d3a6183e61f5793a355b08e19c9a7fd8e2f",
+    "secuencias/seq05/seq05-0002.jpg": "fb15762d97a8548e32e99ac8cd9650c079fb5bc2ebac0a37dec98dabf5beaa89",
+    "secuencias/seq05/seq05-0003.jpg": "9cf8174680a0f003eebdb5455c25ff056125f4ced5aa7979d9ce77a02549c269",
+    "secuencias/seq05/seq05-0004.jpg": "b612052e83322f073d6373c64560ffdc8eb48461a3ef932bf2235a691186fcd8",
+    "secuencias/seq05/seq05-0005.jpg": "112325c5ab414685fdd503246b285905d28dccc6c4efa82b3e8e28e1a9040d09",
+    "secuencias/seq05/seq05-0006.jpg": "caafcbc758433d2273d3e5f3d729c07f7a84b7410bf3717b54afcde320eb89bd",
+    "secuencias/seq05/seq05-0007.jpg": "3d8dfded5df827bc8b8b00b209282468c84bfcc7359e54d2326097f794a6b586",
+    "secuencias/seq05/seq05-0008.jpg": "ef0ccbcf84c1c49ab533e55f198a9a42db70a48100e1bf185e0c07a5316a8e21",
+    "secuencias/seq05/seq05-0009.jpg": "7713f8afd896d4fd9ad4bdf15cccb97d7bf82f0c89f305c1ef94ec83600f6805",
+    "secuencias/seq05/seq05-0010.jpg": "5f7ff5188117ad3404514f3bcc287fcc9575b8b91d1f89df5b86bca8bedcb681",
+    "secuencias/seq05/seq05-0011.jpg": "f1d7b69aaaed73ec796f8c475750927640c116547357b26d8d4d9fd8699ded42",
+    "secuencias/seq05/seq05-0012.jpg": "5cd9efa23328e2675ef74020ae703f1dfdcb771db05b4c7d7c182da1a00c92a2",
+    "secuencias/seq05/seq05-0013.jpg": "b3365573fb1979c7770ec2b2f07135dff3e69be17526e3b7054d2c520ce8d966",
+    "secuencias/seq05/seq05-0014.jpg": "bc09ab6288233ba7ab844892a5fc27ef87a35a7000aada13ea5d9606f654b84e",
+    "secuencias/seq05/seq05-0015.jpg": "5f652a284345ef4463c1f8cb68dbe555da1b8a1ac0ea5d1ff709ded53ccd9623",
+    "secuencias/seq06/capturas.jsonl": "14212b5a3a1f1ae9e68c0eb7ba593f9b19104da3aeaa931056d0360f2c98053e",
+    "secuencias/seq06/seq06-0001.jpg": "d6ebfb5915e4a743cba7908c3b563657af444a30593b3c507c269d7c8c5cbe46",
+    "secuencias/seq06/seq06-0002.jpg": "645d129808c27e4cd75ebb8bbcd70739ebcd0017d97cb1b9abc1cb1ec0ce1316",
+    "secuencias/seq06/seq06-0003.jpg": "5d5cf6227a9c0f73feb0879ab968c454700b369c060ab5bb93d38eddb932c3f8",
+    "secuencias/seq06/seq06-0004.jpg": "d7b91241ddadf3ede19d0af45cf5b73198cfcddf4ecccaaa17b08fb274e1078d",
+    "secuencias/seq06/seq06-0005.jpg": "5ef8eff95f49ce9edb973fbc9077278d09291b337e083b27a7229edfcbe7e111",
+    "secuencias/seq06/seq06-0006.jpg": "2d4acf60a75e6b0ff4cba22049c500c102d0dd31a431e4077c0da2d6974af3db",
+    "secuencias/seq06/seq06-0007.jpg": "1a178c4ed61451c87fa685d399c411f47e20e17980c226c3e7800988270e3da8",
+    "secuencias/seq06/seq06-0008.jpg": "725edd8a15ff98f4bc971b4acb789bbe7344e91131f641358b2ef738aee396af",
+    "secuencias/seq06/seq06-0009.jpg": "7778c23506b0c20a5c115e90e846b362e7d3c4330f36c904b64358814f1561a6",
+    "secuencias/seq06/seq06-0010.jpg": "198da0e0f088b2f1bd3656b74e9f8226bd58c9dfa011047c524358990d735ecc",
+    "secuencias/seq06/seq06-0011.jpg": "c64d187a039e1c7b935fd13f308ea534f71c3404a8925aa7cdc6f25d223197f0",
+    "secuencias/seq06/seq06-0012.jpg": "5ace0d84a6dcb1168e1d6adf811d3c1d3288443e1a2ba89d855e4e803cefd3af",
+    "secuencias/seq06/seq06-0013.jpg": "99d593a35dd67067892cc5c8c35e4c61859f46919c04ba00e5857b4c779762d1",
+    "secuencias/seq06/seq06-0014.jpg": "73ead72f0bfec27a4e5d68442df2ff8e0b67a9b46583dce709a47fbf9960ca00",
+    "secuencias/seq06/seq06-0015.jpg": "06430f2ca2e242d7361d27439ad87c98bf8634a068ea8522209c2e25d8fa8aa7",
+    "secuencias/seq06/seq06-0016.jpg": "1df9a65011fd48558a9f7cccdabf978da33b221922c755320fe4eacd1799de62",
+    "secuencias/seq06/seq06-0017.jpg": "53ab04f89a14b0673e190d2541c75c0b2237a4d61716ac1bf25d65abbc97fc35",
+    "secuencias/seq06/seq06-0018.jpg": "a857c0808e8fea78c8faa7da642a11d647a67ad42e31c7ba376774295bca1002",
+    "secuencias/seq06/seq06-0019.jpg": "b128d2e247cca9275643dff1d087881c2fb270865cfd2a34915b3460f4905f03",
+    "secuencias/seq06/seq06-0020.jpg": "96ba84f9dc1de13e477c947cdebbc34c8154baef7d54b01a6ade7a284fab4c7c",
+    "secuencias/seq06/seq06-0021.jpg": "5fecd6c171436546c51d36cd28616d91ad8d1ab723b8e6b6b66cb5138723d93f",
+    "secuencias/seq06/seq06-0022.jpg": "ba3361228ae4af2c5fa2c14d81e210df6909d924409250357ce11999ace5013b",
+    "secuencias/seq06/seq06-0023.jpg": "3a102e086fc8c2eaea175febd2136a727b6411033b22e92f7c0e67c482f0c57e",
+    "secuencias/seq06/seq06-0024.jpg": "0ce24c20340ca008c3cc304d69b2306bc5c00142c14afe0841c6a0c01eb99c90",
+    "secuencias/seq06/seq06-0025.jpg": "d72993803031fdb45437020f7eedaf4faa89731e633ff33aabf1c5070a7a91ba",
+    "secuencias/seq06/seq06-0026.jpg": "65156bcd9b6e047963c42cedee9cc1484d8d3f2ef57c3aa57fb3c0699fa50d12",
+    "secuencias/seq06/seq06-0027.jpg": "5a1b9c3af9a22ceb2732e3c72b9d6a507f3319c5e4754c2518e449a61e0e6118",
+    "secuencias/seq06/seq06-0028.jpg": "5da0547cb85368a716c08f9fb6e73ffd8cf1b076370eeeb06e52a6c56ae8d589",
+    "secuencias/seq06/seq06-0029.jpg": "e805a8ee0706c8f6a8d9df0aa38c82ac95a244abe5fc35432c57d12bf404bf8c",
+    "secuencias/seq06/seq06-0030.jpg": "d0ff392dd8293d438015c94122a6b563494845a51760ab9b398ca2bc17b40e03",
+    "secuencias/seq06/seq06-0031.jpg": "c41654b6434f3b88779c36ebdb681892204ec4a438f286d897a256a53648065a",
+    "secuencias/seq06/seq06-0032.jpg": "081325004e533b4605a0514211e044346505ed7602819469a3fca3d4aaa5ac8d",
+    "secuencias/seq06/seq06-0033.jpg": "7efae7695b03581f7271d4dc4b5266e6c9327d5136e1f314ec47d250a1994548",
+    "secuencias/seq06/seq06-0034.jpg": "d81856fbd4e767208aef4d28cda20e5ae30582323fa67a294c361a77bbc102a3",
+    "secuencias/seq06/seq06-0035.jpg": "74e5d9c0e2b15e5fc70c134397770381d93a14acfbe035909d6c45c41f9c501d",
+    "secuencias/seq06/seq06-0036.jpg": "f022b86921c351e28bbe1983e2b541f6e39ad50232c94d71a23f928edfceef62",
+    "secuencias/seq06/seq06-0037.jpg": "c037eaea79bb32d85ef829400b52678506df6e898f2607982fe76f5ec40689bf",
+    "secuencias/seq06/seq06-0038.jpg": "8226a978c07d00bd494f2ad2c9b1fba3e9e40d54bf6a7a116bb551f6df74a45c",
+    "secuencias/seq06/seq06-0039.jpg": "691c5f5e2d3294d2aed3b6e7d75c0ae7b4274ed722f27648a43d7625b13b72f9",
+    "secuencias/seq06/seq06-0040.jpg": "9842c48544a20b97cdfa262950b0c5750299224ec3d039204efa2f04bb64a5c9",
+    "secuencias/seq06/seq06-0041.jpg": "049c969c3301b29eabaf903a3473b15a3c993c53666527fac4c0acbec07aea0c",
+    "secuencias/seq06/seq06-0042.jpg": "72f447543d5e4d35f2fa04ce1c49451f4bd94a32db2898ac421c06b922df0058",
+    "secuencias/seq06/seq06-0043.jpg": "cc77b038f580220ab243e2a44b2f40805ec6e024b639f80ca2e66b1448b51170",
+    "secuencias/seq06/seq06-0044.jpg": "dd3cabe1c1a4b9851b1a329723e1802a4cfba982048f211e96abed077b85f435",
+    "secuencias/seq06/seq06-0045.jpg": "2e40109a436fdf9ed5c6328b327332766d84c70e048be495e26cde806b77163f",
+    "secuencias/seq06/seq06-0046.jpg": "2587bcd7eb3262fc00263eaf73f0300386a1a8e0376883bdb00654d40d618803",
+    "secuencias/seq06/seq06-0047.jpg": "801e2b9d9766ddac4b51be957415251c240e4ccf9480e1d1f4712f1fde66ece0",
+    "secuencias/seq06/seq06-0048.jpg": "335e42ff46aec4632afa8ecd64898fb87ca45bd5a3c805cbcdf5f01d7bb78d2a",
+    "secuencias/seq06/seq06-0049.jpg": "efadff8c8a94abea736f1733b573602e3fa4a07903c41876029552ced77453a7",
+    "secuencias/seq06/seq06-0050.jpg": "d8a58d393418d474cf220c1b41477ebcb63e175dd2284bbcfdc35fa0126e4267",
+    "secuencias.json": "7d4762d9e859b83f27e80be48fbf1f938585a5ebc387b0174f38b549c40f054f"
+  },
+  "source_artifacts_sha256": {
+    "evidencias/a3-metricas-v1/metricas.json": "5f789442ab99d91f37de8615e462ad8ab61278ffc0f5a1b63742a623da85dd31",
+    "evidencias/a3-metricas-v1/metricas.csv": "d70ed24571448ddba4ad5a2ab91a2b98b6bc638d615b5accd9ebcdc4e223abf2",
+    "evidencias/a3-metricas-v1/resultados_por_cuadro.jsonl": "357fb6db70db1bf14d35c164e3a827049105d70e66b870e032cc22a1913b2f7f",
+    "evidencias/a3-metricas-v1/predicciones.jsonl": "b97a6814620aba4686e1d6c67d3c1601678228cb41fed5543c55b4e67bab4cc5",
+    "evidencias/A3-03/benchmark.json": "856c18449d6feb1dd02c25db70a4a5a7c7030d141cbf816e37c6dd58f259f74d",
+    "evidencias/A3-03/tiempos.csv": "7c381275323bc601269423e4deb87f14c0829b0869da735432acfc970bb2c1e4",
+    "evidencias/A3-03-programas-abiertos/benchmark.json": "377b3189b068598810eb232abc3cfa1032ac8fe644160074bff7bbae89b5082c",
+    "evidencias/A3-03-programas-abiertos/tiempos.csv": "739ce7985ef93a201ce9b265872a760b7dd83874b39e16f0319b64f327b550ec"
+  },
+  "metrics": {
+    "micro": {
+      "tp": 64,
+      "fp": 2,
+      "fn": 27,
+      "support": 91,
+      "precision": 0.9696969696969697,
+      "recall": 0.7032967032967034,
+      "f1": 0.8152866242038217
+    },
+    "per_class": {
+      "person": {
+        "tp": 64,
+        "fp": 2,
+        "fn": 27,
+        "support": 91,
+        "precision": 0.9696969696969697,
+        "recall": 0.7032967032967034,
+        "f1": 0.8152866242038217
+      },
+      "bicycle": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "car": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "motorcycle": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "bus": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "truck": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cat": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "dog": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "sample": [
+      {
+        "frame_id": "seq01-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0004",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0007",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0010",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0013",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0015",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0001",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9720786042774506,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8459706430992497,
+              "bbox_xyxy": [
+                222.7372963508064,
+                68.38546638417236,
+                279.8031673168431,
+                204.0409132597814
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                222,
+                69,
+                280,
+                203
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0006",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7686362828424401,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6826054742009902,
+              "bbox_xyxy": [
+                229.40901112833646,
+                81.80280254578217,
+                272.44291435478027,
+                203.69146997971174
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                222,
+                72,
+                272,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7186538782018829,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8428762177179294,
+              "bbox_xyxy": [
+                57.91995306886556,
+                105.73664377743125,
+                107.30999834949756,
+                202.7841648092762
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                59,
+                78,
+                108,
+                209
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0015",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              0,
+              87,
+              42,
+              200
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq02-0020",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0024",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              12,
+              118,
+              38,
+              180
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq03-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7365654816163636,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7252036695462607,
+              "bbox_xyxy": [
+                67.49171857732225,
+                112.14378982120324,
+                93.29326964259916,
+                181.46715575201662
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                62,
+                108,
+                92,
+                181
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0005",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7730250446731931,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7902713178150904,
+              "bbox_xyxy": [
+                68.62507775559983,
+                114.98525995280498,
+                92.77272965911527,
+                179.97049524427987
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                68,
+                112,
+                97,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.751684281001614,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7271081137616875,
+              "bbox_xyxy": [
+                62.828107549921164,
+                101.95762173600028,
+                89.8014485557659,
+                180.47083361678293
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                60,
+                110,
+                88,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6145193276052212,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6842429225501441,
+              "bbox_xyxy": [
+                65.65536573349321,
+                108.33402808024503,
+                93.38151499808943,
+                181.52451120761555
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                56,
+                104,
+                90,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6265668774801699,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6909843286565476,
+              "bbox_xyxy": [
+                60.83683885669999,
+                119.81467133710663,
+                84.43871910146274,
+                182.73184082649576
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                60,
+                104,
+                90,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0001",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7947693835640268,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.68504081384134,
+              "bbox_xyxy": [
+                309.8663055289069,
+                105.48768039293644,
+                335.71430579173546,
+                179.80219680168824
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7119697157189562,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7011594549736344,
+              "bbox_xyxy": [
+                312.4941832160722,
+                103.51095434050737,
+                336.545633640312,
+                180.711317927201
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                338,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0005",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8341567391783289,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7426892004466339,
+              "bbox_xyxy": [
+                308.8550624134675,
+                97.94963993664791,
+                337.22843742162013,
+                183.13026491306476
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                307,
+                106,
+                338,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6696381614038723,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6599274017130412,
+              "bbox_xyxy": [
+                302.9539980935315,
+                109.2430124636599,
+                328.7780952773463,
+                180.94153121931882
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                298,
+                104,
+                333,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6165540086001561,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.565927531978474,
+              "bbox_xyxy": [
+                311.1992655841168,
+                114.223354452988,
+                333.9755508959329,
+                180.92383068923564
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                305,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6758394744122252,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5661096818727884,
+              "bbox_xyxy": [
+                311.56347548764927,
+                110.34030118557094,
+                336.5637653718959,
+                181.30560992112552
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                108,
+                333,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0001",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9467629448931701,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8880057995716975,
+              "bbox_xyxy": [
+                140.0274838265605,
+                0.9954654826218464,
+                199.92574064900663,
+                140.1542186164288
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                142,
+                2,
+                200,
+                142
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.9100617038048362,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8475495200497107,
+              "bbox_xyxy": [
+                264.8756677923479,
+                2.005205532635274,
+                321.43394125400124,
+                139.66228704044258
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                267,
+                3,
+                324,
+                139
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0004",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8975405299091577,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8854780484491585,
+              "bbox_xyxy": [
+                144.1468010091987,
+                2.361402163215655,
+                200.07377857829755,
+                139.1791215125562
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                2,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              264,
+              5,
+              314,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0007",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8967103425343734,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.854492560095423,
+              "bbox_xyxy": [
+                144.82779203311134,
+                2.3721853569516025,
+                200.39318457633877,
+                136.86308008142169
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              3,
+              324,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8147778084671297,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8319266250673252,
+              "bbox_xyxy": [
+                143.11112639173982,
+                2.3612602974087036,
+                200.1942926498204,
+                137.97056187783733
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                150,
+                2,
+                203,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              274,
+              2,
+              322,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0013",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.902260515557401,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8916174540689283,
+              "bbox_xyxy": [
+                144.07725353220175,
+                2.255032329963395,
+                200.58418768390024,
+                139.1365384215202
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              3,
+              322,
+              140
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0015",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9264794624864582,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8917314001618024,
+              "bbox_xyxy": [
+                144.51286076472067,
+                1.5791012676531389,
+                201.1446052433923,
+                140.03879657299348
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                2,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              2,
+              322,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0026",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0030",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7837845056135527,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8646753047571565,
+              "bbox_xyxy": [
+                110.1843476389706,
+                0.09394166935640358,
+                168.67280280564702,
+                137.3069642332127
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                113,
+                0,
+                178,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0038",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              139,
+              0,
+              183,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0045",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7733551915785053,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6950546967295423,
+              "bbox_xyxy": [
+                96.04874911063727,
+                0.0,
+                134.6182624437873,
+                135.69379308745286
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                100,
+                0,
+                139,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0050",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0006",
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [
+          {
+            "prediction_index": 0,
+            "best_iou": 0.42547619280841187,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6280175181762218,
+              "bbox_xyxy": [
+                67.32768303531451,
+                123.1561084719831,
+                88.62237722223037,
+                180.69961788012165
+              ]
+            }
+          }
+        ],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              57,
+              110,
+              97,
+              182
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0028",
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [
+          {
+            "prediction_index": 0,
+            "best_iou": 0.47284356754785883,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5792305472960777,
+              "bbox_xyxy": [
+                39.90876919643592,
+                5.412403140325433,
+                88.18847337898944,
+                113.37848747997954
+              ]
+            }
+          }
+        ],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              44,
+              0,
+              111,
+              144
+            ],
+            "class_name": "person"
+          }
+        ]
+      }
+    ],
+    "source_commit": "0cf6dd9d35b567c92542681d820a7c9fd79f964c",
+    "source_runtime": "Python 3.13.15"
+  },
+  "benchmarks": {
+    "A3-03": {
+      "warmups_excluded": 10,
+      "valid_measurements": 200,
+      "stages": {
+        "ms_total": {
+          "n": 200,
+          "p50": 62.85785,
+          "p95": 107.87667499999995
+        },
+        "ms_lectura": {
+          "n": 200,
+          "p50": 1.65795,
+          "p95": 2.4261999999999992
+        },
+        "ms_preprocesamiento": {
+          "n": 200,
+          "p50": 1.6663000000000001,
+          "p95": 3.0362349999999996
+        },
+        "ms_inferencia": {
+          "n": 200,
+          "p50": 53.629400000000004,
+          "p95": 95.39880999999998
+        },
+        "ms_posprocesamiento": {
+          "n": 200,
+          "p50": 4.6084499999999995,
+          "p95": 6.822235
+        },
+        "ms_politica": {
+          "n": 200,
+          "p50": 0.2478,
+          "p95": 0.43131499999999967
+        },
+        "ms_control": {
+          "n": 200,
+          "p50": 0.02895,
+          "p95": 0.041129999999999924
+        }
+      },
+      "source_commit": "dacaa56b8a3fb0e8b86396104ab15fc0ea17ae58",
+      "source_config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42"
+    },
+    "A3-03-programas-abiertos": {
+      "warmups_excluded": 10,
+      "valid_measurements": 200,
+      "stages": {
+        "ms_total": {
+          "n": 200,
+          "p50": 51.19845,
+          "p95": 92.01824499999998
+        },
+        "ms_lectura": {
+          "n": 200,
+          "p50": 1.43645,
+          "p95": 2.0415499999999995
+        },
+        "ms_preprocesamiento": {
+          "n": 200,
+          "p50": 1.5563,
+          "p95": 2.7076499999999997
+        },
+        "ms_inferencia": {
+          "n": 200,
+          "p50": 42.36555,
+          "p95": 81.096965
+        },
+        "ms_posprocesamiento": {
+          "n": 200,
+          "p50": 4.8563,
+          "p95": 8.9698
+        },
+        "ms_politica": {
+          "n": 200,
+          "p50": 0.2131,
+          "p95": 0.38505999999999996
+        },
+        "ms_control": {
+          "n": 200,
+          "p50": 0.026099999999999998,
+          "p95": 0.042574999999999974
+        }
+      },
+      "source_commit": "dacaa56b8a3fb0e8b86396104ab15fc0ea17ae58",
+      "source_config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42"
+    }
+  },
+  "numeric_checks_pass": true,
+  "environment_findings": [
+    {
+      "id": "A3-04-F01",
+      "observed": "Python 3.13.15",
+      "expected": "Python >=3.12,<3.13 (pyproject.toml)",
+      "action": "repetir la evaluacion en el entorno soportado sin modificar umbrales"
+    }
+  ],
+  "failures": [],
+  "visual_review": "ver revision_visual.csv; el script no acredita revision visual"
+}

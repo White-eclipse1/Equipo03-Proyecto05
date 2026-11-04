@@ -32,3 +32,18 @@ Get-Content pyproject.toml
 - Registrar commit, versiones y hashes de la nueva ejecución y enlazarla a #29.
 
 Publicado como [issue #40](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40).
+
+## Cierre técnico verificado — 2026-11-04
+
+Se completaron los cuatro puntos del cierre propuesto. La nueva inferencia y
+su comparación están en [a3-metricas-python312](../../evidencias/a3-metricas-python312/README.md),
+enlazadas al seguimiento de [#29](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/29).
+Python 3.12.16 y todas las dependencias coinciden con las versiones fijadas.
+Se conservaron manifiesto, modelo y umbrales; las predicciones y resultados
+por cuadro son idénticos byte a byte a los históricos. Se reproducen 64 TP,
+2 FP y 27 FN, sin errores, también mediante el auditor independiente sobre
+los 128 cuadros. La ejecución histórica no se sobrescribió.
+
+El cierre se refiere a la discrepancia de entorno F01. Las observaciones de
+cajas F02 y las limitaciones del dataset conservan su alcance propio.
+Este registro local no cambia el estado del issue en GitHub.

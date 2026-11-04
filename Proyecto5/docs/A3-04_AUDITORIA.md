@@ -154,7 +154,8 @@ y paquete no instalado). Ruff, formato y `git diff --check` correctos.
 ## Seguimiento y límites
 
 - [F01: entorno de métricas](issues/A3-04-F01_ENTORNO.md): solicitar evidencia
-  en Python 3.12, preservando la anterior y sin ajustar umbrales.
+  en Python 3.12, preservando la anterior y sin ajustar umbrales. **Completado
+  el 2026-11-04:** [inferencia nueva, comparación y hashes](../evidencias/a3-metricas-python312/README.md).
 - [F02: criterio de caja en seq06-0028](issues/A3-04-F02_CAJA.md): segunda revisión;
   cualquier corrección aceptada requiere una versión posterior, nunca editar v1.
 - Seguimientos publicados: [#40, entorno](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40)

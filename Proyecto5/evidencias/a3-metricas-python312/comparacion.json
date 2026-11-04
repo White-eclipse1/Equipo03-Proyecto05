@@ -1,0 +1,3340 @@
+{
+  "seguimiento": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40",
+  "auditoria": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/29",
+  "ejecucion_historica": {
+    "run_id": "1b625493b15d428d9a216ec308db7699",
+    "fecha": "2026-11-04T06:03:54+00:00",
+    "commit": "0cf6dd9d35b567c92542681d820a7c9fd79f964c",
+    "origen": "detector",
+    "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "predicciones_sha256": "b97a6814620aba4686e1d6c67d3c1601678228cb41fed5543c55b4e67bab4cc5",
+    "umbral_detector": 0.1,
+    "nms_detector": 0.45,
+    "runtime": "Python 3.13.15",
+    "hardware": "Windows AMD64, CPU"
+  },
+  "ejecucion_nueva": {
+    "run_id": "2c12ae75ecda419bb0f9601f5357ad3b",
+    "fecha": "2026-11-04T23:07:39+00:00",
+    "commit": "7b4adb45b85483cf0a65e1cf275fa3ba5cc4bede",
+    "origen": "detector",
+    "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "predicciones_sha256": "b97a6814620aba4686e1d6c67d3c1601678228cb41fed5543c55b4e67bab4cc5",
+    "umbral_detector": 0.1,
+    "nms_detector": 0.45,
+    "runtime": "Python 3.12.16",
+    "hardware": "Windows AMD64, CPU"
+  },
+  "comprobaciones": {
+    "python_soportado": true,
+    "inferencia_real_312": true,
+    "manifiesto_conservado": true,
+    "modelo_conservado": true,
+    "umbrales_conservados": true,
+    "sin_errores_inferencia": true,
+    "version:annotated-types": true,
+    "version:colorama": true,
+    "version:flatbuffers": true,
+    "version:iniconfig": true,
+    "version:numpy": true,
+    "version:onnxruntime": true,
+    "version:opencv-python-headless": true,
+    "version:packaging": true,
+    "version:pluggy": true,
+    "version:protobuf": true,
+    "version:pydantic": true,
+    "version:pydantic-core": true,
+    "version:pygments": true,
+    "version:pytest": true,
+    "version:pyyaml": true,
+    "version:ruff": true,
+    "version:typing-extensions": true,
+    "version:typing-inspection": true,
+    "historico_intacto:metricas.json": true,
+    "historico_intacto:metricas.csv": true,
+    "historico_intacto:predicciones.jsonl": true,
+    "historico_intacto:resultados_por_cuadro.jsonl": true,
+    "fuente_y_dataset_sin_cambios_desde_commit": true
+  },
+  "dependencias": {
+    "annotated-types": {
+      "fijada": "0.8.0",
+      "instalada": "0.8.0"
+    },
+    "colorama": {
+      "fijada": "0.4.6",
+      "instalada": "0.4.6"
+    },
+    "flatbuffers": {
+      "fijada": "25.12.19",
+      "instalada": "25.12.19"
+    },
+    "iniconfig": {
+      "fijada": "2.3.1",
+      "instalada": "2.3.1"
+    },
+    "numpy": {
+      "fijada": "2.5.4",
+      "instalada": "2.5.4"
+    },
+    "onnxruntime": {
+      "fijada": "1.31.1",
+      "instalada": "1.31.1"
+    },
+    "opencv-python-headless": {
+      "fijada": "5.0.0.93",
+      "instalada": "5.0.0.93"
+    },
+    "packaging": {
+      "fijada": "26.3",
+      "instalada": "26.3"
+    },
+    "pluggy": {
+      "fijada": "1.7.0",
+      "instalada": "1.7.0"
+    },
+    "protobuf": {
+      "fijada": "7.36.2",
+      "instalada": "7.36.2"
+    },
+    "pydantic": {
+      "fijada": "2.13.5",
+      "instalada": "2.13.5"
+    },
+    "pydantic-core": {
+      "fijada": "2.46.5",
+      "instalada": "2.46.5"
+    },
+    "pygments": {
+      "fijada": "2.21.0",
+      "instalada": "2.21.0"
+    },
+    "pytest": {
+      "fijada": "9.1.1",
+      "instalada": "9.1.1"
+    },
+    "pyyaml": {
+      "fijada": "6.0.3",
+      "instalada": "6.0.3"
+    },
+    "ruff": {
+      "fijada": "0.16.8",
+      "instalada": "0.16.8"
+    },
+    "typing-extensions": {
+      "fijada": "4.16.0",
+      "instalada": "4.16.0"
+    },
+    "typing-inspection": {
+      "fijada": "0.4.4",
+      "instalada": "0.4.4"
+    }
+  },
+  "historico_sha256": {
+    "metricas.json": "5f789442ab99d91f37de8615e462ad8ab61278ffc0f5a1b63742a623da85dd31",
+    "metricas.csv": "d70ed24571448ddba4ad5a2ab91a2b98b6bc638d615b5accd9ebcdc4e223abf2",
+    "predicciones.jsonl": "b97a6814620aba4686e1d6c67d3c1601678228cb41fed5543c55b4e67bab4cc5",
+    "resultados_por_cuadro.jsonl": "357fb6db70db1bf14d35c164e3a827049105d70e66b870e032cc22a1913b2f7f"
+  },
+  "nueva_evidencia_sha256": {
+    "metricas.json": "08b95e25e1e37ad1ce13eb4f05dd1dd48b8908e2a9a7c03ba8a591b35b3a8268",
+    "metricas.csv": "d70ed24571448ddba4ad5a2ab91a2b98b6bc638d615b5accd9ebcdc4e223abf2",
+    "predicciones.jsonl": "b97a6814620aba4686e1d6c67d3c1601678228cb41fed5543c55b4e67bab4cc5",
+    "resultados_por_cuadro.jsonl": "357fb6db70db1bf14d35c164e3a827049105d70e66b870e032cc22a1913b2f7f"
+  },
+  "fuentes_sha256": {
+    "src/p5/metrics/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/p5/metrics/__main__.py": "3d4d37f583afcea19dfb48c8a8780b5385a4119a778f8cf593b50ee78e7e8205",
+    "src/p5/metrics/detection.py": "078fdfc0930a024223de8e649b0513c3315d92ba5e8ba263937982cf22eb6df6",
+    "src/p5/detector/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/p5/detector/__main__.py": "03df6d84fea20f16f12fd65a0112d2cd58920322cb113a46c764b2bf10a8893e",
+    "src/p5/detector/coco_classes.py": "e605abb8a91eb5d9e69cf2c2f6e46398cbc100b9277ed2ac76e6e660d47669f5",
+    "src/p5/detector/frame.py": "da3081839b8cafde0c5cfc4cee68b5ebaca7b96e90df21c418868d31d25e9935",
+    "src/p5/detector/models.py": "65cdf1eccf3d05d7359cd2ad9d22dca6922eaac8077e6566add80dd14e52f056",
+    "src/p5/detector/weights.py": "74bb948c5bc0a76749dc9b9f4da0e5874ed21fe84946bdb47c6f5b8948f16060",
+    "src/p5/detector/yolox.py": "00c3a971713a937261e2e3aa34262f86a40fc821f05c67b564896e7e283d9ebe",
+    "src/p5/dataset/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/p5/dataset/anotar.py": "2c77b7ea84fb3f441e7225eb56499c6233a0776cdc007111cd85346bffb00d7b",
+    "src/p5/dataset/captura.py": "90dc90254f334d4ebb15c80dba87f377a2cd58c71d9a3c9eff10a89146accfa6",
+    "src/p5/dataset/paquete.py": "1c9062ce3f4a7f383c068e4e8f34fe06e79eed42ab92203bdee47d3733737750"
+  },
+  "entorno_sha256": {
+    "pyproject.toml": "f4e78f412ed07657ad9adb4ab8be8bb6129814ac801c5ad5d19deef11a6cc3cf",
+    "requirements.lock.txt": "40e52192b67c7344f30edfc841af6008fcb8adc40f8c27ea4ed6541e9b89e95d"
+  },
+  "verificador_sha256": "cc8f2aae11d60f2bbcbb25dd7a08525af71bd1e170a2ba1a49183be75af02ef8",
+  "metricas_identicas_sin_metadatos": true,
+  "archivos_identicos": {
+    "metricas.json": false,
+    "metricas.csv": true,
+    "predicciones.jsonl": true,
+    "resultados_por_cuadro.jsonl": true
+  },
+  "auditoria_independiente_128_cuadros": {
+    "micro": {
+      "tp": 64,
+      "fp": 2,
+      "fn": 27,
+      "support": 91,
+      "precision": 0.9696969696969697,
+      "recall": 0.7032967032967034,
+      "f1": 0.8152866242038217
+    },
+    "per_class": {
+      "person": {
+        "tp": 64,
+        "fp": 2,
+        "fn": 27,
+        "support": 91,
+        "precision": 0.9696969696969697,
+        "recall": 0.7032967032967034,
+        "f1": 0.8152866242038217
+      },
+      "bicycle": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "car": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "motorcycle": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "bus": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "truck": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cat": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "dog": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "sample": [
+      {
+        "frame_id": "seq01-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0002",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0003",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0004",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0005",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0006",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0007",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0008",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0009",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0010",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0011",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0012",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0013",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0014",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq01-0015",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0001",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9720786042774506,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8459706430992497,
+              "bbox_xyxy": [
+                222.7372963508064,
+                68.38546638417236,
+                279.8031673168431,
+                204.0409132597814
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                222,
+                69,
+                280,
+                203
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0002",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.859398369501412,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8711728336261615,
+              "bbox_xyxy": [
+                221.99679857092588,
+                67.11304311959972,
+                285.2167316027426,
+                204.45023926013752
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                228,
+                69,
+                287,
+                203
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9216062141901856,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8694351032804377,
+              "bbox_xyxy": [
+                222.40035490192528,
+                68.68300775302158,
+                283.9157934158519,
+                203.86375126550962
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                224,
+                72,
+                283,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0004",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9338883782748719,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8638815574766312,
+              "bbox_xyxy": [
+                222.4029364424471,
+                70.0579519856629,
+                284.0252612715515,
+                204.36235708110954
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                224,
+                72,
+                283,
+                203
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0005",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9197552756710802,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8428794008006264,
+              "bbox_xyxy": [
+                229.2538595228886,
+                72.42224722755954,
+                277.5233719869803,
+                202.9461186470977
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                228,
+                69,
+                278,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0006",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7686362828424401,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6826054742009902,
+              "bbox_xyxy": [
+                229.40901112833646,
+                81.80280254578217,
+                272.44291435478027,
+                203.69146997971174
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                222,
+                72,
+                272,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0007",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7627948562339347,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8648736501132248,
+              "bbox_xyxy": [
+                205.11052854458367,
+                102.07542447138825,
+                257.5541930177285,
+                203.4301446931813
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                206,
+                76,
+                258,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8572885252902293,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8639189168425077,
+              "bbox_xyxy": [
+                202.18315036575345,
+                79.4307450610107,
+                255.22812417742188,
+                206.46935990185173
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                206,
+                76,
+                258,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0009",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.876671994411868,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8614107926661632,
+              "bbox_xyxy": [
+                72.1543060752638,
+                75.39227771603382,
+                131.35992142506484,
+                207.28097116185833
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                78,
+                74,
+                131,
+                209
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7186538782018829,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8428762177179294,
+              "bbox_xyxy": [
+                57.91995306886556,
+                105.73664377743125,
+                107.30999834949756,
+                202.7841648092762
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                59,
+                78,
+                108,
+                209
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0011",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7595902190645389,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7668314744320099,
+              "bbox_xyxy": [
+                44.15154965071653,
+                96.48568967076848,
+                99.49175620114644,
+                203.16283365991998
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                44,
+                72,
+                102,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.604632890377219,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6378475325083599,
+              "bbox_xyxy": [
+                35.485392867414085,
+                108.02280247337276,
+                70.55094740592952,
+                201.22691039729844
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                39,
+                80,
+                75,
+                206
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0013",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6677998808677406,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6556311452996795,
+              "bbox_xyxy": [
+                29.04829574585389,
+                112.22352014127027,
+                62.83800089322176,
+                199.73591066334913
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                28,
+                80,
+                64,
+                203
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0014",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.5870362428846578,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7229654006785324,
+              "bbox_xyxy": [
+                16.384136272484685,
+                124.92424085439765,
+                48.09699098963079,
+                198.66796162562505
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                17,
+                83,
+                50,
+                200
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0015",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              0,
+              87,
+              42,
+              200
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq02-0016",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0017",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0018",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0019",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0020",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0021",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0022",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0023",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq02-0024",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              12,
+              118,
+              38,
+              180
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq03-0002",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.5710276865723415,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7822648249884168,
+              "bbox_xyxy": [
+                66.28999279062471,
+                117.80913963746441,
+                90.70702672037804,
+                184.0391022786052
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                58,
+                105,
+                93,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7365654816163636,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7252036695462607,
+              "bbox_xyxy": [
+                67.49171857732225,
+                112.14378982120324,
+                93.29326964259916,
+                181.46715575201662
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                62,
+                108,
+                92,
+                181
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0004",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6331199036623811,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6790280947211258,
+              "bbox_xyxy": [
+                68.11998462611523,
+                113.8399508966878,
+                92.35677605474368,
+                181.65968613853533
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                58,
+                108,
+                93,
+                181
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0005",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7730250446731931,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7902713178150904,
+              "bbox_xyxy": [
+                68.62507775559983,
+                114.98525995280498,
+                92.77272965911527,
+                179.97049524427987
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                68,
+                112,
+                97,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0006",
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [
+          {
+            "prediction_index": 0,
+            "best_iou": 0.42547619280841187,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6280175181762218,
+              "bbox_xyxy": [
+                67.32768303531451,
+                123.1561084719831,
+                88.62237722223037,
+                180.69961788012165
+              ]
+            }
+          }
+        ],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              57,
+              110,
+              97,
+              182
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq03-0007",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              66,
+              115,
+              90,
+              182
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq03-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.751684281001614,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7271081137616875,
+              "bbox_xyxy": [
+                62.828107549921164,
+                101.95762173600028,
+                89.8014485557659,
+                180.47083361678293
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                60,
+                110,
+                88,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0009",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              64,
+              108,
+              90,
+              182
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq03-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6145193276052212,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6842429225501441,
+              "bbox_xyxy": [
+                65.65536573349321,
+                108.33402808024503,
+                93.38151499808943,
+                181.52451120761555
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                56,
+                104,
+                90,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0011",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6027381705790921,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6632766787317905,
+              "bbox_xyxy": [
+                63.09925578572786,
+                118.35547796603936,
+                87.06782795450651,
+                181.92714525161668
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                58,
+                104,
+                90,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq03-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6265668774801699,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6909843286565476,
+              "bbox_xyxy": [
+                60.83683885669999,
+                119.81467133710663,
+                84.43871910146274,
+                182.73184082649576
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                60,
+                104,
+                90,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0001",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7947693835640268,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.68504081384134,
+              "bbox_xyxy": [
+                309.8663055289069,
+                105.48768039293644,
+                335.71430579173546,
+                179.80219680168824
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0002",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7736316875375533,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6945074463353897,
+              "bbox_xyxy": [
+                311.062880191111,
+                100.06489633077297,
+                337.2497820068823,
+                182.4025532976168
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7119697157189562,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7011594549736344,
+              "bbox_xyxy": [
+                312.4941832160722,
+                103.51095434050737,
+                336.545633640312,
+                180.711317927201
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                338,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0004",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              306,
+              106,
+              337,
+              183
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq04-0005",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8341567391783289,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7426892004466339,
+              "bbox_xyxy": [
+                308.8550624134675,
+                97.94963993664791,
+                337.22843742162013,
+                183.13026491306476
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                307,
+                106,
+                338,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0006",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7754181453936937,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7598289815614621,
+              "bbox_xyxy": [
+                309.89628668342897,
+                98.2424154837026,
+                336.60857764246117,
+                181.30643769358807
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0007",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.803095678219094,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.649525501213418,
+              "bbox_xyxy": [
+                310.2963828525721,
+                103.36155597383807,
+                342.4408916841476,
+                181.4881739309236
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                104,
+                345,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6696381614038723,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6599274017130412,
+              "bbox_xyxy": [
+                302.9539980935315,
+                109.2430124636599,
+                328.7780952773463,
+                180.94153121931882
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                298,
+                104,
+                333,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0009",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8892528394817658,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7072201585033326,
+              "bbox_xyxy": [
+                304.0800056439691,
+                101.93562564714125,
+                334.0539466068783,
+                180.43065426668767
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                304,
+                106,
+                335,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6165540086001561,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.565927531978474,
+              "bbox_xyxy": [
+                311.1992655841168,
+                114.223354452988,
+                333.9755508959329,
+                180.92383068923564
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                305,
+                106,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0011",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7608324826581807,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.820620132024473,
+              "bbox_xyxy": [
+                313.2645109393961,
+                110.7989626167056,
+                337.2592185683436,
+                181.10195641722524
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                308,
+                108,
+                337,
+                183
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq04-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6758394744122252,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5661096818727884,
+              "bbox_xyxy": [
+                311.56347548764927,
+                110.34030118557094,
+                336.5637653718959,
+                181.30560992112552
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                306,
+                108,
+                333,
+                182
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0001",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9467629448931701,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8880057995716975,
+              "bbox_xyxy": [
+                140.0274838265605,
+                0.9954654826218464,
+                199.92574064900663,
+                140.1542186164288
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                142,
+                2,
+                200,
+                142
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.9100617038048362,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8475495200497107,
+              "bbox_xyxy": [
+                264.8756677923479,
+                2.005205532635274,
+                321.43394125400124,
+                139.66228704044258
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                267,
+                3,
+                324,
+                139
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0002",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9056030826674846,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.903358166312433,
+              "bbox_xyxy": [
+                143.80932530084783,
+                1.4224233619003985,
+                200.63924113591972,
+                141.02088143358486
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.8340142354430056,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7777165478180592,
+              "bbox_xyxy": [
+                265.8438076004888,
+                2.3369094103401267,
+                308.0829970154123,
+                138.41748768849456
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                267,
+                3,
+                314,
+                141
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0003",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9113667971085344,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7690873514582641,
+              "bbox_xyxy": [
+                143.55569591259052,
+                2.6840367580070015,
+                200.3074318692041,
+                139.0743868271511
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                2,
+                200,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              264,
+              3,
+              317,
+              140
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0004",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8975405299091577,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8854780484491585,
+              "bbox_xyxy": [
+                144.1468010091987,
+                2.361402163215655,
+                200.07377857829755,
+                139.1791215125562
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                2,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              264,
+              5,
+              314,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0005",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8761655312450041,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8996721278979152,
+              "bbox_xyxy": [
+                143.90130404277795,
+                1.6559398808598373,
+                200.38501671692194,
+                140.46030597579204
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                5,
+                202,
+                144
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.8092648560076902,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8302173276092617,
+              "bbox_xyxy": [
+                261.62743901070286,
+                2.1366647272712176,
+                307.13237833278885,
+                141.30251814109943
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                264,
+                5,
+                313,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0006",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8563922838799974,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.9014311859936441,
+              "bbox_xyxy": [
+                143.52897226162412,
+                1.7576739189500483,
+                199.50642856915826,
+                140.31250763423034
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                5,
+                202,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              272,
+              5,
+              328,
+              144
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0007",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8967103425343734,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.854492560095423,
+              "bbox_xyxy": [
+                144.82779203311134,
+                2.3721853569516025,
+                200.39318457633877,
+                136.86308008142169
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              3,
+              324,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0008",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8710753573104585,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.9072880626563347,
+              "bbox_xyxy": [
+                143.159434971402,
+                1.3852527123773255,
+                199.6255493237828,
+                139.74466281848765
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              272,
+              3,
+              322,
+              140
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0009",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8097906080266288,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8698403394266379,
+              "bbox_xyxy": [
+                143.56187293198064,
+                1.8533182154297487,
+                200.10100158325935,
+                136.0098372962796
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                150,
+                2,
+                203,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              276,
+              2,
+              322,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0010",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8147778084671297,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8319266250673252,
+              "bbox_xyxy": [
+                143.11112639173982,
+                2.3612602974087036,
+                200.1942926498204,
+                137.97056187783733
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                150,
+                2,
+                203,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              274,
+              2,
+              322,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0011",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8557711223779605,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8791039880619564,
+              "bbox_xyxy": [
+                142.19152890038367,
+                2.0051356510428913,
+                201.98602530353008,
+                138.9576741317189
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                5,
+                203,
+                144
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.7793394727678221,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5452025925105417,
+              "bbox_xyxy": [
+                283.64637055105857,
+                2.368309753239568,
+                320.77246472209725,
+                137.71316924597167
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                276,
+                3,
+                322,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0012",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8562952634557988,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8519175324275139,
+              "bbox_xyxy": [
+                143.22433679902397,
+                2.612791140699691,
+                200.00720182683992,
+                138.8537054002502
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                5,
+                202,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              274,
+              3,
+              322,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0013",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.902260515557401,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8916174540689283,
+              "bbox_xyxy": [
+                144.07725353220175,
+                2.255032329963395,
+                200.58418768390024,
+                139.1365384215202
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              3,
+              322,
+              140
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq05-0014",
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.926402683131253,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8955929717805589,
+              "bbox_xyxy": [
+                144.65340352361486,
+                1.7014842924838764,
+                201.08358425057384,
+                140.74366549600583
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                3,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          },
+          {
+            "prediction_index": 1,
+            "annotation_index": 1,
+            "iou": 0.860257239598243,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6923745058986128,
+              "bbox_xyxy": [
+                281.7609121306543,
+                2.5726864909285694,
+                317.7867161253365,
+                137.49548508359067
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                281,
+                3,
+                322,
+                140
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq05-0015",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9264794624864582,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8917314001618024,
+              "bbox_xyxy": [
+                144.51286076472067,
+                1.5791012676531389,
+                201.1446052433923,
+                140.03879657299348
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                147,
+                2,
+                202,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 1,
+            "bbox_xyxy": [
+              278,
+              2,
+              322,
+              139
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0001",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0002",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0003",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0004",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0005",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0006",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0007",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0008",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0009",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0010",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0011",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0012",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0013",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0014",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0015",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0016",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0017",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0018",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0019",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0020",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0021",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0022",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0023",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0024",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0025",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0026",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0027",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              0,
+              0,
+              47,
+              70
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0028",
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [
+          {
+            "prediction_index": 0,
+            "best_iou": 0.47284356754785883,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5792305472960777,
+              "bbox_xyxy": [
+                39.90876919643592,
+                5.412403140325433,
+                88.18847337898944,
+                113.37848747997954
+              ]
+            }
+          }
+        ],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              44,
+              0,
+              111,
+              144
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0029",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8763705617467414,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6980358330884329,
+              "bbox_xyxy": [
+                82.96589694393045,
+                0.35261848343113983,
+                138.56475693626223,
+                135.65479317991773
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                83,
+                2,
+                142,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0030",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7837845056135527,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8646753047571565,
+              "bbox_xyxy": [
+                110.1843476389706,
+                0.09394166935640358,
+                168.67280280564702,
+                137.3069642332127
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                113,
+                0,
+                178,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0031",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              136,
+              0,
+              183,
+              141
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0032",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              136,
+              0,
+              180,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0033",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8950616100564702,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6873721040786904,
+              "bbox_xyxy": [
+                132.37773976759377,
+                2.91942240247827,
+                178.53885550799168,
+                138.54599025093125
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                133,
+                0,
+                181,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0034",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              136,
+              0,
+              181,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0035",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              136,
+              0,
+              183,
+              144
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0036",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              136,
+              0,
+              180,
+              144
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0037",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9013713071062369,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7265758155657664,
+              "bbox_xyxy": [
+                136.31495154797827,
+                4.086625475297996,
+                180.81110981817633,
+                138.33164536938162
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                136,
+                0,
+                183,
+                141
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0038",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              139,
+              0,
+              183,
+              142
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0039",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9329251105223213,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5757107119572424,
+              "bbox_xyxy": [
+                137.13880749469195,
+                2.5111669129148075,
+                182.78471167650932,
+                138.91644355778362
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                136,
+                0,
+                183,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0040",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8902780821172881,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.777186597194536,
+              "bbox_xyxy": [
+                136.57195222688048,
+                2.4286429116203934,
+                182.19277837332984,
+                137.995370226197
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                139,
+                0,
+                183,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0041",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.9115887431766299,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5278104997093322,
+              "bbox_xyxy": [
+                136.3022773568229,
+                2.124884144774123,
+                206.16989442662432,
+                138.72321512362564
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                139,
+                0,
+                206,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0042",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.8917964789935479,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.8852540995276286,
+              "bbox_xyxy": [
+                136.66475510880662,
+                0.0,
+                204.91037594071636,
+                138.82490141603145
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                139,
+                0,
+                208,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0043",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              139,
+              0,
+              183,
+              141
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0044",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7543613847764297,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.5630526072801985,
+              "bbox_xyxy": [
+                125.93680473415321,
+                0.058593337723955585,
+                177.14099572314095,
+                137.26157303002697
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                114,
+                0,
+                181,
+                139
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0045",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.7733551915785053,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.6950546967295423,
+              "bbox_xyxy": [
+                96.04874911063727,
+                0.0,
+                134.6182624437873,
+                135.69379308745286
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                100,
+                0,
+                139,
+                142
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0046",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [
+          {
+            "prediction_index": 0,
+            "annotation_index": 0,
+            "iou": 0.6928145281127964,
+            "prediction": {
+              "class_name": "person",
+              "confidence": 0.7668372084073738,
+              "bbox_xyxy": [
+                44.72119678064961,
+                0.39390666885735526,
+                91.53173191649628,
+                136.79437020891268
+              ]
+            },
+            "ground_truth": {
+              "bbox_xyxy": [
+                44,
+                0,
+                108,
+                144
+              ],
+              "class_name": "person"
+            }
+          }
+        ],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0047",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              0,
+              0,
+              38,
+              70
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0048",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": [
+          {
+            "annotation_index": 0,
+            "bbox_xyxy": [
+              0,
+              8,
+              14,
+              58
+            ],
+            "class_name": "person"
+          }
+        ]
+      },
+      {
+        "frame_id": "seq06-0049",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      },
+      {
+        "frame_id": "seq06-0050",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "pairs": [],
+        "unmatched_predictions": [],
+        "unmatched_ground_truth": []
+      }
+    ],
+    "source_commit": "7b4adb45b85483cf0a65e1cf275fa3ba5cc4bede",
+    "source_runtime": "Python 3.12.16"
+  },
+  "fallos_auditoria": [],
+  "correcto": true
+}
