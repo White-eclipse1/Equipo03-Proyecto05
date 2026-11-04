@@ -49,6 +49,10 @@ class VirtualControlAdapter:
 
         return self._record(command)
 
+    def cancel(self) -> None:
+        """Anula el comando vigente sin generar otro, si un STOP no se pudo emitir."""
+        self._last_command = None
+
     def _record(self, command: ControlCommand) -> ControlCommand:
         self._last_command = command
         self._history.append(command)

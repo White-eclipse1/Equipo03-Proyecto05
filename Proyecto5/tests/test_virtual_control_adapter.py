@@ -121,6 +121,24 @@ def test_invalid_requested_steering_is_rejected(action, requested):
     assert adapter.last_command is None
 
 
+def test_cancel_clears_the_active_command():
+    adapter = VirtualControlAdapter()
+    adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-013",
+            decision_id="decision-013",
+            reason_code="clear",
+        )
+    )
+
+    adapter.cancel()
+
+    assert adapter.last_command is None
+    assert len(adapter.history) == 1
+
+
 def test_stop_ignores_requested_steering():
     command = VirtualControlAdapter().apply(
         ControlDecision(

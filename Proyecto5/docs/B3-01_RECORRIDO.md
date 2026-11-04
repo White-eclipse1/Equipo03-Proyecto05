@@ -102,6 +102,7 @@ Una línea JSON por cuadro. Este es el cuadro seq02-0003 real, con los campos la
 - `frame_id` es el mismo en cada etapa.
 - `t_capture_ms` es relativo al inicio de la secuencia; `timestamp` es la hora en que el adaptador emitió el comando, en segundos Unix. La traza es lo que relaciona ambos.
 - `decision` es `null` solo si la política falló y no llegó a decidir.
+- La traza siempre es JSON estricto: un valor no finito se guarda como `null` y se registra en `errors`.
 
 ## Conversión de la decisión al comando
 
@@ -119,20 +120,27 @@ Una línea JSON por cuadro. Este es el cuadro seq02-0003 real, con los campos la
 
 ## Errores
 
-Cada fallo se registra en el log con `integration_error stage=<etapa> frame_id=<cuadro> detail=<detalle>` y en `errors` de la traza. En todos los casos el comando es STOP, que reemplaza el comando de movimiento anterior.
+Cada fallo se registra en el log con `integration_error stage=<etapa> frame_id=<cuadro> detail=<detalle>` y en `errors` de la traza. En todas estas etapas, salvo `trace`, el comando es STOP, que reemplaza el comando de movimiento anterior. `trace` no cambia el comando: la registra junto al fallo que haya causado el valor.
 
 | Etapa | Cuándo | Resultado |
 |---|---|---|
 | `detector` | Imagen ilegible o fallo de inferencia | Política en FAULT, `ERROR_PERCEPCION`. La vía hay que volver a confirmarla |
 | `contract` | La salida no cumple el contrato A → B | Política en FAULT, `SALIDA_MALFORMADA` |
-| `policy` | Cuadro con tiempo no creciente | `CUADRO_FUERA_DE_ORDEN` |
-| `policy` | La política lanza una excepción | `decision: null`, comando con `FALLO_INTEGRACION` |
-| `adapter` | El adaptador rechaza la decisión | Comando con `FALLO_INTEGRACION` |
+| `policy` | Cuadro con tiempo no creciente | `CUADRO_FUERA_DE_ORDEN`. La política conserva lo que recordaba: es regla de B1 |
+| `policy` | La política lanza una excepción | `decision: null`, comando con `FALLO_INTEGRACION`. La vía hay que volver a confirmarla |
+| `adapter` | El adaptador rechaza la decisión o falla | Comando con `FALLO_INTEGRACION`. La vía hay que volver a confirmarla |
+| `failsafe` | Tampoco se pudo emitir el STOP de respaldo | El comando vigente se anula y este `Pipeline` no vuelve a emitir movimiento |
+| `trace` | Hay un número no finito en la traza | Ese valor se guarda como `null`, y `detail` indica en qué campo estaba |
+| `output` | No se puede escribir la traza | STOP con `FALLO_INTEGRACION` y fin de la corrida. Solo va al log, porque esa línea no se pudo guardar |
+
+Volver a confirmar la vía significa que la política reinicia sus zonas: harán falta 3 cuadros libres para avanzar.
+
+Con `stage=failsafe`, el adaptador no llegó a generar el comando: la traza lo muestra como STOP con `timestamp: null`, y `last_command` del adaptador queda en `None`. Para volver a moverse hay que crear otro `Pipeline`. El rearme controlado es de B2-03 (#6).
 
 Códigos de salida:
 
 - **0:** todos los cuadros pasaron sin error.
-- **1 con traza:** algún cuadro falló. La traza queda completa.
+- **1 con traza:** algún cuadro falló. La traza queda completa, salvo con `stage=output`.
 - **1 sin traza:** falló el arranque (`stage=startup`) por pesos, política o manifiesto. No se emite ningún comando.
 
 ## Uso desde código

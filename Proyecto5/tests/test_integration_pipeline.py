@@ -263,12 +263,54 @@ def test_frame_out_of_order_is_rejected_with_stop(tmp_path):
     assert trace.errors[0]["stage"] == "policy"
 
 
-def test_policy_failure_stops_without_a_decision(tmp_path, caplog):
-    class BrokenPolicy:
-        def decidir_crudo(self, _data):
-            raise RuntimeError("policy down")
+def real_policy(cls):
+    config, sha256 = cargar_config(POLICY_CONFIG)
+    return cls(config, sha256)
 
-    pipeline = Pipeline(YoloxDetector(FakeSession()), BrokenPolicy(), VirtualControlAdapter())
+
+class FailingOncePolicy(PoliticaDecision):
+    """Lanza una excepcion en el cuadro indicado y funciona en los demas."""
+
+    fail_at = 0
+    calls = 0
+
+    def decidir_crudo(self, data):
+        self.calls += 1
+        if self.calls - 1 == self.fail_at:
+            raise RuntimeError("policy down")
+        return super().decidir_crudo(data)
+
+
+class InvalidSpeedOncePolicy(PoliticaDecision):
+    """En el cuadro indicado entrega una velocidad que el adaptador rechaza."""
+
+    fail_at = 0
+    calls = 0
+    speed = 7.0
+
+    def decidir_crudo(self, data):
+        decision = super().decidir_crudo(data)
+        self.calls += 1
+        if self.calls - 1 == self.fail_at:
+            return decision.model_copy(update={"accion": "FORWARD", "velocidad": self.speed})
+        return decision
+
+
+class FailingAdapter(VirtualControlAdapter):
+    """Mientras `broken` sea verdadero, ningun comando llega, ni siquiera un STOP."""
+
+    broken = False
+
+    def apply(self, decision):
+        if self.broken:
+            raise RuntimeError("adapter down")
+        return super().apply(decision)
+
+
+def test_policy_failure_stops_without_a_decision(tmp_path, caplog):
+    pipeline = Pipeline(
+        YoloxDetector(FakeSession()), real_policy(FailingOncePolicy), VirtualControlAdapter()
+    )
 
     with caplog.at_level(logging.ERROR):
         trace = pipeline.process(frame_input(image_file(tmp_path)))
@@ -282,13 +324,8 @@ def test_policy_failure_stops_without_a_decision(tmp_path, caplog):
 
 
 def test_adapter_rejection_still_leaves_a_stop_as_last_command(tmp_path, caplog):
-    class BrokenPolicy:
-        def decidir_crudo(self, data):
-            real = policy().decidir_crudo(data)
-            return real.model_copy(update={"accion": "FORWARD", "velocidad": 7.0})
-
     adapter = VirtualControlAdapter()
-    pipeline = Pipeline(YoloxDetector(FakeSession()), BrokenPolicy(), adapter)
+    pipeline = Pipeline(YoloxDetector(FakeSession()), real_policy(InvalidSpeedOncePolicy), adapter)
 
     with caplog.at_level(logging.ERROR):
         trace = pipeline.process(frame_input(image_file(tmp_path)))
@@ -298,6 +335,131 @@ def test_adapter_rejection_still_leaves_a_stop_as_last_command(tmp_path, caplog)
     assert adapter.last_command.direction == "stop"
     assert [error["stage"] for error in trace.errors] == ["adapter"]
     assert "integration_error stage=adapter" in caplog.text
+
+
+@pytest.mark.parametrize("policy_class", [FailingOncePolicy, InvalidSpeedOncePolicy])
+def test_failure_needs_the_road_confirmed_again(tmp_path, policy_class):
+    image = image_file(tmp_path)
+    broken = real_policy(policy_class)
+    broken.fail_at = 3
+    pipeline = Pipeline(YoloxDetector(FakeSession()), broken, VirtualControlAdapter())
+
+    traces = run(pipeline, image, 7)
+
+    assert traces[2].command["direction"] == "forward"
+    assert traces[3].command["direction"] == "stop"
+    assert traces[3].errors
+    # Tres cuadros libres confirman la via otra vez: el primero no basta para avanzar.
+    assert [t.command["direction"] for t in traces[4:]] == ["stop", "stop", "forward"]
+    assert traces[4].decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+    assert traces[4].decision["estado_anterior"] == "FAULT"
+
+
+def test_a_failed_stop_cancels_motion_and_keeps_the_path_stopped(tmp_path, caplog):
+    image = image_file(tmp_path)
+    adapter = FailingAdapter()
+    pipeline = Pipeline(YoloxDetector(FakeSession()), policy(), adapter)
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    adapter.broken = True
+    with caplog.at_level(logging.ERROR):
+        failed = pipeline.process(frame_input(image, 3))
+
+    assert adapter.last_command is None
+    assert failed.command["direction"] == "stop"
+    assert failed.command["speed"] == 0.0
+    assert failed.command["steering"] == 0.0
+    assert failed.command["frame_id"] == "seq01-0003"
+    assert failed.command["reason_code"] == FAILSAFE_REASON
+    assert [error["stage"] for error in failed.errors] == ["adapter", "failsafe"]
+    assert "integration_error stage=failsafe" in caplog.text
+    assert json.loads(failed.to_json())["command"]["timestamp"] is None
+
+    # Aunque el adaptador se recupere, este recorrido ya no vuelve a moverse.
+    adapter.broken = False
+    later = run(pipeline, image, 4, first=4)
+    assert pipeline.halted is True
+    assert [t.command["direction"] for t in later] == ["stop"] * 4
+    assert adapter.last_command.direction == "stop"
+    assert all(t.errors[-1]["stage"] == "failsafe" for t in later)
+
+
+def test_non_finite_time_is_reported_and_the_trace_stays_strict_json(tmp_path, caplog):
+    image = image_file(tmp_path)
+    pipeline = make_pipeline(FakeSession())
+
+    with caplog.at_level(logging.ERROR):
+        trace = pipeline.process(frame_input(image, t_capture_ms=float("nan")))
+
+    payload = json.loads(trace.to_json(), parse_constant=pytest.fail)
+    assert payload["t_capture_ms"] is None
+    assert payload["perception"]["t_capture_ms"] is None
+    assert payload["decision"]["reason_code"] == "SALIDA_MALFORMADA"
+    assert payload["command"]["direction"] == "stop"
+    assert "trace" in [error["stage"] for error in trace.errors]
+    assert "integration_error stage=trace" in caplog.text
+
+
+def test_non_finite_decision_is_stopped_and_reported(tmp_path):
+    broken = real_policy(InvalidSpeedOncePolicy)
+    broken.speed = float("inf")
+    pipeline = Pipeline(YoloxDetector(FakeSession()), broken, VirtualControlAdapter())
+
+    trace = pipeline.process(frame_input(image_file(tmp_path)))
+
+    payload = json.loads(trace.to_json(), parse_constant=pytest.fail)
+    assert payload["decision"]["velocidad"] is None
+    assert payload["command"]["direction"] == "stop"
+    assert [error["stage"] for error in trace.errors] == ["adapter", "trace"]
+
+
+def test_cli_keeps_going_after_a_non_finite_frame(tmp_path, monkeypatch):
+    image = image_file(tmp_path)
+    frames = [
+        frame_input(image, 0, t_capture_ms=float("nan")),
+        frame_input(image, 1),
+    ]
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    fake_weights(monkeypatch, FakeSession())
+    output = tmp_path / "traza.jsonl"
+
+    code = cli.main(cli_arguments(tmp_path, output))
+
+    assert code == 1
+    lines = output.read_text(encoding="utf-8").splitlines()
+    payloads = [json.loads(line, parse_constant=pytest.fail) for line in lines]
+    assert [p["frame_id"] for p in payloads] == ["seq01-0000", "seq01-0001"]
+
+
+def test_cli_stops_motion_if_the_trace_cannot_be_written(tmp_path, monkeypatch, caplog):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(3)]
+    adapters = []
+
+    class RecordedAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+    real_to_json = pipeline_module.FrameTrace.to_json
+
+    def failing_to_json(self):
+        if self.frame_id == "seq01-0002":
+            raise OSError("disk full")
+        return real_to_json(self)
+
+    monkeypatch.setattr(pipeline_module.FrameTrace, "to_json", failing_to_json)
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", RecordedAdapter)
+    fake_weights(monkeypatch, FakeSession())
+
+    with caplog.at_level(logging.ERROR):
+        code = cli.main(cli_arguments(tmp_path, tmp_path / "traza.jsonl"))
+
+    assert code == 1
+    assert "integration_error stage=output" in caplog.text
+    assert adapters[0].last_command.direction == "stop"
+    assert adapters[0].last_command.reason_code == FAILSAFE_REASON
 
 
 def test_physical_output_stays_disabled(tmp_path):

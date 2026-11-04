@@ -52,10 +52,14 @@ def main(argv: list[str] | None = None) -> int:
         with args.output.open("w", encoding="utf-8") as output:
             for frame in frames:
                 trace = pipeline.process(frame)
-                # Linea a linea: si el proceso se interrumpe, la evidencia ya esta escrita.
-                output.write(trace.to_json() + "\n")
-                output.flush()
                 failed += bool(trace.errors)
+                try:
+                    # Linea a linea: si el proceso se interrumpe, la evidencia ya esta escrita.
+                    output.write(trace.to_json() + "\n")
+                    output.flush()
+                except OSError:
+                    pipeline.halt(frame)
+                    raise
     except OSError as failure:
         logger.error("integration_error stage=output detail=%s", failure)
         return 1

@@ -1,19 +1,21 @@
 """Recorrido completo de un cuadro: imagen -> deteccion -> estado -> decision -> comando.
 
 Ver `docs/B3-01_RECORRIDO.md`. Cualquier fallo termina en STOP y queda registrado con su
-etapa: un cuadro nunca deja vigente el comando de movimiento anterior.
+etapa: un cuadro nunca deja vigente el comando de movimiento anterior, y tras un fallo la
+via hay que volver a confirmarla.
 """
 
 import json
 import logging
 from dataclasses import asdict, dataclass
+from math import isfinite
 from pathlib import Path
 from typing import Any
 
-from p3.policy.politica import Decision, PoliticaDecision
+from p3.policy.politica import Decision, Memoria, PoliticaDecision
 
 from p5.control.adapter import VirtualControlAdapter
-from p5.control.models import Action, ControlCommand, ControlDecision
+from p5.control.models import Action, ControlDecision
 from p5.dataset.paquete import load_manifest
 from p5.detector.frame import detect_frame
 from p5.detector.yolox import YoloxDetector
@@ -51,7 +53,8 @@ class FrameTrace:
 
     sequence_id: str
     frame_id: str
-    t_capture_ms: float
+    # None en este y los demas campos numericos si el valor no era finito: ver `errors`.
+    t_capture_ms: float | None
     image: str
     perception: dict[str, Any]
     # None solo si la politica fallo y no llego a decidir.
@@ -109,22 +112,39 @@ class Pipeline:
         self._detector = detector
         self._policy = policy
         self.adapter = adapter
+        # Verdadero si un STOP no se pudo emitir: este recorrido ya no vuelve a moverse.
+        self.halted = False
 
     def process(self, frame: FrameInput) -> FrameTrace:
         errors: list[dict[str, str]] = []
         perception = self._perceive(frame, errors)
         decision = self._decide(frame, perception, errors)
         command = self._command(frame, decision, errors)
+        replaced: list[str] = []
+        fields = _finite_only(
+            {
+                "t_capture_ms": frame.t_capture_ms,
+                "perception": perception,
+                "decision": None if decision is None else decision.model_dump(mode="json"),
+                "command": command,
+            },
+            "",
+            replaced,
+        )
+        if replaced:
+            _record(errors, "trace", frame, f"valores no finitos en {', '.join(replaced)}")
         return FrameTrace(
             sequence_id=frame.sequence_id,
             frame_id=frame.frame_id,
-            t_capture_ms=frame.t_capture_ms,
             image=str(frame.image_path),
-            perception=perception,
-            decision=None if decision is None else decision.model_dump(mode="json"),
-            command=asdict(command),
             errors=tuple(errors),
+            **fields,
         )
+
+    def halt(self, frame: FrameInput) -> None:
+        """Termina el recorrido en STOP cuando el fallo ocurre fuera de `process`."""
+        self.halted = True
+        self._stop(frame, [])
 
     def _perceive(self, frame: FrameInput, errors: list[dict[str, str]]) -> dict[str, Any]:
         try:
@@ -160,6 +180,7 @@ class Pipeline:
             decision = self._policy.decidir_crudo(perception)
         except Exception as failure:
             _record(errors, "policy", frame, str(failure) or type(failure).__name__)
+            self._restart_confirmation(frame)
             return None
         stage = _REJECTIONS.get(decision.reason_code)
         if stage is not None:
@@ -168,24 +189,75 @@ class Pipeline:
 
     def _command(
         self, frame: FrameInput, decision: Decision | None, errors: list[dict[str, str]]
-    ) -> ControlCommand:
-        decision_id = f"{frame.sequence_id}:{frame.frame_id}"
-        if decision is not None:
+    ) -> dict[str, Any]:
+        if self.halted:
+            _record(errors, "failsafe", frame, "recorrido detenido por un STOP fallido anterior")
+        elif decision is not None:
             try:
-                return self.adapter.apply(
-                    to_control_decision(decision, frame_id=frame.frame_id, decision_id=decision_id)
+                control = to_control_decision(
+                    decision, frame_id=frame.frame_id, decision_id=_decision_id(frame)
                 )
+                return asdict(self.adapter.apply(control))
             except Exception as failure:
                 _record(errors, "adapter", frame, str(failure) or type(failure).__name__)
-        return self.adapter.apply(
-            ControlDecision(
-                action=Action.STOP,
-                requested_speed=0.0,
-                frame_id=frame.frame_id,
-                decision_id=decision_id,
-                reason_code=FAILSAFE_REASON,
+                self._restart_confirmation(frame)
+        return self._stop(frame, errors)
+
+    def _stop(self, frame: FrameInput, errors: list[dict[str, str]]) -> dict[str, Any]:
+        decision_id = _decision_id(frame)
+        try:
+            return asdict(
+                self.adapter.apply(
+                    ControlDecision(
+                        action=Action.STOP,
+                        requested_speed=0.0,
+                        frame_id=frame.frame_id,
+                        decision_id=decision_id,
+                        reason_code=FAILSAFE_REASON,
+                    )
+                )
             )
+        except Exception as failure:
+            _record(errors, "failsafe", frame, str(failure) or type(failure).__name__)
+            self.halted = True
+            self.adapter.cancel()
+            # El adaptador no llego a generarlo: por eso no tiene hora de emision.
+            return {
+                "speed": 0.0,
+                "direction": "stop",
+                "steering": 0.0,
+                "timestamp": None,
+                "frame_id": frame.frame_id,
+                "decision_id": decision_id,
+                "reason_code": FAILSAFE_REASON,
+            }
+
+    def _restart_confirmation(self, frame: FrameInput) -> None:
+        """Igual que un error del detector: lo recordado deja de valer para avanzar."""
+        self._policy.memoria = Memoria(
+            estado="FAULT",
+            sequence_id=frame.sequence_id,
+            ultimo_t_ms=self._policy.memoria.ultimo_t_ms,
         )
+
+
+def _decision_id(frame: FrameInput) -> str:
+    return f"{frame.sequence_id}:{frame.frame_id}"
+
+
+def _finite_only(value: Any, path: str, replaced: list[str]) -> Any:
+    """Copia `value` con None en lugar de cada numero no finito, y anota donde estaba."""
+    if isinstance(value, dict):
+        return {
+            key: _finite_only(item, f"{path}.{key}" if path else key, replaced)
+            for key, item in value.items()
+        }
+    if isinstance(value, list | tuple):
+        return [_finite_only(item, f"{path}[{i}]", replaced) for i, item in enumerate(value)]
+    if isinstance(value, float) and not isfinite(value):
+        replaced.append(path)
+        return None
+    return value
 
 
 def _record(errors: list[dict[str, str]], stage: str, frame: FrameInput, detail: str) -> None:
