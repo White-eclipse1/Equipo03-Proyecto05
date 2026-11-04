@@ -21,6 +21,8 @@ El adaptador puede utilizarse durante pruebas e integración offline.
 
 Cada decisión incluye acción, velocidad solicitada, frame_id, decision_id y reason_code.
 
+De forma opcional puede incluir `requested_steering`, en [-1, 1] con negativo a la izquierda. Sin él, LEFT y RIGHT usan el giro completo (-1.0 y 1.0).
+
 ## Comando generado
 
 Cada salida contiene speed, direction, steering, timestamp, frame_id, decision_id y reason_code.
@@ -30,6 +32,7 @@ Cada salida contiene speed, direction, steering, timestamp, frame_id, decision_i
 STOP siempre produce speed = 0.0, direction = stop y steering = 0.0.
 Un STOP reemplaza el último comando activo.
 Las velocidades de movimiento deben ser finitas y estar dentro del rango 0.0 a 1.0. Los valores inválidos son rechazados.
+`requested_steering` debe ser finito, estar en [-1, 1] y coincidir con la acción: negativo en LEFT, positivo en RIGHT y 0.0 en FORWARD. Los valores inválidos son rechazados. STOP lo ignora.
 
 ## Motores físicos
 
@@ -40,10 +43,9 @@ No existe activación de motores físicos en B2-01.
 
 Cada comando queda en el historial del adaptador, se guarda como last_command y genera un evento mediante logging.
 
-## Compatibilidad con integración
+## Integración
 
-ControlDecision representa actualmente la frontera local de B2.
-El contrato definitivo de B1 podrá adaptarse posteriormente sin modificar las reglas de seguridad.
+El recorrido de B3-01 convierte la decisión de la política en `ControlDecision`. Ver [B3-01_RECORRIDO.md](B3-01_RECORRIDO.md).
 
 ## Verificación
 
@@ -52,12 +54,3 @@ Desde Proyecto5 ejecutar:
 python -m pytest
 python -m ruff check .
 python -m ruff format --check .
-
-## Pendiente
-
-La integración del adaptador con la salida real de la política B1 todavía está pendiente.
-Este avance implementa y valida la base del adaptador virtual.
-
-Resultado actual: 15 pruebas automatizadas pasando.
-
-

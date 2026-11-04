@@ -40,7 +40,7 @@ class VirtualControlAdapter:
         command = ControlCommand(
             speed=decision.requested_speed,
             direction=decision.action.value,
-            steering=self._steering_for(decision.action),
+            steering=self._resolve_steering(decision),
             timestamp=time(),
             frame_id=decision.frame_id,
             decision_id=decision.decision_id,
@@ -70,6 +70,18 @@ class VirtualControlAdapter:
     def _validate_speed(speed: float) -> None:
         if not isfinite(speed) or not 0.0 <= speed <= 1.0:
             raise ValueError("requested_speed must be finite and between 0.0 and 1.0")
+
+    @classmethod
+    def _resolve_steering(cls, decision: ControlDecision) -> float:
+        steering = decision.requested_steering
+        if steering is None:
+            return cls._steering_for(decision.action)
+        if not isfinite(steering) or not -1.0 <= steering <= 1.0:
+            raise ValueError("requested_steering must be finite and between -1.0 and 1.0")
+        expected = cls._steering_for(decision.action)
+        if (steering > 0) - (steering < 0) != (expected > 0) - (expected < 0):
+            raise ValueError("requested_steering does not match the action direction")
+        return steering
 
     @staticmethod
     def _steering_for(action: Action) -> float:
