@@ -1,0 +1,106 @@
+{
+  "ejecucion": {
+    "run_id": "81c29e65a0fe4385bdf2aab09bcd6d6a",
+    "fecha": "2026-11-04T17:16:10+00:00",
+    "commit": "f9b173ad2c666a5b2f16e34841853e359da8fbd7",
+    "modo": "virtual",
+    "salida": "comandos del adaptador virtual; C6 solo evalua decisiones de la politica",
+    "salida_fisica": false,
+    "casos": "casos\\c1_c10.yaml",
+    "dataset": "data\\p5-eval-v1",
+    "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42",
+    "umbral_detector": 0.1,
+    "nms_detector": 0.45,
+    "runtime": "Python 3.12.10",
+    "hardware": "Windows AMD64, CPU"
+  },
+  "caso": {
+    "id": "C7",
+    "tipo": "real",
+    "nombre": "Libre, obstaculo persistente y desaparicion",
+    "estado_inicial": "Politica recien creada, con la via libre",
+    "justificacion": "Libre en los cuadros 1-26, con la persona en el centro en los cuadros 30-44 y libre otra vez desde el 49. Debe avanzar, reaccionar al bloqueo sin alternar por un solo cuadro y volver a moverse cuando se libera la via.",
+    "entrada": {
+      "secuencia": "seq06",
+      "cuadros": 50
+    },
+    "esperado": {
+      "acciones_por_cuadro": "allowed_actions del manifiesto",
+      "alguna": [
+        {
+          "cuadros": [
+            3,
+            26
+          ],
+          "acciones": [
+            "FORWARD"
+          ]
+        },
+        {
+          "cuadros": [
+            49,
+            50
+          ],
+          "acciones": [
+            "FORWARD",
+            "SLOW"
+          ]
+        }
+      ],
+      "reaccion": {
+        "desde": 30,
+        "plazo_cuadros": 2,
+        "acciones": [
+          "STOP",
+          "EVADE_LEFT",
+          "EVADE_RIGHT"
+        ]
+      }
+    },
+    "resultado": "FALLA",
+    "fallos": [
+      {
+        "regla": "acciones",
+        "cuadro": 36,
+        "frame_id": "seq06-0036",
+        "observada": "FORWARD",
+        "permitidas": [
+          "STOP",
+          "SLOW",
+          "EVADE_LEFT",
+          "EVADE_RIGHT"
+        ],
+        "reason_code": "VIA_LIBRE"
+      },
+      {
+        "regla": "acciones",
+        "cuadro": 38,
+        "frame_id": "seq06-0038",
+        "observada": "FORWARD",
+        "permitidas": [
+          "STOP",
+          "SLOW",
+          "EVADE_LEFT",
+          "EVADE_RIGHT"
+        ],
+        "reason_code": "VIA_LIBRE"
+      },
+      {
+        "regla": "reaccion",
+        "desde": 30,
+        "plazo_cuadros": 2,
+        "acciones": [
+          "STOP",
+          "EVADE_LEFT",
+          "EVADE_RIGHT"
+        ],
+        "observadas": [
+          "SLOW/CAUTION"
+        ]
+      }
+    ],
+    "eventos_watchdog": []
+  }
+}
