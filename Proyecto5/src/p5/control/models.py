@@ -19,6 +19,8 @@ class ControlDecision:
     reason_code: str
     # En [-1, 1], negativo = izquierda. None usa el giro completo de la accion.
     requested_steering: float | None = None
+    # Vigencia en el reloj de la secuencia (`t_capture_ms`). None no vence.
+    valid_until_ms: float | None = None
 
 
 @dataclass(frozen=True)
@@ -30,3 +32,5 @@ class ControlCommand:
     frame_id: str
     decision_id: str
     reason_code: str
+    # A partir de este instante, un comando de movimiento vale como STOP. None no vence.
+    valid_until_ms: float | None = None

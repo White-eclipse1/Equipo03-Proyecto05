@@ -25,7 +25,7 @@ De forma opcional puede incluir `requested_steering`, en [-1, 1] con negativo a 
 
 ## Comando generado
 
-Cada salida contiene speed, direction, steering, timestamp, frame_id, decision_id y reason_code.
+Cada salida contiene speed, direction, steering, timestamp, frame_id, decision_id, reason_code y valid_until_ms. La vigencia y su vencimiento están en [B2-02_WATCHDOG.md](B2-02_WATCHDOG.md).
 
 ## Reglas de seguridad
 
