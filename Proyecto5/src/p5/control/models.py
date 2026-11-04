@@ -19,6 +19,10 @@ class ControlDecision:
     reason_code: str
     # En [-1, 1], negativo = izquierda. None usa el giro completo de la accion.
     requested_steering: float | None = None
+    # Tiempo relativo de captura recibido desde la politica B1.
+    t_capture_ms: float | None = None
+    # Instante hasta el que un comando de movimiento sigue siendo valido.
+    valid_until_ms: float | None = None
 
 
 @dataclass(frozen=True)
@@ -30,3 +34,4 @@ class ControlCommand:
     frame_id: str
     decision_id: str
     reason_code: str
+    valid_until_ms: float | None = None

@@ -12,7 +12,7 @@ Reproducir con un comando los diez casos que pide la evaluación, guardar cada r
 |---|---|---|
 | C1–C5 y C7 | Secuencias de `p5-eval-v1` con el detector real | Se ejecutan |
 | C6 | Detecciones sintéticas del caso de B1 | Se ejecuta |
-| C8 | Corte de cuadros y cuadro vencido | **Pendiente de #5** |
+| C8 | Corte de cuadros y cuadro vencido | Se ejecuta con reloj determinista y watchdog de B2 |
 | C9 y C10 | Fallo del detector, emergencia, rearme y cierre | **Pendiente de #6** |
 
 Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política. #8 sigue abierto hasta ejecutar C8–C10.
@@ -86,7 +86,7 @@ Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `st
 
 ## Última corrida
 
-Con YOLOX-Tiny sobre `p5-eval-v1`: **5 pasan, 2 fallan y 3 pendientes.** Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
+Con YOLOX-Tiny sobre `p5-eval-v1`: **6 pasan, 2 fallan y 2 pendientes.** Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
 
 | Caso | Cuadros | Observado | Por qué es un fallo |
 |---|---|---|---|
@@ -127,12 +127,11 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 ## Límites conocidos
 
-- El adaptador todavía no aplica la vigencia del comando: es de #5. Los comandos se comparan con la decisión, sin simular su vencimiento.
+- Las secuencias grabadas C1-C5 y C7 no interpretan el intervalo entre timestamps como silencio de una aplicaci?n en vivo. C8 prueba la expiraci?n temporal por separado mediante `Pipeline`, pol?tica real y un reloj determinista.
 - Los plazos se miden en cuadros del recorrido, no en tiempo físico de frenado.
 - `seq01`, `seq03` y `seq04` no tienen un tramo que cambie de libre a ocupado, y C2 y C5 empiezan con la persona ya en su lugar.
 - Las expectativas se escribieron después de ver cómo se comporta el sistema en estas secuencias, durante la captura. Su base es la geometría de las etiquetas y las reglas de la política.
 
 ## Pendiente
 
-- C8: #5.
 - C9 y C10: #6.

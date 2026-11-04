@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 FAILSAFE_REASON = "FALLO_INTEGRACION"
 # El STOP de respaldo tampoco llego al adaptador: solo consta en la traza.
 STOP_NOT_EMITTED_REASON = "STOP_NO_EMITIDO"
+STALE_FRAME_REASON = "CUADRO_VENCIDO"
 
 _ACTIONS = {
     "STOP": Action.STOP,
@@ -99,6 +100,8 @@ def to_control_decision(decision: Decision, *, frame_id: str, decision_id: str) 
         decision_id=decision_id,
         reason_code=decision.reason_code,
         requested_steering=decision.direccion,
+        t_capture_ms=decision.t_capture_ms,
+        valid_until_ms=decision.valido_hasta_ms,
     )
 
 
@@ -118,7 +121,62 @@ class Pipeline:
         self.halted = False
 
     def process(self, frame: FrameInput) -> FrameTrace:
+        # Antes de aceptar un cuadro nuevo, vence cualquier movimiento anterior
+        # que ya haya superado su vigencia.
+        self.check_watchdog()
+
         errors: list[dict[str, str]] = []
+
+        if self._is_stale(frame):
+            now_ms = self.adapter.current_time_ms()
+            detail = f"cuadro vencido: t_capture_ms={frame.t_capture_ms}, now_ms={now_ms}"
+            _record(errors, "stale", frame, detail)
+            self._restart_confirmation(frame)
+
+            width, height = frame.image_size
+            perception = {
+                "sequence_id": frame.sequence_id,
+                "frame_id": frame.frame_id,
+                "t_capture_ms": frame.t_capture_ms,
+                "image_width": width,
+                "image_height": height,
+                "status": "error",
+                "detections": (),
+                "error": detail,
+            }
+
+            command = self._stop(
+                frame,
+                errors,
+                reason_code=STALE_FRAME_REASON,
+            )
+            replaced: list[str] = []
+            fields = _finite_only(
+                {
+                    "t_capture_ms": frame.t_capture_ms,
+                    "perception": perception,
+                    "decision": None,
+                    "command": command,
+                },
+                "",
+                replaced,
+            )
+            if replaced:
+                _record(
+                    errors,
+                    "trace",
+                    frame,
+                    f"valores no finitos en {', '.join(replaced)}",
+                )
+
+            return FrameTrace(
+                sequence_id=frame.sequence_id,
+                frame_id=frame.frame_id,
+                image=str(frame.image_path),
+                errors=tuple(errors),
+                **fields,
+            )
+
         perception = self._perceive(frame, errors)
         decision = self._decide(frame, perception, errors)
         command = self._command(frame, decision, errors)
@@ -147,6 +205,29 @@ class Pipeline:
         """Termina el recorrido en STOP cuando el fallo ocurre fuera de `process`."""
         self.halted = True
         self._stop(frame, [])
+
+    def check_watchdog(self) -> dict[str, Any] | None:
+        """Revisa expiraci?n sin requerir la llegada de un nuevo cuadro."""
+        command = self.adapter.check_watchdog()
+        if command is None:
+            return None
+
+        self._restart_confirmation_without_frame()
+        return asdict(command)
+
+    def _is_stale(self, frame: FrameInput) -> bool:
+        """Rechaza cuadros que ya no son temporalmente confiables."""
+        now_ms = self.adapter.current_time_ms()
+        if now_ms is None:
+            return False
+
+        if not isfinite(now_ms) or not isfinite(frame.t_capture_ms):
+            return True
+
+        age_ms = now_ms - frame.t_capture_ms
+        limit_ms = self._policy.config.temporal.vigencia_comando_ms
+
+        return age_ms < 0 or age_ms >= limit_ms
 
     def _perceive(self, frame: FrameInput, errors: list[dict[str, str]]) -> dict[str, Any]:
         try:
@@ -205,7 +286,13 @@ class Pipeline:
                 self._restart_confirmation(frame)
         return self._stop(frame, errors)
 
-    def _stop(self, frame: FrameInput, errors: list[dict[str, str]]) -> dict[str, Any]:
+    def _stop(
+        self,
+        frame: FrameInput,
+        errors: list[dict[str, str]],
+        *,
+        reason_code: str = FAILSAFE_REASON,
+    ) -> dict[str, Any]:
         decision_id = _decision_id(frame)
         try:
             return asdict(
@@ -215,7 +302,7 @@ class Pipeline:
                         requested_speed=0.0,
                         frame_id=frame.frame_id,
                         decision_id=decision_id,
-                        reason_code=FAILSAFE_REASON,
+                        reason_code=reason_code,
                     )
                 )
             )
@@ -239,6 +326,14 @@ class Pipeline:
         self._policy.memoria = Memoria(
             estado="FAULT",
             sequence_id=frame.sequence_id,
+            ultimo_t_ms=self._policy.memoria.ultimo_t_ms,
+        )
+
+    def _restart_confirmation_without_frame(self) -> None:
+        """Un watchdog invalida lo recordado aunque no haya llegado otro cuadro."""
+        self._policy.memoria = Memoria(
+            estado="FAULT",
+            sequence_id=self._policy.memoria.sequence_id,
             ultimo_t_ms=self._policy.memoria.ultimo_t_ms,
         )
 

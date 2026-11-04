@@ -116,15 +116,15 @@ def test_expectations_are_consistent_with_a_perfect_detector(rows, config):
 def test_pending_cases_declare_their_contract_and_do_not_pass(rows, config):
     report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
 
-    for case_id in ("C8", "C9", "C10"):
+    for case_id in ("C9", "C10"):
         case = result_by_id(report, case_id)
         assert case["resultado"] == "PENDIENTE"
         assert case["entrada"]
         assert case["esperado"]
         assert case["plazo_ms"] > 0
         assert case["bloqueado_por"]
-    assert report["pasan"] == 7
-    assert report["pendientes"] == 3
+    assert report["pasan"] == 8
+    assert report["pendientes"] == 2
     assert report["correcto"] is False
 
 
@@ -519,4 +519,63 @@ def test_cli_runs_the_real_detector_over_the_frozen_dataset(tmp_path):
     assert code == 1
     report = json.loads((target / "resultados.json").read_text(encoding="utf-8"))
     assert result_by_id(report, "C1")["decisiones"][0]["frame_id"] == "seq01-0001"
-    assert result_by_id(report, "C8")["resultado"] == "PENDIENTE"
+    assert result_by_id(report, "C8")["resultado"] == "PASA"
+
+
+def test_c8_watchdog_is_reproducible(rows, config):
+    report = run_cases(
+        load_cases(CASES),
+        rows,
+        config,
+        perfect_detector(rows),
+        DATASET,
+    )
+
+    c8 = result_by_id(report, "C8")
+
+    assert c8["resultado"] == "PASA"
+    assert c8["plazo_ms"] == 500
+
+    # C8 debe atravesar el Pipeline y la pol?tica real, no fabricar
+    # ControlDecision directamente sobre el adaptador.
+    assert len(c8["decisiones"]) >= 3
+    assert c8["decisiones"][0]["frame_id"].startswith("c8-")
+    assert c8["decisiones"][0]["cuadro"]["status"] == "ok"
+    assert any(decision["accion"] == "FORWARD" for decision in c8["decisiones"])
+
+    commands = c8["comandos"]
+
+    assert commands[0]["evento"] == "movimiento_inicial"
+    assert commands[0]["direction"] == "forward"
+
+    assert commands[1]["evento"] == "watchdog"
+    assert commands[1]["direction"] == "stop"
+    assert commands[1]["reason_code"] == "watchdog_timeout"
+
+    assert commands[2]["evento"] == "cuadro_vencido"
+    assert commands[2]["direction"] == "stop"
+    assert commands[2]["reason_code"] == "CUADRO_VENCIDO"
+
+    assert c8["decisiones"][-1]["errores"][0]["stage"] == "stale"
+
+
+def test_real_runner_does_not_treat_capture_spacing_as_live_watchdog(rows, config):
+    sequence = [row for row in rows if row["sequence_id"] == "seq01"][:3]
+
+    case = copy.deepcopy(case_by_id(load_cases(CASES), "C1"))
+    case["alguna"] = []
+
+    result = run_real_case(
+        case,
+        sequence,
+        config,
+        perfect_detector(rows),
+        DATASET,
+    )
+
+    assert len(result["decisiones"]) == 3
+    assert result["decisiones"][-1]["comando"]["direction"] == "forward"
+
+    # El intervalo de captura del dataset no representa silencio de una
+    # aplicaci?n en vivo. El watchdog temporal se prueba aparte en C8.
+    assert result["eventos_watchdog"] == []

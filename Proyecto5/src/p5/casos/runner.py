@@ -177,13 +177,18 @@ def run_real_case(
         missing = {"regla": "entrada", "motivo": f"no existe la secuencia {case['secuencia']}"}
         return {**result, "resultado": FAILED, "fallos": [missing], "decisiones": []}
 
+    # Una secuencia grabada conserva sus timestamps, pero su espaciado no
+    # representa el paso del tiempo de una aplicaci?n en vivo. El watchdog
+    # temporal se reproduce expl?citamente en C8 con un reloj controlado.
+    adapter = VirtualControlAdapter()
     pipeline = Pipeline(
         detector,
         PoliticaDecision(settings, config_sha256=config_sha256),
-        VirtualControlAdapter(),
+        adapter,
     )
     decisions = []
     failures = []
+    watchdog_events = []
     for number, row in enumerate(sequence, start=1):
         where = {"cuadro": number, "frame_id": row["frame_id"]}
         try:
@@ -217,12 +222,14 @@ def run_real_case(
                     "comando": record["comando"],
                 }
             )
+
     failures.extend(_rule_failures(case, decisions))
     return {
         **result,
         "resultado": FAILED if failures else PASSED,
         "fallos": failures,
         "decisiones": decisions,
+        "eventos_watchdog": watchdog_events,
     }
 
 
@@ -257,6 +264,156 @@ def _pending_case(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _run_watchdog_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
+    """Reproduce C8 por Pipeline y politica real con reloj y detector deterministas."""
+    settings, config_sha256 = config
+    now = {"ms": 1000.0}
+
+    class ClearImage:
+        shape = (416, 416, 3)
+
+    class ClearDetector:
+        @staticmethod
+        def read_image(_source):
+            return ClearImage()
+
+        @staticmethod
+        def detect_image(_image, *, source="array"):
+            return ()
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        ClearDetector(),
+        PoliticaDecision(settings, config_sha256=config_sha256),
+        adapter,
+    )
+
+    decisions: list[dict[str, Any]] = []
+    commands: list[dict[str, Any]] = []
+    failures: list[dict[str, Any]] = []
+
+    # Tres cuadros libres confirman la via mediante la politica real.
+    for index, capture_ms in enumerate((1000.0, 1100.0, 1200.0), start=1):
+        now["ms"] = capture_ms
+        trace = pipeline.process(
+            FrameInput(
+                sequence_id="c8",
+                frame_id=f"c8-{index:04d}",
+                t_capture_ms=capture_ms,
+                image_size=(416, 416),
+                image_path=Path("c8-clear.synthetic"),
+            )
+        )
+        decisions.append(_frame_record(trace))
+
+    moving = adapter.last_command
+
+    if moving is None or moving.direction != "forward":
+        failures.append(
+            {
+                "regla": "movimiento_inicial",
+                "motivo": "la politica no alcanzo FORWARD antes del corte",
+            }
+        )
+        deadline = now["ms"] + case["plazo_ms"]
+    else:
+        commands.append(
+            {
+                "evento": "movimiento_inicial",
+                "direction": moving.direction,
+                "speed": moving.speed,
+                "reason_code": moving.reason_code,
+            }
+        )
+        deadline = moving.valid_until_ms
+
+        if deadline is None:
+            failures.append(
+                {
+                    "regla": "vigencia",
+                    "motivo": "el comando de movimiento no tiene valid_until_ms",
+                }
+            )
+            deadline = now["ms"] + case["plazo_ms"]
+
+    expected_deadline = now["ms"] + case["plazo_ms"]
+    if deadline != expected_deadline:
+        failures.append(
+            {
+                "regla": "plazo",
+                "esperado_ms": expected_deadline,
+                "observado_ms": deadline,
+            }
+        )
+
+    # No llega ningun cuadro nuevo: solo avanza el reloj.
+    now["ms"] = deadline
+    watchdog_stop = pipeline.check_watchdog()
+
+    if watchdog_stop is None:
+        failures.append(
+            {
+                "regla": "watchdog",
+                "motivo": "no genero STOP al vencer sin cuadro nuevo",
+            }
+        )
+    else:
+        commands.append(
+            {
+                "evento": "watchdog",
+                "direction": watchdog_stop["direction"],
+                "speed": watchdog_stop["speed"],
+                "reason_code": watchdog_stop["reason_code"],
+            }
+        )
+
+    # Luego llega un cuadro cuya captura ya tiene exactamente una vigencia de antiguedad.
+    stale_capture_ms = deadline - case["plazo_ms"]
+    stale_trace = pipeline.process(
+        FrameInput(
+            sequence_id="c8",
+            frame_id="c8-stale",
+            t_capture_ms=stale_capture_ms,
+            image_size=(416, 416),
+            image_path=Path("c8-stale.synthetic"),
+        )
+    )
+    stale_record = _frame_record(stale_trace)
+    decisions.append(stale_record)
+
+    commands.append(
+        {
+            "evento": "cuadro_vencido",
+            "direction": stale_trace.command["direction"],
+            "speed": stale_trace.command["speed"],
+            "reason_code": stale_trace.command["reason_code"],
+        }
+    )
+
+    if (
+        stale_trace.command["direction"] != "stop"
+        or not stale_trace.errors
+        or stale_trace.errors[0]["stage"] != "stale"
+    ):
+        failures.append(
+            {
+                "regla": "cuadro_vencido",
+                "motivo": "el cuadro vencido no fue rechazado antes de percepcion/politica",
+            }
+        )
+
+    return {
+        **_base_result(case),
+        "entrada": case["entrada"],
+        "esperado": case["esperado"],
+        "plazo_ms": case["plazo_ms"],
+        "resultado": FAILED if failures else PASSED,
+        "fallos": failures,
+        "decisiones": decisions,
+        "comandos": commands,
+    }
+
+
 def run_cases(
     data: dict[str, Any],
     rows: list[dict[str, Any]],
@@ -270,6 +427,8 @@ def run_cases(
             results.append(run_real_case(case, rows, config, detector, dataset))
         elif case["tipo"] == "sintetico":
             results.append(_run_synthetic_case(case, config))
+        elif case["tipo"] == "watchdog":
+            results.append(_run_watchdog_case(case, config))
         else:
             results.append(_pending_case(case))
 

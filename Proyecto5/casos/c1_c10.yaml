@@ -100,7 +100,7 @@ casos:
       {desde: 30, plazo_cuadros: 2, acciones: [STOP, EVADE_LEFT, EVADE_RIGHT]}
 
   - id: C8
-    tipo: pendiente
+    tipo: watchdog
     nombre: Perdida de percepcion y cuadro vencido
     bloqueado_por: ["#5"]
     plazo_ms: 500

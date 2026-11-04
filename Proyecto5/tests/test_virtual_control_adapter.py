@@ -299,3 +299,274 @@ def test_generated_command_is_logged(caplog):
 
     assert "virtual_control_command" in caplog.text
     assert "decision-011" in caplog.text
+
+
+def test_command_preserves_valid_until_ms():
+    adapter = VirtualControlAdapter()
+
+    command = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-time-001",
+            decision_id="decision-time-001",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=1250.0,
+        )
+    )
+
+    assert command.valid_until_ms == 1250.0
+
+
+def test_stop_has_no_expiration():
+    adapter = VirtualControlAdapter()
+
+    command = adapter.apply(
+        ControlDecision(
+            action=Action.STOP,
+            requested_speed=0.0,
+            frame_id="frame-time-002",
+            decision_id="decision-time-002",
+            reason_code="watchdog_timeout",
+            t_capture_ms=1300.0,
+            valid_until_ms=None,
+        )
+    )
+
+    assert command.speed == 0.0
+    assert command.valid_until_ms is None
+
+
+def test_motion_is_allowed_before_expiration():
+    adapter = VirtualControlAdapter(clock_ms=lambda: 1200.0)
+
+    command = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-time-003",
+            decision_id="decision-time-003",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=1250.0,
+        )
+    )
+
+    assert command.direction == "forward"
+    assert command.speed == 0.5
+
+
+def test_expired_motion_is_replaced_by_stop():
+    adapter = VirtualControlAdapter(clock_ms=lambda: 1300.0)
+
+    command = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-time-004",
+            decision_id="decision-time-004",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=1250.0,
+        )
+    )
+
+    assert command.direction == "stop"
+    assert command.speed == 0.0
+    assert command.reason_code == "watchdog_timeout"
+    assert adapter.last_command == command
+
+
+def test_watchdog_stops_motion_without_receiving_a_new_frame():
+    now = {"ms": 1200.0}
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+
+    forward = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-watchdog-001",
+            decision_id="decision-watchdog-001",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=1250.0,
+        )
+    )
+
+    assert forward.direction == "forward"
+    assert adapter.last_command == forward
+
+    # No llega ningun frame nuevo; solamente avanza el tiempo.
+    now["ms"] = 1300.0
+
+    stop = adapter.check_watchdog()
+
+    assert stop is not None
+    assert stop.direction == "stop"
+    assert stop.speed == 0.0
+    assert stop.reason_code == "watchdog_timeout"
+    assert adapter.last_command == stop
+    assert adapter.history[-2:] == (forward, stop)
+
+
+def test_configurable_timeout_stops_stale_perception():
+    now = {"ms": 1100.0}
+
+    adapter = VirtualControlAdapter(
+        clock_ms=lambda: now["ms"],
+        timeout_ms=200.0,
+    )
+
+    forward = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-watchdog-002",
+            decision_id="decision-watchdog-002",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=None,
+        )
+    )
+
+    assert forward.direction == "forward"
+    assert forward.valid_until_ms == 1200.0
+
+    # Sigue vigente.
+    now["ms"] = 1199.0
+    assert adapter.check_watchdog() is None
+
+    # Vence aunque no llegue otro frame.
+    now["ms"] = 1200.0
+    stop = adapter.check_watchdog()
+
+    assert stop is not None
+    assert stop.direction == "stop"
+    assert stop.speed == 0.0
+    assert stop.reason_code == "watchdog_timeout"
+
+
+def test_watchdog_timeout_is_logged(caplog):
+    now = {"ms": 1000.0}
+    adapter = VirtualControlAdapter(
+        clock_ms=lambda: now["ms"],
+        timeout_ms=100.0,
+    )
+
+    adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-watchdog-log",
+            decision_id="decision-watchdog-log",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=None,
+        )
+    )
+
+    now["ms"] = 1100.0
+
+    with caplog.at_level(logging.WARNING):
+        adapter.check_watchdog()
+
+    assert "watchdog_timeout" in caplog.text
+    assert "frame-watchdog-log" in caplog.text
+
+
+def test_watchdog_does_not_repeat_stop_after_timeout():
+    now = {"ms": 1000.0}
+    adapter = VirtualControlAdapter(
+        clock_ms=lambda: now["ms"],
+        timeout_ms=100.0,
+    )
+
+    adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-watchdog-repeat",
+            decision_id="decision-watchdog-repeat",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=1000.0,
+            valid_until_ms=None,
+        )
+    )
+
+    now["ms"] = 1100.0
+
+    first_stop = adapter.check_watchdog()
+    second_stop = adapter.check_watchdog()
+
+    assert first_stop is not None
+    assert first_stop.direction == "stop"
+    assert second_stop is None
+
+
+@pytest.mark.parametrize(
+    "invalid_timeout",
+    [
+        0.0,
+        -1.0,
+        float("nan"),
+        float("inf"),
+        float("-inf"),
+    ],
+)
+def test_invalid_timeout_is_rejected(invalid_timeout):
+    with pytest.raises(ValueError, match="timeout_ms"):
+        VirtualControlAdapter(timeout_ms=invalid_timeout)
+
+
+def test_non_finite_clock_expires_active_motion():
+    now = {"ms": 100.0}
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+
+    moving = adapter.apply(
+        ControlDecision(
+            action=Action.FORWARD,
+            requested_speed=0.5,
+            frame_id="frame-nan-clock",
+            decision_id="decision-nan-clock",
+            reason_code="clear_path",
+            requested_steering=0.0,
+            t_capture_ms=100.0,
+            valid_until_ms=500.0,
+        )
+    )
+
+    assert moving.direction == "forward"
+
+    now["ms"] = float("nan")
+
+    stop = adapter.check_watchdog()
+
+    assert stop is not None
+    assert stop.direction == "stop"
+    assert stop.reason_code == "watchdog_timeout"
+
+
+def test_non_finite_valid_until_is_rejected():
+    adapter = VirtualControlAdapter(clock_ms=lambda: 100.0)
+
+    with pytest.raises(ValueError, match="valid_until_ms"):
+        adapter.apply(
+            ControlDecision(
+                action=Action.FORWARD,
+                requested_speed=0.5,
+                frame_id="frame-nan-limit",
+                decision_id="decision-nan-limit",
+                reason_code="clear_path",
+                requested_steering=0.0,
+                t_capture_ms=100.0,
+                valid_until_ms=float("nan"),
+            )
+        )

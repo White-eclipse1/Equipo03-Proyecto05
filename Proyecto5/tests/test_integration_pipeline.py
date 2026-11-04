@@ -679,3 +679,222 @@ def test_installed_command_finds_the_policy_without_the_pytest_path(tmp_path):
     )
 
     assert result.returncode == 0, result.stderr
+
+
+def test_policy_timing_reaches_control_decision():
+    decision = (
+        policy()
+        .decidir_crudo(
+            {
+                "sequence_id": "s-time",
+                "frame_id": "f-time",
+                "t_capture_ms": 1000.0,
+                "image_width": 10,
+                "image_height": 10,
+                "status": "ok",
+                "detections": [],
+            }
+        )
+        .model_copy(
+            update={
+                "accion": "FORWARD",
+                "velocidad": 0.5,
+                "direccion": 0.0,
+                "valido_hasta_ms": 1250.0,
+            }
+        )
+    )
+
+    control = to_control_decision(
+        decision,
+        frame_id="f-time",
+        decision_id="s-time:f-time",
+    )
+
+    assert control.t_capture_ms == 1000.0
+    assert control.valid_until_ms == 1250.0
+
+
+def test_watchdog_timeout_restarts_policy_confirmation_without_new_frame(tmp_path):
+    image = image_file(tmp_path)
+    now = {"ms": 0.0}
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        YoloxDetector(ScriptedSession([CLEAR] * 6)),
+        policy(),
+        adapter,
+    )
+
+    # Tres cuadros frescos confirman la vía y permiten avanzar.
+    initial = []
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0)):
+        now["ms"] = capture_ms
+        initial.append(
+            pipeline.process(
+                frame_input(
+                    image,
+                    index,
+                    t_capture_ms=capture_ms,
+                )
+            )
+        )
+
+    assert initial[-1].command["direction"] == "forward"
+
+    # Se interrumpe la llegada de cuadros y vence el comando.
+    deadline = adapter.last_command.valid_until_ms
+    assert deadline is not None
+
+    now["ms"] = deadline
+
+    stop = pipeline.check_watchdog()
+
+    assert stop is not None
+    assert stop["direction"] == "stop"
+    assert stop["reason_code"] == "watchdog_timeout"
+
+    # No llegó ningún cuadro para provocar el STOP.
+    assert len(initial) == 3
+
+    # Tras el timeout, la política debe reconfirmar la vía.
+    recovered = []
+    for offset in (1.0, 2.0, 3.0):
+        now["ms"] = deadline + offset
+        recovered.append(
+            pipeline.process(
+                frame_input(
+                    image,
+                    3 + int(offset),
+                    t_capture_ms=now["ms"],
+                )
+            )
+        )
+
+    assert [trace.command["direction"] for trace in recovered] == [
+        "stop",
+        "stop",
+        "forward",
+    ]
+    assert recovered[0].decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+
+def test_late_fresh_frame_cannot_bypass_expired_previous_command(tmp_path):
+    image = image_file(tmp_path)
+    now = {"ms": 0.0}
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        YoloxDetector(ScriptedSession([CLEAR] * 4)),
+        policy(),
+        adapter,
+    )
+
+    # Tres cuadros confirman la vía.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0)):
+        now["ms"] = capture_ms
+        trace = pipeline.process(frame_input(image, index, t_capture_ms=capture_ms))
+
+    assert trace.command["direction"] == "forward"
+
+    expired_decision_id = adapter.last_command.decision_id
+
+    # No se llamó check_watchdog() manualmente.
+    # El siguiente cuadro llega mucho después del vencimiento.
+    now["ms"] = 2200.0
+
+    late = pipeline.process(
+        frame_input(
+            image,
+            3,
+            t_capture_ms=2200.0,
+        )
+    )
+
+    # El Pipeline debe haber detectado primero el vencimiento.
+    watchdog_commands = [
+        command for command in adapter.history if command.reason_code == "watchdog_timeout"
+    ]
+
+    assert len(watchdog_commands) == 1
+    assert watchdog_commands[0].decision_id == expired_decision_id
+    assert watchdog_commands[0].direction == "stop"
+
+    # Y el cuadro nuevo ya entra con la confirmación reiniciada.
+    assert late.command["direction"] == "stop"
+    assert late.decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+
+def test_stale_frames_do_not_reach_detector_or_policy(tmp_path):
+    image = image_file(tmp_path)
+    now = {"ms": 0.0}
+
+    session = ScriptedSession([CLEAR] * 7)
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        YoloxDetector(session),
+        policy(),
+        adapter,
+    )
+
+    # Tres cuadros frescos confirman la v?a.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0)):
+        now["ms"] = capture_ms
+        trace = pipeline.process(frame_input(image, index, t_capture_ms=capture_ms))
+
+    assert trace.command["direction"] == "forward"
+    assert len(session.tensors) == 3
+
+    # El reloj avanza, pero llegan tres cuadros demasiado antiguos.
+    now["ms"] = 2200.0
+    stale = []
+
+    for index, capture_ms in enumerate((300.0, 400.0, 500.0), start=3):
+        stale.append(pipeline.process(frame_input(image, index, t_capture_ms=capture_ms)))
+
+    # Los cuadros vencidos deben rechazarse antes del detector y la pol?tica.
+    assert len(session.tensors) == 3
+    assert all(trace.command["direction"] == "stop" for trace in stale)
+    assert all(trace.decision is None for trace in stale)
+    assert all(trace.errors[0]["stage"] == "stale" for trace in stale)
+
+    # Como los cuadros viejos no contaron, el siguiente cuadro fresco
+    # todav?a debe empezar la reconfirmaci?n de la v?a.
+    fresh = pipeline.process(
+        frame_input(
+            image,
+            6,
+            t_capture_ms=2200.0,
+        )
+    )
+
+    assert len(session.tensors) == 4
+    assert fresh.command["direction"] == "stop"
+    assert fresh.decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+
+def test_future_frame_is_rejected_before_detector_and_policy(tmp_path):
+    image = image_file(tmp_path)
+    now = {"ms": 1000.0}
+
+    session = ScriptedSession([CLEAR])
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        YoloxDetector(session),
+        policy(),
+        adapter,
+    )
+
+    future = pipeline.process(
+        frame_input(
+            image,
+            0,
+            t_capture_ms=3_601_000.0,
+        )
+    )
+
+    assert session.tensors == []
+    assert future.decision is None
+    assert future.command["direction"] == "stop"
+    assert future.errors[0]["stage"] == "stale"
+    assert adapter.last_command.direction == "stop"
