@@ -4,7 +4,7 @@
 
 Garantizar que una pérdida de percepción detenga el sistema incluso cuando no llegue un frame nuevo.
 
-El watchdog trabaja sobre el adaptador virtual de B2 y puede reproducirse de forma determinista mediante un reloj inyectable.
+El watchdog se integra mediante `Pipeline`, la pol?tica real y el adaptador virtual, con un reloj inyectable para reproducci?n determinista.
 
 ## Componentes
 
@@ -50,7 +50,7 @@ El evento queda registrado mediante logging.
 
 `check_watchdog()` revisa el último comando activo sin necesitar un nuevo frame.
 
-Al vencer el movimiento genera STOP y llamadas posteriores no generan STOPs duplicados.
+Al vencer el movimiento genera STOP, reinicia la confirmaci?n de la pol?tica y llamadas posteriores no generan STOPs duplicados.
 
 ## Caso C8
 
