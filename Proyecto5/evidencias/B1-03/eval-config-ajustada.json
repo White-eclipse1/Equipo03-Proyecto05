@@ -1,0 +1,157 @@
+{
+  "nota": "Medicion unica en p5-eval-v1 con umbral_bajo 0.15 y cuadros_para_liberar 5 (seleccion de ajuste.json, commit 1b59eb2). La configuracion no se adopta.",
+  "ejecucion": {
+    "run_id": "5471153dec5f4fe8b8394e9270e1b280",
+    "fecha": "2026-11-04T22:38:26+00:00",
+    "commit": "1b59eb2e101637bb630195b46d8b0fbd7240ba50",
+    "modo": "virtual",
+    "salida_fisica": false,
+    "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "config_sha256": "5a4d3f2098c542a1b9ccfc4f7c74bda4cc945547e148c67db7e809db9e35178a",
+    "umbral_detector": 0.1,
+    "nms_detector": 0.45,
+    "runtime": "Python 3.12.10",
+    "hardware": "Windows AMD64, CPU"
+  },
+  "resumen": {
+    "total": 10,
+    "pasan": 4,
+    "fallan": 4,
+    "pendientes": 2
+  },
+  "casos": [
+    {
+      "id": "C1",
+      "resultado": "PASA",
+      "fallos": []
+    },
+    {
+      "id": "C2",
+      "resultado": "PASA",
+      "fallos": []
+    },
+    {
+      "id": "C3",
+      "resultado": "PASA",
+      "fallos": []
+    },
+    {
+      "id": "C4",
+      "resultado": "PASA",
+      "fallos": []
+    },
+    {
+      "id": "C5",
+      "resultado": "FALLA",
+      "fallos": [
+        {
+          "regla": "acciones",
+          "cuadro": 10,
+          "frame_id": "seq05-0010",
+          "observada": "EVADE_RIGHT",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "EVASION_DERECHA"
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "resultado": "FALLA",
+      "fallos": [
+        {
+          "cuadro": 4,
+          "observada": "STOP",
+          "permitidas": [
+            "SLOW"
+          ],
+          "reason_code": "PERCEPCION_NO_CONFIRMADA"
+        },
+        {
+          "cuadro": 5,
+          "observada": "STOP",
+          "permitidas": [
+            "SLOW"
+          ],
+          "reason_code": "PERCEPCION_NO_CONFIRMADA"
+        },
+        {
+          "cuadro": 6,
+          "observada": "STOP",
+          "permitidas": [
+            "SLOW"
+          ],
+          "reason_code": "PERCEPCION_NO_CONFIRMADA"
+        },
+        {
+          "cuadro": 7,
+          "observada": "STOP",
+          "permitidas": [
+            "SLOW"
+          ],
+          "reason_code": "PERCEPCION_NO_CONFIRMADA"
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "resultado": "FALLA",
+      "fallos": [
+        {
+          "regla": "acciones",
+          "cuadro": 38,
+          "frame_id": "seq06-0038",
+          "observada": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "regla": "reaccion",
+          "desde": 30,
+          "plazo_cuadros": 2,
+          "acciones": [
+            "STOP",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "observadas": [
+            "SLOW/CAUTION"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C8",
+      "resultado": "FALLA",
+      "fallos": [
+        {
+          "regla": "movimiento_inicial",
+          "motivo": "la politica no alcanzo FORWARD antes del corte"
+        },
+        {
+          "regla": "watchdog",
+          "motivo": "no genero STOP al vencer sin cuadro nuevo"
+        }
+      ]
+    },
+    {
+      "id": "C9",
+      "resultado": "PENDIENTE",
+      "fallos": []
+    },
+    {
+      "id": "C10",
+      "resultado": "PENDIENTE",
+      "fallos": []
+    }
+  ]
+}
