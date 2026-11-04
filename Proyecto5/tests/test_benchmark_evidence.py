@@ -132,6 +132,9 @@ def test_document_compares_the_official_figures_with_the_deadlines():
     assert f"{min(gaps)} a {max(gaps)} ms" in document
     assert f"mediana {statistics.median(gaps):.0f} ms" in document
     assert f"{sum(gap > validity for gap in gaps)} de {len(gaps)}" in document
+    # Esos huecos son del dataset: no pueden presentarse como el ritmo real de la camara.
+    assert "Ritmo de captura de p5-eval-v1" in document
+    assert "`/stream`" in document
 
 
 def test_document_reports_the_size_of_the_model():

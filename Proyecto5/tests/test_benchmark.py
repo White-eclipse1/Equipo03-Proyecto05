@@ -452,6 +452,25 @@ def test_cli_checks_the_images_before_measuring(tmp_path, monkeypatch):
     assert session.tensors == []
 
 
+def test_cli_reports_a_package_with_missing_fields_at_startup(tmp_path, monkeypatch, caplog):
+    session = FakeSession()
+    monkeypatch.setattr(YoloxDetector, "from_weights", lambda *_a, **_k: YoloxDetector(session))
+    monkeypatch.setattr(cli, "verify_weights", lambda *_a, **_k: None)
+    manifest = small_dataset(tmp_path)
+    captures = next(manifest.parent.glob("secuencias/*/capturas.jsonl"))
+    lines = captures.read_text(encoding="utf-8").splitlines()
+    first = json.loads(lines[0])
+    del first["frame_id"]
+    captures.write_text("\n".join([json.dumps(first), *lines[1:]]) + "\n", encoding="utf-8")
+    output = tmp_path / "salida"
+
+    assert cli.main(arguments(manifest, output)) == 1
+
+    assert "benchmark_error stage=startup" in caplog.text
+    assert not output.exists()
+    assert session.tensors == []
+
+
 def test_cli_fails_at_startup_if_the_conditions_cannot_be_collected(
     tmp_path, fake_weights, monkeypatch, caplog
 ):
@@ -472,15 +491,27 @@ def test_cli_fails_at_startup_if_the_conditions_cannot_be_collected(
 
 
 def test_commit_is_the_one_of_the_imported_code(tmp_path, monkeypatch):
-    expected = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
-    ).stdout.strip()
+    try:
+        expected = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        pytest.skip("copia sin repositorio de git, por ejemplo un ZIP")
     other = tmp_path / "otro"
     other.mkdir()
     subprocess.run(["git", "init", "-q"], cwd=other, check=True)
     monkeypatch.chdir(other)
 
     assert cli.code_version()["commit"] == expected
+
+
+def test_code_version_is_unknown_without_a_repository(monkeypatch):
+    def no_repository(command, **_kwargs):
+        raise subprocess.CalledProcessError(128, command)
+
+    monkeypatch.setattr(cli.subprocess, "run", no_repository)
+
+    assert cli.code_version() == {"commit": None, "cambios_sin_commit": None}
 
 
 def test_untracked_code_counts_as_a_change_but_new_evidence_does_not(monkeypatch):

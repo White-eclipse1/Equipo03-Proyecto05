@@ -201,6 +201,7 @@ def main(argv: list[str] | None = None) -> int:
         DetectorError,
         OSError,
         ValueError,
+        KeyError,
         PackageNotFoundError,
         yaml.YAMLError,
     ) as failure:

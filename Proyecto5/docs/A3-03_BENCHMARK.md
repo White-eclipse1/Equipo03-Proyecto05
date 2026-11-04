@@ -154,13 +154,13 @@ Medición oficial en [evidencias/A3-03/](../evidencias/A3-03/), desde el commit 
 |---|---:|---|---|
 | Vigencia del comando (`vigencia_comando_ms`) | 500 ms | p95 total 107.88 ms y máximo total 139.22 ms | El cómputo cabe |
 | Periodo declarado en la política, a 10 FPS | 100 ms | p95 de inferencia 95.40 ms; p95 total 107.88 ms y máximo total 139.22 ms | La inferencia cabe por poco en su p95; el total no |
-| Ritmo de entrada real | 122 huecos, de 500 a 2843 ms, mediana 525 ms | Vigencia de 500 ms: la superan 120 de 122 huecos, y los otros 2 miden justo 500 ms | **La entrada no cabe** |
+| Ritmo de captura de p5-eval-v1 | 122 huecos, de 500 a 2843 ms, mediana 525 ms | Vigencia de 500 ms: la superan 120 de 122 huecos, y los otros 2 miden justo 500 ms | A este ritmo de captura, el comando vence antes del siguiente cuadro |
 
-La regla de [politica.md](../../Proyecto3/docs/politica.md) pide subir `vigencia_comando_ms` o bajar los FPS si el p95 de inferencia supera el periodo de entrada. Con el ritmo de p5-eval-v1 eso no ocurre: 95.40 ms contra al menos 500 ms.
+La regla de [politica.md](../../Proyecto3/docs/politica.md) pide subir `vigencia_comando_ms` o bajar los FPS si el p95 de inferencia supera el periodo de entrada. Al ritmo de captura de p5-eval-v1 eso no ocurre: 95.40 ms contra al menos 500 ms.
 
-El problema es otro. Cuando #5 aplique la vigencia, a este ritmo cada comando de movimiento vencerá antes de que el siguiente cuadro produzca otro, así que el carro se detendría entre cuadros. Además, la vigencia ya no cubre ningún cuadro perdido, porque esa cuenta de la política supone 10 FPS.
+**La última fila describe cómo se capturó el dataset, no lo que entrega la cámara.** El mínimo de 500 ms lo impuso `--interval-ms` al grabar, y el ritmo real de `/stream` todavía no se ha medido. Solo dice qué pasaría a ese ritmo: cuando #5 aplique la vigencia, cada comando de movimiento vencería antes del siguiente cuadro, y el carro se detendría entre cuadros.
 
-**Falta una decisión de B1 y B2:** subir la vigencia, capturar más rápido o aceptar ese comportamiento. Este benchmark no la toma. El periodo de 500 ms es el valor por defecto de `--interval-ms` en la captura de A2, y el cómputo no es lo que limita: el peor total observado permite unos 7 cuadros por segundo.
+Lo que sí sale de esta medición es que, a ese ritmo, el cómputo no es lo que limita: el p95 total permite unos 9 cuadros por segundo, y el peor total observado, unos 7. **Hay que medir el ritmo real de `/stream` antes de decidir si cambia la vigencia.**
 
 ### Variación entre corridas
 
@@ -194,5 +194,6 @@ Estas cifras describen este laptop en estas corridas: no son un valor estable de
 - **Hardware:** se midió en un laptop. Si la demostración corre en otro equipo, como la Raspberry del Proyecto 4, hay que repetir ahí la medición.
 - **Tiempo del sistema completo:** no incluye la captura de la cámara ni el envío al carro. `ms_total` es el tiempo local.
 - **Regla de vigencia:** el adaptador todavía no aplica `valido_hasta_ms` (#5). Si #5 o #6 cambian el adaptador, `ms_control` puede cambiar.
+- **Cambios en la política:** si `politica.yaml` cambia, la medición oficial queda con un `config_sha256` anterior y conviene repetirla. Si cambia `vigencia_comando_ms`, una prueba falla hasta actualizar este documento.
 - **Commit de la evidencia:** las mediciones citan `dacaa56`, así que este PR debe fusionarse con merge commit para que ese commit quede en `main`. Las correcciones posteriores del comando afectan las validaciones y el resumen, no el recorrido ni los cronómetros, y `calentamientos_validos` no existe en esos archivos.
 - **Política:** las decisiones no se evalúan aquí; eso es de B3-02 (#8).
