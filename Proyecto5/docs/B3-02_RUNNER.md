@@ -30,7 +30,7 @@ Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. `pip install 
 ### PowerShell
 
 ```powershell
-.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config ../Proyecto3/config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output <carpeta-nueva>
+.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output <carpeta-nueva>
 ```
 
 Para ver el código de salida, corre `$LASTEXITCODE` justo después.
@@ -40,7 +40,7 @@ Para ver el código de salida, corre `$LASTEXITCODE` justo después.
 ```bash
 .venv/bin/python -m p5.casos.runner \
   --cases casos/c1_c10.yaml \
-  --config ../Proyecto3/config/politica.yaml \
+  --config config/politica.yaml \
   --dataset data/p5-eval-v1 \
   --weights models/yolox_tiny.onnx \
   --output <carpeta-nueva>

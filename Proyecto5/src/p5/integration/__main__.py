@@ -14,7 +14,7 @@ from p5.integration.pipeline import FrameInput, Pipeline, frames_from_manifest
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_POLICY_CONFIG = Path("..") / "Proyecto3" / "config" / "politica.yaml"
+DEFAULT_POLICY_CONFIG = Path("config") / "politica.yaml"
 
 
 def _prepare(args: argparse.Namespace) -> tuple[Pipeline, list[FrameInput]]:

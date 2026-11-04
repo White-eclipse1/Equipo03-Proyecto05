@@ -28,7 +28,7 @@ MIN_OBSTACLE_FRAMES = 20
 MIN_CLEAR_FRAMES = 20
 REQUIRED_SCENARIOS = frozenset({"C1", "C2", "C3", "C4", "C5", "C7"})
 
-# Las clases obstaculo de Proyecto3/config/politica.yaml.
+# Las clases obstaculo de config/politica.yaml (P5).
 OBSTACLE_CLASSES = ("person", "bicycle", "car", "motorcycle", "bus", "truck", "cat", "dog")
 
 # Mismas zonas y cobertura que la politica; si cambian alla, cambian aqui.

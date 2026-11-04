@@ -1,0 +1,28 @@
+# B1-01 / E4. Validado por p3.policy.config.ConfigPolitica.
+# Reglas y limites: docs/B1-01_POLITICA.md.
+schema_version: 1
+clases_obstaculo: [person, bicycle, car, motorcycle, bus, truck, cat, dog]
+zonas:
+  izquierda: [0.0, 0.35]
+  centro: [0.35, 0.65]
+  derecha: [0.65, 1.0]
+geometria:
+  banda_riesgo_y_min: 0.40
+  area_min: 0.005
+  # Solape / menor ancho entre caja y zona, no solo ancho de zona.
+  cobertura_min_zona: 0.15
+confianza:
+  umbral_alto: 0.50
+  umbral_bajo: 0.30
+temporal:
+  cuadros_para_bloquear: 2
+  cuadros_para_liberar: 3
+  vigencia_comando_ms: 500
+comandos:
+  velocidad_crucero: 0.60
+  velocidad_precaucion: 0.30
+  velocidad_evasion: 0.20
+  direccion_evasion: 0.50
+evasion:
+  habilitada: true
+  lado_preferido: derecha
