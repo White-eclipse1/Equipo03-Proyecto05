@@ -35,13 +35,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.lock.txt
+          python -m pip install --no-deps -e .
 
       - name: Download detector weights
-        run: |
-          mkdir -p models
-          curl -fsSL -o models/yolox_tiny.onnx \
-            https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
-          echo "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7  models/yolox_tiny.onnx" | sha256sum -c -
+        run: python -m p5.detector.weights
 
       - name: Ruff lint
         run: python -m ruff check .
