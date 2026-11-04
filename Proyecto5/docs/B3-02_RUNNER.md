@@ -12,10 +12,10 @@ Reproducir con un comando los diez casos que pide la evaluación, guardar cada r
 |---|---|---|
 | C1–C5 y C7 | Secuencias de `p5-eval-v1` con el detector real | Se ejecutan |
 | C6 | Detecciones sintéticas del caso de B1 | Se ejecuta |
-| C8 | Corte de cuadros y cuadro vencido | **Pendiente de #5** |
+| C8 | Corte de cuadros y cuadro vencido | Se ejecuta con `Pipeline.tick()` y cuadros de `seq01` |
 | C9 y C10 | Fallo del detector, emergencia, rearme y cierre | **Pendiente de #6** |
 
-Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política. #8 sigue abierto hasta ejecutar C8–C10.
+Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política. C8 verifica el watchdog sin un cuadro nuevo y exige reconfirmar la vía. #8 sigue abierto hasta ejecutar C9–C10.
 
 ## Componentes
 
@@ -86,7 +86,7 @@ Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `st
 
 ## Última corrida
 
-Con YOLOX-Tiny sobre `p5-eval-v1`: **5 pasan, 2 fallan y 3 pendientes.** Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
+Con YOLOX-Tiny sobre `p5-eval-v1`: **6 pasan, 2 fallan y 2 pendientes.** C8 pasa con el recorrido integrado; C5 y C7 siguen siendo fallos reales del sistema y no deben corregirse cambiando las expectativas:
 
 | Caso | Cuadros | Observado | Por qué es un fallo |
 |---|---|---|---|
@@ -134,5 +134,4 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 ## Pendiente
 
-- C8: #5.
 - C9 y C10: #6.

@@ -4,6 +4,7 @@
 #            Cada cuadro se compara con `allowed_actions` del manifiesto, y ademas con las
 #            reglas de abajo. Los cuadros se cuentan desde 1 dentro de la secuencia.
 # sintetico: reutiliza un caso de politica con detecciones sinteticas. No acredita al detector.
+# watchdog: reproduce el corte de percepcion sobre el recorrido integrado, con reloj simulado.
 # pendiente: declara el caso, pero todavia no se puede ejecutar. Hace fallar al runner.
 #
 # Reglas:
@@ -100,9 +101,9 @@ casos:
       {desde: 30, plazo_cuadros: 2, acciones: [STOP, EVADE_LEFT, EVADE_RIGHT]}
 
   - id: C8
-    tipo: pendiente
+    tipo: watchdog
     nombre: Perdida de percepcion y cuadro vencido
-    bloqueado_por: ["#5"]
+    secuencia: seq01
     plazo_ms: 500
     estado_inicial: Avanzando con percepcion valida
     entrada: Se dejan de entregar cuadros, avanza el reloj y luego llega un cuadro vencido

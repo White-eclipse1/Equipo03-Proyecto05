@@ -13,6 +13,7 @@ import platform
 import subprocess
 import sys
 from datetime import UTC, datetime
+from math import isfinite
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -244,6 +245,130 @@ def _run_synthetic_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
     }
 
 
+def _c8_command(evento: str, command: dict[str, Any]) -> dict[str, Any]:
+    """Conserva la evidencia del control sin la hora de emision no determinista."""
+    return {
+        "evento": evento,
+        "direction": command["direction"],
+        "speed": command["speed"],
+        "steering": command["steering"],
+        "reason_code": command["reason_code"],
+        "frame_id": command["frame_id"],
+        "valid_until_ms": command["valid_until_ms"],
+    }
+
+
+def _run_watchdog_case(
+    case: dict[str, Any],
+    rows: list[dict[str, Any]],
+    config: Config,
+    detector: YoloxDetector,
+    dataset: Path,
+) -> dict[str, Any]:
+    """C8: corte de cuadros y reconfirmacion usando el mismo Pipeline que C1-C7."""
+    sequence = [row for row in rows if row["sequence_id"] == case["secuencia"]]
+    failures: list[dict[str, Any]] = []
+    decisions: list[dict[str, Any]] = []
+    commands: list[dict[str, Any]] = []
+
+    def finish() -> dict[str, Any]:
+        return {
+            **_base_result(case),
+            "entrada": {"secuencia": case["secuencia"], "cuadros": len(sequence)},
+            "esperado": case["esperado"],
+            "plazo_ms": case["plazo_ms"],
+            "resultado": FAILED if failures else PASSED,
+            "fallos": failures,
+            "decisiones": decisions,
+            "comandos": commands,
+        }
+
+    if len(sequence) < 6:
+        failures.append({"regla": "entrada", "motivo": "C8 necesita seis cuadros de via libre"})
+        return finish()
+
+    settings, config_sha256 = config
+    pipeline = Pipeline(
+        detector,
+        PoliticaDecision(settings, config_sha256=config_sha256),
+        VirtualControlAdapter(),
+    )
+    try:
+        # Los tres primeros cuadros reales confirman la via; sus etiquetas no llegan al detector.
+        for row in sequence[:3]:
+            trace = pipeline.process(
+                _frame_input(row, dataset), now_ms=float(row["t_capture_ms"])
+            )
+            decisions.append({**_frame_record(trace), "evento": "cuadro_inicial"})
+            if trace.errors:
+                failures.append({"regla": "recorrido", "errores": list(trace.errors)})
+
+        movement = decisions[-1]["comando"]
+        commands.append(_c8_command("movimiento_inicial", movement))
+        deadline = movement["valid_until_ms"]
+        if movement["direction"] != "forward" or movement["speed"] <= 0:
+            failures.append({"regla": "entrada", "motivo": "la via no produjo avance inicial"})
+            return finish()
+        if deadline is None or not isfinite(deadline):
+            failures.append({"regla": "watchdog", "motivo": "movimiento sin vigencia finita"})
+            return finish()
+        elapsed = deadline - sequence[2]["t_capture_ms"]
+        if elapsed <= 0 or elapsed > case["plazo_ms"]:
+            failures.append({"regla": "plazo", "observado_ms": elapsed})
+
+        # No llega otro cuadro: tick debe detener el comando exactamente al vencer.
+        if pipeline.tick(deadline - 1) is not None:
+            failures.append({"regla": "watchdog", "motivo": "STOP antes del limite"})
+        event = pipeline.tick(deadline)
+        if event is None:
+            failures.append({"regla": "watchdog", "motivo": "no emitio STOP sin otro cuadro"})
+        else:
+            commands.append(_c8_command("watchdog", event.command))
+            if (
+                event.command["direction"] != "stop"
+                or event.command["speed"] != 0.0
+                or event.command["reason_code"] != "WATCHDOG_VENCIDO"
+                or event.t_ms != deadline
+                or pipeline.adapter.last_command is None
+                or pipeline.adapter.last_command.direction != "stop"
+            ):
+                failures.append({"regla": "watchdog", "motivo": "STOP no llego al adaptador"})
+        if pipeline.tick(deadline + 1) is not None:
+            failures.append({"regla": "watchdog", "motivo": "STOP duplicado"})
+
+        # Reenviamos el ultimo cuadro, ahora vencido: debe rechazarse antes del detector.
+        stale = pipeline.process(_frame_input(sequence[2], dataset), now_ms=deadline)
+        decisions.append({**_frame_record(stale), "evento": "cuadro_vencido"})
+        commands.append(_c8_command("cuadro_vencido", stale.command))
+        if (
+            stale.decision is not None
+            or stale.command["direction"] != "stop"
+            or stale.command["reason_code"] != "CUADRO_VENCIDO"
+            or not any(error["stage"] == "stale" for error in stale.errors)
+        ):
+            failures.append({"regla": "cuadro_vencido", "motivo": "reactivo el movimiento"})
+
+        # Un STOP no equivale a via libre: hacen falta tres cuadros nuevos para avanzar.
+        if sequence[3]["t_capture_ms"] <= deadline:
+            failures.append({"regla": "entrada", "motivo": "no hay cuadros frescos tras el corte"})
+            return finish()
+        directions = []
+        for row in sequence[3:6]:
+            trace = pipeline.process(
+                _frame_input(row, dataset), now_ms=float(row["t_capture_ms"])
+            )
+            decisions.append({**_frame_record(trace), "evento": "reconfirmacion"})
+            commands.append(_c8_command("reconfirmacion", trace.command))
+            directions.append(trace.command["direction"])
+            if trace.errors:
+                failures.append({"regla": "reconfirmacion", "errores": list(trace.errors)})
+        if directions != ["stop", "stop", "forward"]:
+            failures.append({"regla": "reconfirmacion", "direcciones": directions})
+    except Exception as failure:
+        failures.append({"regla": "recorrido", "motivo": repr(failure)})
+    return finish()
+
+
 def _pending_case(case: dict[str, Any]) -> dict[str, Any]:
     return {
         **_base_result(case),
@@ -270,6 +395,8 @@ def run_cases(
             results.append(run_real_case(case, rows, config, detector, dataset))
         elif case["tipo"] == "sintetico":
             results.append(_run_synthetic_case(case, config))
+        elif case["tipo"] == "watchdog":
+            results.append(_run_watchdog_case(case, rows, config, detector, dataset))
         else:
             results.append(_pending_case(case))
 

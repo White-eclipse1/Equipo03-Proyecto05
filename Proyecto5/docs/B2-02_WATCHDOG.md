@@ -11,6 +11,7 @@ Detener el sistema si se pierde la percepción, incluso cuando no llega ningún 
 - src/p5/control/adapter.py: `is_expired`, la vigencia de cada comando y el reloj de `timestamp`.
 - src/p5/integration/pipeline.py: `Pipeline.tick`, `WatchdogEvent` y el rechazo de cuadros vencidos en `Pipeline.process`.
 - tests/test_watchdog.py: los límites exactos y C8 completo, con un reloj controlado.
+- src/p5/casos/runner.py: C8 ejecutable sobre el mismo `Pipeline` que usa el recorrido.
 
 ## Reloj
 
@@ -72,8 +73,10 @@ Sin `now_ms`, `process` no comprueba el tiempo. Así funciona `python -m p5.inte
 Las pruebas también cubren las dos variantes: un cuadro nuevo que descubre el vencimiento antes de `tick`, y un cuadro con hora futura.
 
 `tests/test_watchdog.py` lo corre dos veces y exige el mismo resultado en todos los comandos.
-
-Falta conectarlo al runner de #8 para que C8 deje de estar `PENDIENTE`.
+El runner de #8 usa los primeros seis cuadros reales de `seq01`: tres para iniciar el avance,
+`tick` sin cuadro nuevo, el tercer cuadro repetido ya vencido y tres cuadros frescos para
+verificar que el movimiento solo se reanuda tras reconfirmar la vía. Guarda los comandos y
+los fallos de C8 en `resultados.json`; C8 ya no figura como `PENDIENTE`.
 
 ## Verificación
 

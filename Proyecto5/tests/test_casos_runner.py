@@ -116,15 +116,15 @@ def test_expectations_are_consistent_with_a_perfect_detector(rows, config):
 def test_pending_cases_declare_their_contract_and_do_not_pass(rows, config):
     report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
 
-    for case_id in ("C8", "C9", "C10"):
+    for case_id in ("C9", "C10"):
         case = result_by_id(report, case_id)
         assert case["resultado"] == "PENDIENTE"
         assert case["entrada"]
         assert case["esperado"]
         assert case["plazo_ms"] > 0
         assert case["bloqueado_por"]
-    assert report["pasan"] == 7
-    assert report["pendientes"] == 3
+    assert report["pasan"] == 8
+    assert report["pendientes"] == 2
     assert report["correcto"] is False
 
 
@@ -428,7 +428,7 @@ def test_cli_exits_non_zero_while_cases_are_pending_and_stores_the_results(
 
 
 def cases_without_pending(tmp_path, monkeypatch):
-    """C1-C7 en un archivo aparte, como si C8-C10 ya no fueran parte de la lista requerida."""
+    """C1-C8 en un archivo aparte, sin los dos casos que aun faltan."""
     data = yaml.safe_load(CASES.read_text(encoding="utf-8"))
     for case in data["casos"]:
         if case["tipo"] == "sintetico":
@@ -519,4 +519,54 @@ def test_cli_runs_the_real_detector_over_the_frozen_dataset(tmp_path):
     assert code == 1
     report = json.loads((target / "resultados.json").read_text(encoding="utf-8"))
     assert result_by_id(report, "C1")["decisiones"][0]["frame_id"] == "seq01-0001"
-    assert result_by_id(report, "C8")["resultado"] == "PENDIENTE"
+    assert result_by_id(report, "C8")["resultado"] == "PASA"
+
+
+def test_c8_uses_the_integrated_path_and_reconfirms_the_road(rows, config):
+    report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
+    c8 = result_by_id(report, "C8")
+    replay = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
+
+    assert c8["resultado"] == "PASA"
+    assert c8["plazo_ms"] == 500
+    assert [command["evento"] for command in c8["comandos"]] == [
+        "movimiento_inicial",
+        "watchdog",
+        "cuadro_vencido",
+        "reconfirmacion",
+        "reconfirmacion",
+        "reconfirmacion",
+    ]
+    assert [command["direction"] for command in c8["comandos"]] == [
+        "forward",
+        "stop",
+        "stop",
+        "stop",
+        "stop",
+        "forward",
+    ]
+    assert c8["comandos"][1]["reason_code"] == "WATCHDOG_VENCIDO"
+    assert c8["comandos"][2]["reason_code"] == "CUADRO_VENCIDO"
+    assert c8["decisiones"][3]["cuadro"]["status"] == "error"
+    assert c8["decisiones"][3]["evento"] == "cuadro_vencido"
+    assert c8["comandos"] == result_by_id(replay, "C8")["comandos"]
+
+
+def test_c8_fails_if_the_watchdog_does_not_emit_a_stop(rows, config, monkeypatch):
+    monkeypatch.setattr(runner.Pipeline, "tick", lambda self, now_ms: None)
+
+    report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
+    c8 = result_by_id(report, "C8")
+
+    assert c8["resultado"] == "FALLA"
+    assert any(failure["regla"] == "watchdog" for failure in c8["fallos"])
+
+
+def test_c8_fails_if_policy_does_not_reconfirm_after_stop(rows, config, monkeypatch):
+    monkeypatch.setattr(runner.Pipeline, "_restart_confirmation", lambda self, sequence_id: None)
+
+    report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
+    c8 = result_by_id(report, "C8")
+
+    assert c8["resultado"] == "FALLA"
+    assert any(failure["regla"] == "reconfirmacion" for failure in c8["fallos"])
