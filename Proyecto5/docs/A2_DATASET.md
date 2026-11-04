@@ -58,12 +58,12 @@ El carro no necesita moverse: basta con que el objeto cambie de posición entre 
 
 | Secuencia | Caso | Escena | Cuadros |
 |---|---|---|---:|
-| seq01 | C1 | Vía despejada, sin objetos de las clases evaluadas | 15 |
-| seq02 | C2 | Libre y luego un obstáculo en el centro | 12 |
-| seq03 | C3 | Obstáculo solo a la izquierda, centro libre | 12 |
-| seq04 | C4 | Obstáculo solo a la derecha, centro libre | 12 |
-| seq05 | C5 | Varios obstáculos, con el centro y un lado ocupados | 12 |
-| seq06 | C7 | Libre, obstáculo persistente y libre otra vez | 15 |
+| seq01 | C1 | Jardín: vía despejada | 15 |
+| seq02 | C2 | Jardín: persona al centro que se va hacia la izquierda, y vía libre | 24 |
+| seq03 | C3 | Jardín, al atardecer: persona solo a la izquierda | 12 |
+| seq04 | C4 | Jardín, al atardecer: persona solo a la derecha | 12 |
+| seq05 | C5 | Biblioteca: una persona al centro y otra a la derecha | 15 |
+| seq06 | C7 | Biblioteca: libre, persona que entra y se queda al centro, y libre otra vez | 50 |
 
 ```bash
 python -m p5.dataset.captura --url http://172.20.10.13:81/stream --dataset data/p5-eval-v1 --sequence seq01 --frames 15
@@ -80,7 +80,6 @@ Crea `data/p5-eval-v1/secuencias.json`. Toda secuencia pertenece a un solo split
 ```json
 {
   "sequences": {
-    "aj01": {"split": "ajuste", "scenario": "orientacion"},
     "seq01": {"split": "evaluacion", "scenario": "C1"},
     "seq02": {"split": "evaluacion", "scenario": "C2"},
     "seq03": {"split": "evaluacion", "scenario": "C3"},
@@ -129,6 +128,29 @@ Escribe `manifiesto.jsonl` y `congelamiento.json`, con el SHA-256 del manifiesto
 
 Después de congelar, `validate` también falla si `manifiesto.jsonl` ya no coincide con el SHA-256 registrado, si falta alguno de los dos archivos, o si los cuadros o las anotaciones cambiaron.
 
+## Procedencia de `p5-eval-v1`
+
+- **Origen:** cámara OV2640 del carro, en resolución CIF, leyendo `/stream`. El carro estuvo inmóvil en todas las tomas; se movían las personas.
+- **Firmware:** se agregaron `set_vflip` y `set_hmirror` porque la imagen salía girada 180°. Se comprobó con un objeto real a la izquierda del carro.
+- **Etiquetas:** hechas a mano con el anotador, sobre las 8 clases obstáculo de la política. En este conjunto solo hay `person`.
+- **Sin ajuste en el paquete:** todas las secuencias son de `evaluacion`. Las tomas de prueba `aj01` a `aj07` no se publican: `aj01` a `aj03` se borraron por salir giradas, y las demás no tienen etiquetas.
+
+### Tomas repetidas
+
+Durante la captura se corrieron YOLOX-Tiny y, en `seq06`, también la política, para comprobar que las tomas fueran útiles. Esto es lo que se repitió y por qué:
+
+| Secuencia | Intentos descartados | Motivo |
+|---|---|---|
+| seq01 | 2 | Alguien en la imagen; gente al fondo. Se cambió de lugar al jardín |
+| seq03 | 1 | Persona demasiado lejos, que además entró a la zona centro |
+| seq04 | 1 | La persona no salió en la imagen |
+| seq05 | 2 | Demasiado oscuro en el jardín; alguien pasó frente a la cámara |
+| seq06 | 3 | Sin vía libre al inicio; persona fuera del centro. En uno de ellos también pesó que la política mandó FORWARD con la persona presente, y se le pidió pararse frente al cartel |
+
+La colocación de las personas se decidió viendo lo que el detector reconocía: de pie frente a fondos oscuros falla más, y en este conjunto están sobre todo en lugares donde se les ve bien. **Por eso estas métricas no representan cualquier escena.** Tampoco hay personas de pie a corta distancia, con el cuerpo cortado, donde el detector casi no las reconoce.
+
+Después de congelar no se repiten tomas. La política no debe ajustarse con estos cuadros, y `seq06` ya muestra FORWARD en dos cuadros con la persona al centro.
+
 ## Formato para A3 y B3
 
 `load_manifest` de `paquete.py` lee el manifiesto, con una fila JSON por cuadro. Lanza `ValueError` si el archivo no coincide con el SHA-256 de `congelamiento.json`, o si ese registro falta o no es válido. Usa esta función en lugar de leer el JSONL directamente:
@@ -164,6 +186,8 @@ python -m pytest tests/test_dataset_captura.py tests/test_dataset_paquete.py tes
 
 ## Límites conocidos
 
-- Las pruebas usan un stream simulado con el formato de `app_httpd.cpp`. Falta capturar del carro real.
+- Las pruebas automáticas usan un stream simulado con el formato de `app_httpd.cpp`; la captura también se usó con el carro real para `p5-eval-v1`.
+- El WiFi del hotspot deja huecos de hasta unos 3 segundos entre cuadros, visibles en `t_capture_ms`.
+- Las secuencias se grabaron en dos lugares y con luz distinta, no en una variedad amplia de escenas.
 - El tiempo de cada cuadro se toma al recibirlo en la PC: incluye la latencia del WiFi, no el instante exacto de exposición.
 - `jpeg_size` revisa la estructura del JPEG, pero no decodifica la imagen.

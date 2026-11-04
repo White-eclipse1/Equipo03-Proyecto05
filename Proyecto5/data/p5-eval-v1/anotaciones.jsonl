@@ -1,0 +1,128 @@
+{"frame_id": "seq01-0001", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0002", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0003", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0004", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0005", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0006", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0007", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0008", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0009", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0010", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0011", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0012", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0013", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0014", "objects": [], "road_state": "libre"}
+{"frame_id": "seq01-0015", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0001", "objects": [{"bbox_xyxy": [222, 69, 280, 203], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0002", "objects": [{"bbox_xyxy": [228, 69, 287, 203], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0003", "objects": [{"bbox_xyxy": [224, 72, 283, 206], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0004", "objects": [{"bbox_xyxy": [224, 72, 283, 203], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0005", "objects": [{"bbox_xyxy": [228, 69, 278, 206], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0006", "objects": [{"bbox_xyxy": [222, 72, 272, 206], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0007", "objects": [{"bbox_xyxy": [206, 76, 258, 206], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0008", "objects": [{"bbox_xyxy": [206, 76, 258, 206], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq02-0009", "objects": [{"bbox_xyxy": [78, 74, 131, 209], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0010", "objects": [{"bbox_xyxy": [59, 78, 108, 209], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0011", "objects": [{"bbox_xyxy": [44, 72, 102, 206], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0012", "objects": [{"bbox_xyxy": [39, 80, 75, 206], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0013", "objects": [{"bbox_xyxy": [28, 80, 64, 203], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0014", "objects": [{"bbox_xyxy": [17, 83, 50, 200], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0015", "objects": [{"bbox_xyxy": [0, 87, 42, 200], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq02-0016", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0017", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0018", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0019", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0020", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0021", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0022", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0023", "objects": [], "road_state": "libre"}
+{"frame_id": "seq02-0024", "objects": [], "road_state": "libre"}
+{"frame_id": "seq03-0001", "objects": [{"bbox_xyxy": [12, 118, 38, 180], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0002", "objects": [{"bbox_xyxy": [58, 105, 93, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0003", "objects": [{"bbox_xyxy": [62, 108, 92, 181], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0004", "objects": [{"bbox_xyxy": [58, 108, 93, 181], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0005", "objects": [{"bbox_xyxy": [68, 112, 97, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0006", "objects": [{"bbox_xyxy": [57, 110, 97, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0007", "objects": [{"bbox_xyxy": [66, 115, 90, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0008", "objects": [{"bbox_xyxy": [60, 110, 88, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0009", "objects": [{"bbox_xyxy": [64, 108, 90, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0010", "objects": [{"bbox_xyxy": [56, 104, 90, 182], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0011", "objects": [{"bbox_xyxy": [58, 104, 90, 183], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq03-0012", "objects": [{"bbox_xyxy": [60, 104, 90, 183], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq04-0001", "objects": [{"bbox_xyxy": [306, 106, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0002", "objects": [{"bbox_xyxy": [306, 106, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0003", "objects": [{"bbox_xyxy": [306, 106, 338, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0004", "objects": [{"bbox_xyxy": [306, 106, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0005", "objects": [{"bbox_xyxy": [307, 106, 338, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0006", "objects": [{"bbox_xyxy": [306, 106, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0007", "objects": [{"bbox_xyxy": [306, 104, 345, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0008", "objects": [{"bbox_xyxy": [298, 104, 333, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0009", "objects": [{"bbox_xyxy": [304, 106, 335, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0010", "objects": [{"bbox_xyxy": [305, 106, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0011", "objects": [{"bbox_xyxy": [308, 108, 337, 183], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq04-0012", "objects": [{"bbox_xyxy": [306, 108, 333, 182], "class_name": "person"}], "road_state": "lateral_derecha"}
+{"frame_id": "seq05-0001", "objects": [{"bbox_xyxy": [142, 2, 200, 142], "class_name": "person"}, {"bbox_xyxy": [267, 3, 324, 139], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0002", "objects": [{"bbox_xyxy": [147, 3, 202, 142], "class_name": "person"}, {"bbox_xyxy": [267, 3, 314, 141], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0003", "objects": [{"bbox_xyxy": [147, 2, 200, 142], "class_name": "person"}, {"bbox_xyxy": [264, 3, 317, 140], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0004", "objects": [{"bbox_xyxy": [147, 2, 202, 142], "class_name": "person"}, {"bbox_xyxy": [264, 5, 314, 142], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0005", "objects": [{"bbox_xyxy": [147, 5, 202, 144], "class_name": "person"}, {"bbox_xyxy": [264, 5, 313, 144], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0006", "objects": [{"bbox_xyxy": [147, 5, 202, 144], "class_name": "person"}, {"bbox_xyxy": [272, 5, 328, 144], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0007", "objects": [{"bbox_xyxy": [147, 3, 202, 142], "class_name": "person"}, {"bbox_xyxy": [278, 3, 324, 139], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0008", "objects": [{"bbox_xyxy": [147, 3, 202, 142], "class_name": "person"}, {"bbox_xyxy": [272, 3, 322, 140], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0009", "objects": [{"bbox_xyxy": [150, 2, 203, 142], "class_name": "person"}, {"bbox_xyxy": [276, 2, 322, 139], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0010", "objects": [{"bbox_xyxy": [150, 2, 203, 142], "class_name": "person"}, {"bbox_xyxy": [274, 2, 322, 139], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0011", "objects": [{"bbox_xyxy": [147, 5, 203, 144], "class_name": "person"}, {"bbox_xyxy": [276, 3, 322, 142], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0012", "objects": [{"bbox_xyxy": [147, 5, 202, 144], "class_name": "person"}, {"bbox_xyxy": [274, 3, 322, 142], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0013", "objects": [{"bbox_xyxy": [147, 3, 202, 142], "class_name": "person"}, {"bbox_xyxy": [278, 3, 322, 140], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0014", "objects": [{"bbox_xyxy": [147, 3, 202, 142], "class_name": "person"}, {"bbox_xyxy": [281, 3, 322, 140], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq05-0015", "objects": [{"bbox_xyxy": [147, 2, 202, 142], "class_name": "person"}, {"bbox_xyxy": [278, 2, 322, 139], "class_name": "person"}], "road_state": "varios"}
+{"frame_id": "seq06-0001", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0002", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0003", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0004", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0005", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0006", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0007", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0008", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0009", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0010", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0011", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0012", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0013", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0014", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0015", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0016", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0017", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0018", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0019", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0020", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0021", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0022", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0023", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0024", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0025", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0026", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0027", "objects": [{"bbox_xyxy": [0, 0, 47, 70], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0028", "objects": [{"bbox_xyxy": [44, 0, 111, 144], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0029", "objects": [{"bbox_xyxy": [83, 2, 142, 144], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0030", "objects": [{"bbox_xyxy": [113, 0, 178, 144], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0031", "objects": [{"bbox_xyxy": [136, 0, 183, 141], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0032", "objects": [{"bbox_xyxy": [136, 0, 180, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0033", "objects": [{"bbox_xyxy": [133, 0, 181, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0034", "objects": [{"bbox_xyxy": [136, 0, 181, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0035", "objects": [{"bbox_xyxy": [136, 0, 183, 144], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0036", "objects": [{"bbox_xyxy": [136, 0, 180, 144], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0037", "objects": [{"bbox_xyxy": [136, 0, 183, 141], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0038", "objects": [{"bbox_xyxy": [139, 0, 183, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0039", "objects": [{"bbox_xyxy": [136, 0, 183, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0040", "objects": [{"bbox_xyxy": [139, 0, 183, 142], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0041", "objects": [{"bbox_xyxy": [139, 0, 206, 144], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0042", "objects": [{"bbox_xyxy": [139, 0, 208, 144], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0043", "objects": [{"bbox_xyxy": [139, 0, 183, 141], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0044", "objects": [{"bbox_xyxy": [114, 0, 181, 139], "class_name": "person"}], "road_state": "centro"}
+{"frame_id": "seq06-0045", "objects": [{"bbox_xyxy": [100, 0, 139, 142], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0046", "objects": [{"bbox_xyxy": [44, 0, 108, 144], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0047", "objects": [{"bbox_xyxy": [0, 0, 38, 70], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0048", "objects": [{"bbox_xyxy": [0, 8, 14, 58], "class_name": "person"}], "road_state": "lateral_izquierda"}
+{"frame_id": "seq06-0049", "objects": [], "road_state": "libre"}
+{"frame_id": "seq06-0050", "objects": [], "road_state": "libre"}

@@ -1,0 +1,10 @@
+{
+  "sequences": {
+    "seq01": {"split": "evaluacion", "scenario": "C1", "description": "Jardin, via despejada"},
+    "seq02": {"split": "evaluacion", "scenario": "C2", "description": "Jardin, persona al centro que se va a la izquierda"},
+    "seq03": {"split": "evaluacion", "scenario": "C3", "description": "Jardin, persona solo a la izquierda"},
+    "seq04": {"split": "evaluacion", "scenario": "C4", "description": "Jardin, persona solo a la derecha"},
+    "seq05": {"split": "evaluacion", "scenario": "C5", "description": "Biblioteca, personas al centro y a la derecha"},
+    "seq06": {"split": "evaluacion", "scenario": "C7", "description": "Biblioteca, libre, persona al centro y libre"}
+  }
+}
