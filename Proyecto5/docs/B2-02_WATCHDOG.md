@@ -91,11 +91,13 @@ Desde Proyecto5.
 .venv/bin/python -m pytest tests/test_watchdog.py
 ```
 
-## Hallazgo para B1 y B2: la vigencia es muy corta para el hotspot
+## Pendiente para B1 y B2: la vigencia frente al ritmo de entrada
 
-**Con 500 ms, todos los comandos vencerían antes del siguiente cuadro.** En `p5-eval-v1`, los 122 huecos entre cuadros miden 500 ms o más: de 500 a 2843 ms. Con 1000 ms seguirían vencidos 18 huecos.
+**Al ritmo con que se grabó `p5-eval-v1`, cada comando vencería antes del siguiente cuadro.** Sus 122 huecos entre cuadros miden de 500 a 2843 ms. Con una vigencia de 1000 ms seguirían vencidos 18.
 
-Un bucle en tiempo real que llame a `tick` con esta configuración frenaría el carro entre un cuadro y otro. Para el carro real hay que capturar más rápido, reducir los huecos del WiFi o subir la vigencia. Este cambio no ajusta `politica.yaml`, porque cambia su hash y lo decide B1.
+**Esos huecos no son el ritmo real de la cámara.** El mínimo de 500 ms lo impuso `--interval-ms` al grabar, que vale 500 por defecto. Los huecos mayores sí pueden deberse a la red o a cuadros descartados, pero el ritmo real de `/stream` todavía no se ha medido.
+
+Un bucle en tiempo real que llame a `tick` frenaría el carro entre cuadros solo si la entrada llega tan despacio como en esa captura. Antes de cambiar `vigencia_comando_ms` hay que medir `/stream`. Este cambio no ajusta `politica.yaml`, porque cambia su hash y lo decide B1.
 
 Esto no afecta C1–C7, porque reproducen las secuencias sin `tick`.
 
