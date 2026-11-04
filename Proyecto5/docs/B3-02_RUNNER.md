@@ -1,0 +1,110 @@
+# B3-02 — Runner de casos C1–C10
+
+Ticket: #8. Entregable: E5.
+
+## Objetivo
+
+Reproducir con un comando los diez casos que pide la evaluación, guardar cada resultado y terminar con error si uno no se cumple.
+
+## Estado
+
+| Caso | Entrada | Estado actual |
+|---|---|---|
+| C1–C5 y C7 | Secuencias de `p5-eval-v1` con el detector real | Se ejecutan |
+| C6 | Detecciones sintéticas del caso de B1 | Se ejecuta |
+| C8 | Corte de cuadros y cuadro vencido | **Pendiente de #5** |
+| C9 y C10 | Fallo del detector, emergencia, rearme y cierre | **Pendiente de #6** |
+
+Los comandos todavía no pasan por el adaptador: el runner compara las decisiones de la política, hasta que #7 integre el recorrido. Por eso #8 sigue abierto.
+
+## Componentes
+
+- src/p5/casos/runner.py: el runner.
+- casos/c1_c10.yaml: entradas, expectativas y plazos de cada caso.
+- tests/test_casos_runner.py: pruebas del runner, incluido el fallo inducido.
+
+## Uso
+
+Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. La política vive en Proyecto3, así que hay que incluirla en `PYTHONPATH`. En Windows el separador es `;`, y en Linux es `:`.
+
+```bash
+PYTHONPATH="src;../Proyecto3/src" python -m p5.casos.runner \
+  --cases casos/c1_c10.yaml \
+  --config ../Proyecto3/config/politica.yaml \
+  --dataset data/p5-eval-v1 \
+  --weights models/yolox_tiny.onnx \
+  --output <carpeta-nueva>
+```
+
+Corre en CPU, sin red ni hardware: nunca llama a las rutas de motores.
+
+Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los diez. No sobrescribe una carpeta existente.
+
+## Resultados
+
+| Archivo | Contenido |
+|---|---|
+| `resultados.json` | La ejecución (commit, hashes del modelo, manifiesto y configuración, umbrales, entorno) y, por caso: entrada, estado inicial, expectativa, resultado, fallos y decisiones |
+| `decisiones.jsonl` | Una decisión por línea, con su caso, cuadro, detecciones, estado, razón y vigencia |
+
+## Cómo se decide un caso
+
+**Sin fuga de etiquetas:** la percepción solo recibe `sequence_id`, `frame_id`, `image`, `t_capture_ms` y las dimensiones. `annotations`, `road_state` y `allowed_actions` se usan después, para comparar.
+
+**Cada cuadro:** la acción debe estar en `allowed_actions` del manifiesto.
+
+**Reglas por caso:**
+
+| Regla | Qué exige | Para qué |
+|---|---|---|
+| `alguna` | Al menos una de esas acciones en el rango | Que detenerse siempre no apruebe C1, C3, C4 ni C7 |
+| `reaccion` | Una de esas acciones con la vía en `BLOCKED`, dentro del plazo | Que el STOP de arranque no cuente como reacción |
+| `direccion_min`, `direccion_max` | Límites de la dirección en toda la secuencia | Comprobar el signo en C3 y C4 |
+
+**Fallos de percepción:** si la percepción lanza una excepción, el cuadro pasa a `status: "error"` y la política detiene el carro. Nunca se toma como escena vacía.
+
+**Comprobación de las expectativas:** las pruebas corren C1–C5 y C7 con las etiquetas como si fueran un detector perfecto, y todos pasan. Si uno fallara ahí, el error estaría en la expectativa, no en el sistema.
+
+## Última corrida
+
+Con YOLOX-Tiny sobre `p5-eval-v1`: **5 pasan, 2 fallan y 3 pendientes.** Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
+
+| Caso | Cuadros | Observado | Por qué es un fallo |
+|---|---|---|---|
+| C5 | `seq05` 8, 9 y 10 | `EVADE_RIGHT` | Hay una persona a la derecha |
+| C7 | `seq06` 36 y 38 | `FORWARD` | Hay una persona al centro |
+| C7 | `seq06` 30 a 32 | Solo `SLOW`, sin `BLOCKED` | No confirma el bloqueo dentro del plazo de 2 cuadros |
+
+En C5 y C7 el detector pierde a la persona en cuadros alternos, y la política necesita 2 cuadros firmes seguidos para bloquear. Se debe ajustar con `p5-ajuste-v1`, no con estas secuencias.
+
+## Verificación
+
+```bash
+python -m pytest tests/test_casos_runner.py
+```
+
+Con `P5_DETECTOR_WEIGHTS` definida, también corre el detector real.
+
+## Fallo inducido
+
+Para comprobar que una expectativa incorrecta hace fallar al runner, en una copia de `casos/c1_c10.yaml` cambia la regla de C1:
+
+```yaml
+alguna:
+  - {cuadros: [3, 15], acciones: [EVADE_LEFT]}
+```
+
+C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba también.
+
+## Límites conocidos
+
+- Las secuencias reales se comparan solo con decisiones de la política, sin el adaptador, hasta #7.
+- Los plazos se miden en cuadros del recorrido, no en tiempo físico de frenado.
+- `seq01`, `seq03` y `seq04` no tienen un tramo que cambie de libre a ocupado, y C2 y C5 empiezan con la persona ya en su lugar.
+- Las expectativas se escribieron después de ver cómo se comporta el sistema en estas secuencias, durante la captura. Su base es la geometría de las etiquetas y las reglas de la política.
+
+## Pendiente
+
+- C8: #5.
+- C9 y C10: #6.
+- Pasar los comandos por el adaptador: #7.
