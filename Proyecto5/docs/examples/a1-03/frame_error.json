@@ -1,0 +1,10 @@
+{
+  "sequence_id": "seq02",
+  "frame_id": "seq02-0006",
+  "t_capture_ms": 2500,
+  "image_width": 640,
+  "image_height": 480,
+  "status": "error",
+  "detections": [],
+  "error": "read failed for secuencias/seq02/seq02-0006.jpg: [Errno 2] No such file or directory: 'secuencias/seq02/seq02-0006.jpg'"
+}

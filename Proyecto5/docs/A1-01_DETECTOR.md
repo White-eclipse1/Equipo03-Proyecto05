@@ -91,7 +91,7 @@ El JSON sale por stdout:
 
 `bbox_xyxy` está en píxeles de la imagen original, con origen arriba a la izquierda. Una escena sin objetos produce `detections: []`.
 
-Este formato es la salida de A1-01. El contrato A → B, con frame_id, tiempo y estado de percepción, corresponde a A1-03; los nombres class_name, confidence y bbox_xyxy ya coinciden con la propuesta de B1 en Proyecto3/src/p3/policy/contrato.py.
+Este formato es la salida de A1-01. El contrato A → B, con frame_id, tiempo y estado de percepción, está en [A1-03_CONTRATO.md](A1-03_CONTRATO.md).
 
 ## Clases
 
@@ -174,4 +174,3 @@ También se comparó la salida con una copia literal de la lógica oficial de YO
 ## Pendiente
 
 - A1-02: procedencia completa y descarga reproducible con verificación del hash.
-- A1-03: contrato A → B.

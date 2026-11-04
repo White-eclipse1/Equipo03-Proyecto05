@@ -4,10 +4,14 @@ on:
   push:
     paths:
       - "Proyecto5/**"
+      - "Proyecto3/src/p3/policy/**"
+      - "Proyecto3/config/politica.yaml"
       - ".github/workflows/p5-ci.yml"
   pull_request:
     paths:
       - "Proyecto5/**"
+      - "Proyecto3/src/p3/policy/**"
+      - "Proyecto3/config/politica.yaml"
       - ".github/workflows/p5-ci.yml"
 
 jobs:

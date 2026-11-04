@@ -1,0 +1,10 @@
+{
+  "sequence_id": "seq02",
+  "frame_id": "seq02-0005",
+  "t_capture_ms": 2000,
+  "image_width": 640,
+  "image_height": 480,
+  "status": "ok",
+  "detections": [],
+  "error": null
+}

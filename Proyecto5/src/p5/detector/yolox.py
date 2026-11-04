@@ -130,7 +130,7 @@ class YoloxDetector:
         return cls(session, score_threshold=score_threshold, nms_threshold=nms_threshold)
 
     def detect_file(self, path: str | Path) -> DetectionResult:
-        image = self._read_image(str(path))
+        image = self.read_image(str(path))
         detections = self.detect_image(image, source=str(path))
         return DetectionResult(
             image_path=str(path),
@@ -144,7 +144,11 @@ class YoloxDetector:
         if image.ndim != 3 or image.shape[2] != 3 or image.size == 0:
             raise _failure("preprocess", source, f"expected HxWx3 image, got {image.shape}")
 
-        tensor, ratio = preprocess(image, self._input_size)
+        try:
+            tensor, ratio = preprocess(image, self._input_size)
+        except cv2.error as error:
+            raise _failure("preprocess", source, error) from error
+
         try:
             outputs = self._session.run(None, {self._input_name: tensor[np.newaxis]})
         except Exception as error:
@@ -210,7 +214,7 @@ class YoloxDetector:
         return height, width
 
     @staticmethod
-    def _read_image(path: str) -> np.ndarray:
+    def read_image(path: str) -> np.ndarray:
         # `imread` no abre rutas con caracteres no ASCII en Windows.
         try:
             image = cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
