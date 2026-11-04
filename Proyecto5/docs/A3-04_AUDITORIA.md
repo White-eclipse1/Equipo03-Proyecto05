@@ -6,9 +6,11 @@ Revisión ejecutada con asistencia de IA; no se atribuye una firma humana al own
 **Resultado:** integridad y cifras publicadas reproducidas sin diferencias numéricas.
 Se revisaron visualmente 38 cuadros de las seis secuencias, con 33 cajas GT.
 Hay dos observaciones de seguimiento: entorno de métricas fuera de la versión
-de Python declarada y holgura de una caja. Los textos de issues están preparados;
-su publicación en GitHub sigue pendiente de conexión. No se da por completado
-ese requisito externo de #29 mientras no existan sus enlaces.
+de Python declarada y holgura de una caja. Los seguimientos están publicados en
+[#40](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40) y
+[#41](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/41).
+La auditoría deja evidencia reproducible y seguimiento de ambos hallazgos;
+su resolución corresponde a esos issues y no requiere modificar el paquete v1.
 
 ## Alcance y trazabilidad
 
@@ -155,7 +157,8 @@ y paquete no instalado). Ruff, formato y `git diff --check` correctos.
   en Python 3.12, preservando la anterior y sin ajustar umbrales.
 - [F02: criterio de caja en seq06-0028](issues/A3-04-F02_CAJA.md): segunda revisión;
   cualquier corrección aceptada requiere una versión posterior, nunca editar v1.
-- Publicación de ambos issues pendiente: GitHub no conectado en esta sesión.
+- Seguimientos publicados: [#40, entorno](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40)
+  y [#41, criterio de caja](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/41).
 - No se repitió inferencia ni benchmark; se auditaron las salidas versionadas.
   No se verificaron físicamente los pesos ausentes, solo sus hashes declarados.
 - La muestra visual cubre 38/128 cuadros, tiene selección dirigida y no es una

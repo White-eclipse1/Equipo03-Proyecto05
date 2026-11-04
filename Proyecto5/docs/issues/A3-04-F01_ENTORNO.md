@@ -31,4 +31,4 @@ Get-Content pyproject.toml
   histórica, documentando diferencias si aparecen. No sobrescribirla.
 - Registrar commit, versiones y hashes de la nueva ejecución y enlazarla a #29.
 
-Estado de este archivo: texto preparado; todavía no publicado como issue.
+Publicado como [issue #40](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40).

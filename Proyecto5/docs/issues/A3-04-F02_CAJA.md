@@ -34,4 +34,4 @@ Esta observación no autoriza cambiar la caja para convertir el par en TP.
 - Si corresponde corregir, hacerlo en una versión posterior del dataset,
   conservando intactos p5-eval-v1 y sus resultados; no ajustar el umbral.
 
-Estado de este archivo: texto preparado; todavía no publicado como issue.
+Publicado como [issue #41](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/41).
