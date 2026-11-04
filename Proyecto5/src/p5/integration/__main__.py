@@ -10,7 +10,12 @@ from p3.policy.politica import PoliticaDecision
 from p5.control.adapter import VirtualControlAdapter
 from p5.detector.weights import DEFAULT_WEIGHTS_PATH
 from p5.detector.yolox import DetectorError, YoloxDetector
-from p5.integration.pipeline import FrameInput, Pipeline, frames_from_manifest
+from p5.integration.pipeline import (
+    STOP_NOT_EMITTED_REASON,
+    FrameInput,
+    Pipeline,
+    frames_from_manifest,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -47,30 +52,36 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     failed = 0
-    try:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        # "x": nunca reemplaza evidencia anterior. Fin de linea fijo: mismo archivo en cada SO.
-        with args.output.open("x", encoding="utf-8", newline="\n") as output:
-            for frame in frames:
-                trace = pipeline.process(frame)
-                failed += bool(trace.errors)
-                try:
-                    # Linea a linea: si el proceso se interrumpe, la evidencia ya esta escrita.
-                    output.write(trace.to_json() + "\n")
-                    output.flush()
-                except OSError:
-                    pipeline.halt(frame)
-                    raise
-    except OSError as failure:
-        logger.error("integration_error stage=output detail=%s", failure)
-        return 1
+    shutdown_command = None
 
-    # Cierre controlado: aun si el último cuadro dejó movimiento activo,
-    # la aplicación termina siempre con un STOP explícito.
-    pipeline.shutdown()
+    try:
+        try:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            # "x": nunca reemplaza evidencia anterior. Fin de linea fijo: mismo archivo en cada SO.
+            with args.output.open("x", encoding="utf-8", newline="\n") as output:
+                for frame in frames:
+                    trace = pipeline.process(frame)
+                    failed += bool(trace.errors)
+                    try:
+                        # Linea a linea: si el proceso se interrumpe, la evidencia ya esta escrita.
+                        output.write(trace.to_json() + "\n")
+                        output.flush()
+                    except OSError:
+                        pipeline.halt(frame)
+                        raise
+        except OSError as failure:
+            logger.error("integration_error stage=output detail=%s", failure)
+            return 1
+    finally:
+        # Siempre intenta un STOP final, incluso ante excepciones o interrupciones.
+        shutdown_command = pipeline.shutdown()
 
     print(f"frames={len(frames)} errors={failed} output={args.output}")
-    return 1 if failed else 0
+
+    shutdown_failed = (
+        shutdown_command is not None and shutdown_command["reason_code"] == STOP_NOT_EMITTED_REASON
+    )
+    return 1 if failed or shutdown_failed else 0
 
 
 if __name__ == "__main__":

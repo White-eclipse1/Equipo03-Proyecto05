@@ -483,8 +483,16 @@ def test_cli_stops_motion_if_the_trace_cannot_be_written(tmp_path, monkeypatch, 
 
     assert code == 1
     assert "integration_error stage=output" in caplog.text
+
+    # El fallo de escritura primero detiene el recorrido con failsafe.
+    assert any(
+        command.direction == "stop" and command.reason_code == FAILSAFE_REASON
+        for command in adapters[0].history
+    )
+
+    # Y el finally siempre deja el STOP de cierre como ?ltimo comando.
     assert adapters[0].last_command.direction == "stop"
-    assert adapters[0].last_command.reason_code == FAILSAFE_REASON
+    assert adapters[0].last_command.reason_code == "APPLICATION_SHUTDOWN"
 
 
 def test_physical_output_stays_disabled(tmp_path):
@@ -1126,3 +1134,78 @@ def test_shutdown_adapter_failure_cancels_motion_and_does_not_escape(tmp_path):
     assert shutdown["reason_code"] == STOP_NOT_EMITTED_REASON
     assert pipeline.halted is True
     assert adapter.last_command is None
+
+
+@pytest.mark.parametrize("failure_type", [RuntimeError, KeyboardInterrupt])
+def test_cli_shutdown_runs_on_unexpected_failure_or_interrupt(tmp_path, monkeypatch, failure_type):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(4)]
+    adapters = []
+
+    class RecordedAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+    real_process = Pipeline.process
+    calls = {"count": 0}
+
+    def interrupted_process(self, frame):
+        # Los primeros 3 cuadros confirman la vía y dejan FORWARD activo.
+        if calls["count"] == 3:
+            raise failure_type("interrupción inesperada")
+        calls["count"] += 1
+        return real_process(self, frame)
+
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", RecordedAdapter)
+    monkeypatch.setattr(Pipeline, "process", interrupted_process)
+    fake_weights(monkeypatch, FakeSession())
+
+    output = tmp_path / "traza.jsonl"
+
+    with pytest.raises(failure_type):
+        cli.main(cli_arguments(tmp_path, output))
+
+    assert adapters
+    assert any(command.direction == "forward" for command in adapters[0].history)
+
+    # Aunque la excepción/interrupción se propague, el finally debe cerrar con STOP.
+    final = adapters[0].last_command
+    assert final.direction == "stop"
+    assert final.speed == 0.0
+    assert final.reason_code == "APPLICATION_SHUTDOWN"
+
+
+def test_cli_returns_error_when_final_shutdown_stop_is_not_emitted(tmp_path, monkeypatch):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(3)]
+    adapters = []
+
+    class ShutdownFailingAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+        def apply(self, decision):
+            # El recorrido funciona normalmente; solo falla el STOP final.
+            if decision.frame_id == "shutdown":
+                raise RuntimeError("shutdown adapter failure")
+            return super().apply(decision)
+
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", ShutdownFailingAdapter)
+    fake_weights(monkeypatch, FakeSession())
+
+    output = tmp_path / "traza.jsonl"
+
+    code = cli.main(cli_arguments(tmp_path, output))
+
+    assert adapters
+    assert any(command.direction == "forward" for command in adapters[0].history)
+
+    # El STOP final no pudo llegar al adaptador.
+    assert adapters[0].last_command is None
+
+    # El CLI no puede reportar éxito.
+    assert code == 1
