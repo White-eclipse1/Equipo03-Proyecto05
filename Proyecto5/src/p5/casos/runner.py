@@ -1,8 +1,9 @@
 """Runner de los casos C1-C10 sobre un paquete congelado (B3-02; E5).
 
-La percepcion solo recibe la imagen y sus identificadores. Las etiquetas y las acciones
-admisibles se usan despues, para comparar lo que decidio el sistema. Sale con codigo 1 si un
-caso falla o sigue pendiente. Ver `docs/B3-02_RUNNER.md`.
+Los casos reales pasan por el mismo recorrido de la aplicacion: detector, politica y adaptador
+virtual. El recorrido solo recibe la imagen y sus identificadores. Las etiquetas y las acciones
+admisibles se usan despues, para comparar lo que hizo el sistema. Sale con codigo 1 si un caso
+falla o sigue pendiente. Ver `docs/B3-02_RUNNER.md`.
 """
 
 import argparse
@@ -11,7 +12,6 @@ import json
 import platform
 import subprocess
 import sys
-from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -22,20 +22,31 @@ from p3.policy.casos import ejecutar_casos
 from p3.policy.config import ConfigPolitica, cargar_config
 from p3.policy.politica import PoliticaDecision
 
+from p5.control.adapter import VirtualControlAdapter
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
-from p5.detector.frame import detect_frame
-from p5.detector.yolox import DEFAULT_NMS_THRESHOLD, DEFAULT_SCORE_THRESHOLD, YoloxDetector
+from p5.detector.yolox import (
+    DEFAULT_NMS_THRESHOLD,
+    DEFAULT_SCORE_THRESHOLD,
+    DetectorError,
+    YoloxDetector,
+)
+from p5.integration.pipeline import FrameInput, FrameTrace, Pipeline
 
 REQUIRED_CASES = tuple(f"C{number}" for number in range(1, 11))
 PASSED = "PASA"
 FAILED = "FALLA"
 PENDING = "PENDIENTE"
 
-# Lo unico del manifiesto que llega a la percepcion. Nunca las etiquetas ni las expectativas.
-INPUT_FIELDS = ("sequence_id", "frame_id", "image", "t_capture_ms", "image_width", "image_height")
+# Se escribe aparte de la conversion del recorrido para comprobarla, no para repetirla.
+_COMMAND_DIRECTIONS = {
+    "STOP": "stop",
+    "FORWARD": "forward",
+    "SLOW": "forward",
+    "EVADE_LEFT": "left",
+    "EVADE_RIGHT": "right",
+}
 
 Config = tuple[ConfigPolitica, str]
-Perceive = Callable[[dict[str, Any]], dict[str, Any]]
 
 
 def load_cases(path: Path) -> dict[str, Any]:
@@ -50,39 +61,46 @@ def load_cases(path: Path) -> dict[str, Any]:
     return data
 
 
-def detector_perceive(weights: Path, dataset: Path) -> Perceive:
-    """Percepcion real: corre el detector sobre la imagen de cada cuadro."""
-    detector = YoloxDetector.from_weights(weights)
-
-    def perceive(row: dict[str, Any]) -> dict[str, Any]:
-        return detect_frame(
-            detector,
-            dataset / row["image"],
-            sequence_id=row["sequence_id"],
-            frame_id=row["frame_id"],
-            t_capture_ms=row["t_capture_ms"],
-            image_size=(row["image_width"], row["image_height"]),
-        ).to_dict()
-
-    return perceive
+def load_detector(weights: Path) -> YoloxDetector:
+    return YoloxDetector.from_weights(weights)
 
 
-def _perceive_safely(perceive: Perceive, row: dict[str, Any]) -> dict[str, Any]:
-    visible = {field: row[field] for field in INPUT_FIELDS}
-    try:
-        return perceive(visible)
-    except Exception as failure:
-        # Un fallo inesperado de la percepcion nunca se presenta como una escena vacia.
-        return {
-            "sequence_id": row["sequence_id"],
-            "frame_id": row["frame_id"],
-            "t_capture_ms": row["t_capture_ms"],
-            "image_width": row["image_width"],
-            "image_height": row["image_height"],
-            "status": "error",
-            "detections": [],
-            "error": f"{type(failure).__name__}: {failure}",
-        }
+def _frame_input(row: dict[str, Any], dataset: Path) -> FrameInput:
+    """Lo unico del manifiesto que llega al recorrido. Nunca las etiquetas ni las expectativas."""
+    return FrameInput(
+        sequence_id=row["sequence_id"],
+        frame_id=row["frame_id"],
+        t_capture_ms=row["t_capture_ms"],
+        image_size=(row["image_width"], row["image_height"]),
+        image_path=dataset / row["image"],
+    )
+
+
+def _frame_record(trace: FrameTrace) -> dict[str, Any]:
+    """Decision, percepcion y comando de un cuadro. Sin decision, cuenta el STOP que se emitio."""
+    decision = trace.decision or {
+        "accion": "STOP",
+        "estado": "FAULT",
+        "velocidad": 0.0,
+        "direccion": 0.0,
+        "reason_code": trace.command["reason_code"],
+    }
+    return {
+        **decision,
+        "frame_id": trace.frame_id,
+        "cuadro": trace.perception,
+        "comando": trace.command,
+        "errores": list(trace.errors),
+    }
+
+
+def _command_matches(record: dict[str, Any]) -> bool:
+    command = record["comando"]
+    return (
+        command["direction"] == _COMMAND_DIRECTIONS[record["accion"]]
+        and command["speed"] == record["velocidad"]
+        and command["steering"] == record["direccion"]
+    )
 
 
 def _rule_failures(case: dict[str, Any], decisions: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -138,9 +156,13 @@ def _base_result(case: dict[str, Any]) -> dict[str, Any]:
 
 
 def run_real_case(
-    case: dict[str, Any], rows: list[dict[str, Any]], config: Config, perceive: Perceive
+    case: dict[str, Any],
+    rows: list[dict[str, Any]],
+    config: Config,
+    detector: YoloxDetector,
+    dataset: Path,
 ) -> dict[str, Any]:
-    """Corre una secuencia por la percepcion y la politica, y compara cuadro por cuadro."""
+    """Corre una secuencia por el recorrido completo y compara cuadro por cuadro."""
     settings, config_sha256 = config
     sequence = [row for row in rows if row["sequence_id"] == case["secuencia"]]
     result = {
@@ -155,22 +177,44 @@ def run_real_case(
         missing = {"regla": "entrada", "motivo": f"no existe la secuencia {case['secuencia']}"}
         return {**result, "resultado": FAILED, "fallos": [missing], "decisiones": []}
 
-    policy = PoliticaDecision(settings, config_sha256=config_sha256)
+    pipeline = Pipeline(
+        detector,
+        PoliticaDecision(settings, config_sha256=config_sha256),
+        VirtualControlAdapter(),
+    )
     decisions = []
     failures = []
     for number, row in enumerate(sequence, start=1):
-        frame = _perceive_safely(perceive, row)
-        decision = policy.decidir_crudo(frame).model_dump(mode="json")
-        decisions.append({**decision, "cuadro": frame})
-        if decision["accion"] not in row["allowed_actions"]:
+        where = {"cuadro": number, "frame_id": row["frame_id"]}
+        try:
+            trace = pipeline.process(_frame_input(row, dataset))
+        except Exception as failure:
+            # El recorrido se quedo sin un STOP confirmado: la secuencia ya no es confiable.
+            failures.append({"regla": "recorrido", **where, "motivo": repr(failure)})
+            break
+        record = _frame_record(trace)
+        decisions.append(record)
+        if record["accion"] not in row["allowed_actions"]:
             failures.append(
                 {
                     "regla": "acciones",
-                    "cuadro": number,
-                    "frame_id": row["frame_id"],
-                    "observada": decision["accion"],
+                    **where,
+                    "observada": record["accion"],
                     "permitidas": row["allowed_actions"],
-                    "reason_code": decision["reason_code"],
+                    "reason_code": record["reason_code"],
+                }
+            )
+        if record["errores"]:
+            failures.append({"regla": "errores", **where, "errores": record["errores"]})
+        if not _command_matches(record):
+            failures.append(
+                {
+                    "regla": "comando",
+                    **where,
+                    "accion": record["accion"],
+                    "velocidad": record["velocidad"],
+                    "direccion": record["direccion"],
+                    "comando": record["comando"],
                 }
             )
     failures.extend(_rule_failures(case, decisions))
@@ -214,12 +258,16 @@ def _pending_case(case: dict[str, Any]) -> dict[str, Any]:
 
 
 def run_cases(
-    data: dict[str, Any], rows: list[dict[str, Any]], config: Config, perceive: Perceive
+    data: dict[str, Any],
+    rows: list[dict[str, Any]],
+    config: Config,
+    detector: YoloxDetector,
+    dataset: Path,
 ) -> dict[str, Any]:
     results = []
     for case in data["casos"]:
         if case["tipo"] == "real":
-            results.append(run_real_case(case, rows, config, perceive))
+            results.append(run_real_case(case, rows, config, detector, dataset))
         elif case["tipo"] == "sintetico":
             results.append(_run_synthetic_case(case, config))
         else:
@@ -281,9 +329,9 @@ def main(argv: list[str] | None = None) -> int:
         data = load_cases(args.cases)
         rows = load_manifest(args.dataset / MANIFEST_FILE)
         config = cargar_config(args.config)
-        perceive = detector_perceive(args.weights, args.dataset)
-        report = run_cases(data, rows, config, perceive)
-    except (OSError, ValueError, KeyError) as error:
+        detector = load_detector(args.weights)
+        report = run_cases(data, rows, config, detector, args.dataset)
+    except (DetectorError, OSError, ValueError, KeyError) as error:
         print(f"no se pudieron correr los casos: {error}", file=sys.stderr)
         return 1
 
@@ -292,7 +340,8 @@ def main(argv: list[str] | None = None) -> int:
         "fecha": datetime.now(UTC).isoformat(timespec="seconds"),
         "commit": _current_commit(),
         "modo": "virtual",
-        "salida": "decisiones de la politica; el adaptador se integra en #7",
+        "salida": "comandos del adaptador virtual; C6 solo evalua decisiones de la politica",
+        "salida_fisica": VirtualControlAdapter.physical_output_enabled,
         "casos": str(args.cases),
         "dataset": str(args.dataset),
         "modelo_sha256": _sha256(args.weights),
