@@ -26,7 +26,7 @@ Integrar un detector real que procese imágenes completas y produzca bounding bo
 | Entrada | 1x3x416x416, float32 |
 | Salida | 1x3549x85 |
 
-La ficha completa de procedencia corresponde a A1-02.
+La ficha completa de procedencia está en [A1-02_PROCEDENCIA.md](A1-02_PROCEDENCIA.md).
 
 ## Preparación
 
@@ -41,9 +41,7 @@ cd Proyecto5
 py -3.12 -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.lock.txt
 .venv\Scripts\python -m pip install --no-deps -e .
-New-Item -ItemType Directory -Force models | Out-Null
-curl.exe -fsSL -o models\yolox_tiny.onnx https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
-if ((Get-FileHash models\yolox_tiny.onnx -Algorithm SHA256).Hash -ne "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7") { throw "SHA-256 no coincide" }
+.venv\Scripts\python -m p5.detector.weights
 ```
 
 ### Linux
@@ -53,9 +51,7 @@ cd Proyecto5
 python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements.lock.txt
 .venv/bin/python -m pip install --no-deps -e .
-mkdir -p models
-curl -fsSL -o models/yolox_tiny.onnx https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx
-echo "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7  models/yolox_tiny.onnx" | sha256sum -c -
+.venv/bin/python -m p5.detector.weights
 ```
 
 ## Uso
@@ -170,7 +166,3 @@ También se comparó la salida con una copia literal de la lógica oficial de YO
 - YOLOX-Tiny puede confundir clases: en dog.jpg el perro sale como cat. Ambas son obstáculo para la política, pero contarían como error en las métricas por clase de A3.
 - Con confianzas bajas aparecen falsos positivos, como refrigerator y tie en la imagen de la botella.
 - Estas imágenes solo comprueban que el detector funciona de punta a punta. La calidad real se medirá con el dataset de A2 y las métricas de A3.
-
-## Pendiente
-
-- A1-02: procedencia completa y descarga reproducible con verificación del hash.
