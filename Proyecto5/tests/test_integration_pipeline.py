@@ -129,6 +129,23 @@ def test_evasion_keeps_the_steering_requested_by_the_policy(tmp_path):
     assert last.command["speed"] == 0.2
 
 
+def test_pipeline_logs_state_transitions_matching_the_persisted_trace(tmp_path, caplog):
+    session = ScriptedSession([CLEAR] * 3 + [CENTER] * 2 + [CLEAR] * 3)
+    with caplog.at_level(logging.INFO, logger="p5.policy.events"):
+        traces = run(make_pipeline(session), image_file(tmp_path), 8)
+
+    changes = [t.decision for t in traces if t.decision["cambio_estado"]]
+    events = [r.policy_transition for r in caplog.records if hasattr(r, "policy_transition")]
+    assert [e["frame_id"] for e in events] == [d["frame_id"] for d in changes]
+    assert [(e["estado_anterior"], e["estado"]) for e in events] == [
+        ("UNKNOWN", "CLEAR"),
+        ("CLEAR", "CAUTION"),
+        ("CAUTION", "BLOCKED"),
+        ("BLOCKED", "CLEAR"),
+    ]
+    assert all(e["reason_code"] and e["razon"] for e in events)
+
+
 def test_every_trace_serializes_to_strict_json(tmp_path):
     trace = make_pipeline(FakeSession(CENTER)).process(frame_input(image_file(tmp_path)))
 

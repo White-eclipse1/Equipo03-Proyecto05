@@ -19,6 +19,7 @@ from p5.control.models import Action, ControlDecision
 from p5.dataset.paquete import load_manifest
 from p5.detector.frame import detect_frame
 from p5.detector.yolox import YoloxDetector
+from p5.policy.events import log_decision
 
 logger = logging.getLogger(__name__)
 
@@ -261,6 +262,7 @@ class Pipeline:
     ) -> Decision | None:
         try:
             decision = self._policy.decidir_crudo(perception)
+            log_decision(decision)
         except Exception as failure:
             _record(errors, "policy", frame, str(failure) or type(failure).__name__)
             self._restart_confirmation(frame)
