@@ -113,7 +113,7 @@ Fuera del conteo quedaron 80 detecciones de las clases evaluadas bajo el umbral 
 - **Elección del umbral:** 0.50 se tomó de la política antes de calcular este F1. Pero antes de congelar el dataset ya se habían visto detecciones de estas secuencias, y se usaron para decidir dónde colocar a las personas. Por eso **estas métricas no representan cualquier escena**. Ver "Tomas repetidas" en A2_DATASET.md.
 - **Una sola clase real:** no mide `car`, `dog` ni las demás.
 - **Muestra pequeña y correlacionada:** son 91 objetos en cuadros consecutivos, no 91 escenas independientes.
-- **Etiquetas de una sola persona:** todavía sin la auditoría independiente de #29. Cajas ajustadas de otra forma podrían cambiar algunos pares cerca de IoU 0.50.
+- **Etiquetas de una sola persona:** la [auditoría independiente de #29](A3-04_AUDITORIA.md) revisó visualmente 38 cuadros y reprodujo las cifras publicadas. Conserva observaciones de seguimiento y no certifica todos los bordes de las cajas; cajas ajustadas de otra forma podrían cambiar algunos pares cerca de IoU 0.50.
 - **Entorno:** medido en Windows con Python 3.13. El proyecto declara 3.12, y entre plataformas los valores podrían variar en los últimos decimales.
 
 ## Verificación
