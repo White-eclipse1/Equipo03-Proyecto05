@@ -322,7 +322,7 @@ def test_an_adapter_rejection_is_a_failure_with_its_stop(rows, config, monkeypat
     assert {decision["comando"]["direction"] for decision in result["decisiones"]} == {"stop"}
 
 
-def test_a_path_that_cannot_stop_ends_the_sequence_as_a_failure(rows, config, monkeypatch):
+def test_a_stop_that_was_not_emitted_is_a_failure(rows, config, monkeypatch):
     class BrokenAdapter(VirtualControlAdapter):
         def apply(self, decision):
             raise RuntimeError("adaptador caido")
@@ -334,8 +334,24 @@ def test_a_path_that_cannot_stop_ends_the_sequence_as_a_failure(rows, config, mo
     result = run_real_case(case, seq, config, perfect_detector(rows), DATASET)
 
     assert result["resultado"] == "FALLA"
+    assert result["decisiones"][0]["comando"]["reason_code"] == "STOP_NO_EMITIDO"
+    stages = {e["stage"] for fallo in result["fallos"] for e in fallo.get("errores", [])}
+    assert "failsafe" in stages
+
+
+def test_an_unexpected_path_exception_ends_the_sequence_as_a_failure(rows, config, monkeypatch):
+    def broken_process(self, frame):
+        raise RuntimeError("recorrido roto")
+
+    monkeypatch.setattr(runner.Pipeline, "process", broken_process)
+    seq = [row for row in rows if row["sequence_id"] == "seq01"]
+    case = case_by_id(load_cases(CASES), "C1")
+
+    result = run_real_case(case, seq, config, perfect_detector(rows), DATASET)
+
+    assert result["resultado"] == "FALLA"
     assert result["fallos"][0]["regla"] == "recorrido"
-    assert "adaptador caido" in result["fallos"][0]["motivo"]
+    assert "recorrido roto" in result["fallos"][0]["motivo"]
     assert result["decisiones"] == []
 
 

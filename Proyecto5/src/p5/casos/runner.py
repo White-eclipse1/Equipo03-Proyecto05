@@ -189,7 +189,7 @@ def run_real_case(
         try:
             trace = pipeline.process(_frame_input(row, dataset))
         except Exception as failure:
-            # El recorrido se quedo sin un STOP confirmado: la secuencia ya no es confiable.
+            # `process` no deberia lanzar nada: si lo hace, la secuencia ya no es confiable.
             failures.append({"regla": "recorrido", **where, "motivo": repr(failure)})
             break
         record = _frame_record(trace)

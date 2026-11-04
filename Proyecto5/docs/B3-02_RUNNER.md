@@ -68,7 +68,9 @@ Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los
 - La acción de la política no está en `allowed_actions` del manifiesto.
 - El recorrido registró un error.
 - El comando del adaptador no coincide con la decisión: dirección, velocidad y giro. El runner hace esta comparación por su cuenta, para comprobar la conversión de B3-01 en lugar de repetirla.
-- El recorrido lanza una excepción. Eso significa que no pudo confirmar ni un STOP, y la secuencia se detiene ahí.
+- El recorrido lanza una excepción inesperada. La secuencia se detiene ahí, porque ya no se puede confiar en su estado.
+
+Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `stage=failsafe`, y el cuadro falla por el error registrado, aunque la traza muestre `direction: stop`.
 
 **Reglas por caso:**
 
