@@ -63,3 +63,17 @@ correctos. Dataset, evidencia histórica, evaluador y lock sin modificaciones.
 Este resultado resuelve la discrepancia de entorno; conserva las limitaciones
 de clase única, cuadros correlacionados y observaciones de cajas de #41.
 Los enlaces documentan el seguimiento; no se publicó ni cerró ningún issue.
+
+## Ajuste solicitado en la revisión de PR #44
+
+La igualdad de las métricas sin metadatos y la igualdad byte a byte de CSV,
+predicciones y resultados por cuadro son condiciones obligatorias de
+`correcto`. Cualquier diferencia produce `correcto=false` y código de salida 1,
+aunque el recálculo numérico independiente pase. La igualdad del JSON completo
+se informa por separado: sus metadatos de ejecución deben poder cambiar.
+
+`tests/test_verificar_a3_04_f01.py` comprueba el caso idéntico y diferencias
+deliberadas en cada uno de los cuatro archivos, manteniendo válida la auditoría
+numérica. `pruebas-verificador.xml` registra esta comprobación junto con las
+pruebas del auditor. Se regeneró `comparacion.json` con el hash actualizado del
+verificador, sin repetir inferencia ni modificar sus cuatro artefactos.

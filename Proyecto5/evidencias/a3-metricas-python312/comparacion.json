@@ -56,7 +56,11 @@
     "historico_intacto:metricas.csv": true,
     "historico_intacto:predicciones.jsonl": true,
     "historico_intacto:resultados_por_cuadro.jsonl": true,
-    "fuente_y_dataset_sin_cambios_desde_commit": true
+    "fuente_y_dataset_sin_cambios_desde_commit": true,
+    "metricas_identicas_sin_metadatos": true,
+    "archivo_identico:metricas.csv": true,
+    "archivo_identico:predicciones.jsonl": true,
+    "archivo_identico:resultados_por_cuadro.jsonl": true
   },
   "dependencias": {
     "annotated-types": {
@@ -164,7 +168,7 @@
     "pyproject.toml": "f4e78f412ed07657ad9adb4ab8be8bb6129814ac801c5ad5d19deef11a6cc3cf",
     "requirements.lock.txt": "40e52192b67c7344f30edfc841af6008fcb8adc40f8c27ea4ed6541e9b89e95d"
   },
-  "verificador_sha256": "cc8f2aae11d60f2bbcbb25dd7a08525af71bd1e170a2ba1a49183be75af02ef8",
+  "verificador_sha256": "c9d3f0c2505cb0464334bb2e3ba4746ebcaf5994812d294ecebf709d9675eb16",
   "metricas_identicas_sin_metadatos": true,
   "archivos_identicos": {
     "metricas.json": false,

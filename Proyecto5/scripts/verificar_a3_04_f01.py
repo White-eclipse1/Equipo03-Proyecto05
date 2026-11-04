@@ -83,6 +83,10 @@ def main():
     same_metrics = {k: v for k, v in old.items() if k != "ejecucion"} == {
         k: v for k, v in new.items() if k != "ejecucion"
     }
+    same_files = {name: digest(historical / name) == digest(args.evidence / name) for name in FILES}
+    checks["metricas_identicas_sin_metadatos"] = same_metrics
+    for name in FILES[1:]:
+        checks[f"archivo_identico:{name}"] = same_files[name]
     report = {
         "seguimiento": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/40",
         "auditoria": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/29",
@@ -102,9 +106,7 @@ def main():
         },
         "verificador_sha256": digest(Path(__file__)),
         "metricas_identicas_sin_metadatos": same_metrics,
-        "archivos_identicos": {
-            name: digest(historical / name) == digest(args.evidence / name) for name in FILES
-        },
+        "archivos_identicos": same_files,
         "auditoria_independiente_128_cuadros": independent,
         "fallos_auditoria": failures,
         "correcto": all(checks.values()) and not failures,
