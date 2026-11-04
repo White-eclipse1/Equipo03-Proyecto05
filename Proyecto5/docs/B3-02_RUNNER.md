@@ -15,7 +15,7 @@ Reproducir con un comando los diez casos que pide la evaluación, guardar cada r
 | C8 | Corte de cuadros y cuadro vencido | **Pendiente de #5** |
 | C9 y C10 | Fallo del detector, emergencia, rearme y cierre | **Pendiente de #6** |
 
-Los comandos todavía no pasan por el adaptador: el runner compara las decisiones de la política, hasta que #7 integre el recorrido. Por eso #8 sigue abierto.
+Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política. #8 sigue abierto hasta ejecutar C8–C10.
 
 ## Componentes
 
@@ -25,12 +25,11 @@ Los comandos todavía no pasan por el adaptador: el runner compara las decisione
 
 ## Uso
 
-Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. La política vive en Proyecto3, así que hay que incluirla en `PYTHONPATH`.
+Desde Proyecto5, después de la preparación de A1-01_DETECTOR.md. `pip install --no-deps -e .` deja importable la política de Proyecto3.
 
 ### PowerShell
 
 ```powershell
-$env:PYTHONPATH = "src;../Proyecto3/src"
 .venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config ../Proyecto3/config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output <carpeta-nueva>
 ```
 
@@ -39,7 +38,6 @@ Para ver el código de salida, corre `$LASTEXITCODE` justo después.
 ### Linux
 
 ```bash
-export PYTHONPATH="src:../Proyecto3/src"
 .venv/bin/python -m p5.casos.runner \
   --cases casos/c1_c10.yaml \
   --config ../Proyecto3/config/politica.yaml \
@@ -59,13 +57,20 @@ Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los
 | Archivo | Contenido |
 |---|---|
 | `resultados.json` | La ejecución (commit, hashes del modelo, manifiesto y configuración, umbrales, entorno) y, por caso: entrada, estado inicial, expectativa, resultado, fallos y decisiones |
-| `decisiones.jsonl` | Una decisión por línea, con su caso, cuadro, detecciones, estado, razón y vigencia |
+| `decisiones.jsonl` | Una línea por cuadro, con su caso, detecciones, estado, razón, vigencia, comando del adaptador y errores |
 
 ## Cómo se decide un caso
 
-**Sin fuga de etiquetas:** la percepción solo recibe `sequence_id`, `frame_id`, `image`, `t_capture_ms` y las dimensiones. `annotations`, `road_state` y `allowed_actions` se usan después, para comparar.
+**Sin fuga de etiquetas:** el recorrido solo recibe `FrameInput`: `sequence_id`, `frame_id`, `t_capture_ms`, las dimensiones y la ruta de la imagen. `annotations`, `road_state` y `allowed_actions` se usan después, para comparar.
 
-**Cada cuadro:** la acción debe estar en `allowed_actions` del manifiesto.
+**Cada cuadro falla si:**
+
+- La acción de la política no está en `allowed_actions` del manifiesto.
+- El recorrido registró un error.
+- El comando del adaptador no coincide con la decisión: dirección, velocidad y giro. El runner hace esta comparación por su cuenta, para comprobar la conversión de B3-01 en lugar de repetirla.
+- El recorrido lanza una excepción inesperada. La secuencia se detiene ahí, porque ya no se puede confiar en su estado.
+
+Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `stage=failsafe`, y el cuadro falla por el error registrado, aunque la traza muestre `direction: stop`.
 
 **Reglas por caso:**
 
@@ -75,7 +80,7 @@ Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los
 | `reaccion` | Una de esas acciones con la vía en `BLOCKED`, dentro del plazo. `plazo_cuadros` incluye el cuadro `desde`: plazo 2 desde el cuadro 30 son los cuadros 30 y 31 | Que el STOP de arranque no cuente como reacción |
 | `direccion_min`, `direccion_max` | Límites de la dirección en toda la secuencia | Comprobar el signo en C3 y C4 |
 
-**Fallos de percepción:** si la percepción lanza una excepción, el cuadro pasa a `status: "error"` y la política detiene el carro. Nunca se toma como escena vacía.
+**Fallos de percepción:** si el detector falla, el recorrido marca el cuadro con `status: "error"` y emite STOP. Nunca se toma como escena vacía.
 
 **Comprobación de las expectativas:** las pruebas corren C1–C5 y C7 con las etiquetas como si fueran un detector perfecto, y todos pasan. Si uno fallara ahí, el error estaría en la expectativa, no en el sistema.
 
@@ -122,7 +127,7 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 ## Límites conocidos
 
-- Las secuencias reales se comparan solo con decisiones de la política, sin el adaptador, hasta #7.
+- El adaptador todavía no aplica la vigencia del comando: es de #5. Los comandos se comparan con la decisión, sin simular su vencimiento.
 - Los plazos se miden en cuadros del recorrido, no en tiempo físico de frenado.
 - `seq01`, `seq03` y `seq04` no tienen un tramo que cambie de libre a ocupado, y C2 y C5 empiezan con la persona ya en su lugar.
 - Las expectativas se escribieron después de ver cómo se comporta el sistema en estas secuencias, durante la captura. Su base es la geometría de las etiquetas y las reglas de la política.
@@ -131,4 +136,3 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 - C8: #5.
 - C9 y C10: #6.
-- Pasar los comandos por el adaptador: #7.
