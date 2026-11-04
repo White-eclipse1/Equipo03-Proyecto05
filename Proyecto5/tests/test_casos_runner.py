@@ -113,19 +113,20 @@ def test_expectations_are_consistent_with_a_perfect_detector(rows, config):
     assert result_by_id(report, "C6")["resultado"] == "PASA"
 
 
-def test_pending_cases_declare_their_contract_and_do_not_pass(rows, config):
+def test_c9_and_c10_are_executable_and_complete(rows, config):
     report = run_cases(load_cases(CASES), rows, config, perfect_detector(rows), DATASET)
 
     for case_id in ("C9", "C10"):
         case = result_by_id(report, case_id)
-        assert case["resultado"] == "PENDIENTE"
+        assert case["resultado"] == "PASA"
         assert case["entrada"]
         assert case["esperado"]
         assert case["plazo_ms"] > 0
-        assert case["bloqueado_por"]
-    assert report["pasan"] == 8
-    assert report["pendientes"] == 2
-    assert report["correcto"] is False
+
+    assert report["pasan"] == 10
+    assert report["fallan"] == 0
+    assert report["pendientes"] == 0
+    assert report["correcto"] is True
 
 
 def test_a_deliberately_wrong_expectation_fails_the_case(rows, config):
@@ -408,14 +409,17 @@ def run_main_with_fake_detector(monkeypatch, tmp_path, rows, cases=CASES, output
     return code, target
 
 
-def test_cli_exits_non_zero_while_cases_are_pending_and_stores_the_results(
+def test_cli_exits_zero_when_all_cases_pass_and_stores_the_results(
     monkeypatch, tmp_path, rows, capsys
 ):
     code, target = run_main_with_fake_detector(monkeypatch, tmp_path, rows)
 
-    assert code == 1
-    assert "PENDIENTE" in capsys.readouterr().out
+    assert code == 0
+    output = capsys.readouterr().out
+    assert "10 pasan, 0 fallan, 0 pendientes" in output
     report = json.loads((target / "resultados.json").read_text(encoding="utf-8"))
+    assert report["correcto"] is True
+    assert report["pendientes"] == 0
     assert report["ejecucion"]["modelo_sha256"]
     assert report["ejecucion"]["manifiesto_sha256"]
     assert report["ejecucion"]["config_sha256"] == cargar_config(CONFIG)[1]
@@ -459,8 +463,8 @@ def test_cli_exits_non_zero_on_a_wrong_expectation(monkeypatch, tmp_path, rows):
 
 def test_cases_file_cannot_drop_a_required_case(tmp_path):
     data = yaml.safe_load(CASES.read_text(encoding="utf-8"))
-    data["casos"] = [case for case in data["casos"] if case["tipo"] != "pendiente"]
-    path = tmp_path / "sin_pendientes.yaml"
+    data["casos"] = [case for case in data["casos"] if case["id"] != "C10"]
+    path = tmp_path / "sin_c10.yaml"
     path.write_text(yaml.safe_dump(data), encoding="utf-8")
 
     with pytest.raises(ValueError, match="C10"):
@@ -579,3 +583,79 @@ def test_real_runner_does_not_treat_capture_spacing_as_live_watchdog(rows, confi
     # El intervalo de captura del dataset no representa silencio de una
     # aplicaci?n en vivo. El watchdog temporal se prueba aparte en C8.
     assert result["eventos_watchdog"] == []
+
+
+def test_c9_detector_failure_is_reproducible(rows, config):
+    report = run_cases(
+        load_cases(CASES),
+        rows,
+        config,
+        perfect_detector(rows),
+        DATASET,
+    )
+
+    c9 = result_by_id(report, "C9")
+
+    assert c9["resultado"] == "PASA"
+    assert c9["tipo"] == "detector_failure"
+
+    assert len(c9["decisiones"]) >= 2
+
+    # Primero debe existir movimiento válido.
+    assert any(decision["comando"]["direction"] == "forward" for decision in c9["decisiones"])
+
+    # Después, el fallo del detector debe terminar en STOP.
+    failed = c9["decisiones"][-1]
+
+    assert failed["cuadro"]["status"] == "error"
+    assert failed["estado"] == "FAULT"
+    assert failed["reason_code"] == "ERROR_PERCEPCION"
+    assert failed["comando"]["direction"] == "stop"
+    assert failed["comando"]["speed"] == 0.0
+    assert failed["errores"][0]["stage"] == "detector"
+
+
+def test_c10_emergency_rearm_and_shutdown_is_reproducible(rows, config):
+    report = run_cases(
+        load_cases(CASES),
+        rows,
+        config,
+        perfect_detector(rows),
+        DATASET,
+    )
+
+    c10 = result_by_id(report, "C10")
+
+    assert c10["resultado"] == "PASA"
+    assert c10["tipo"] == "emergency"
+
+    eventos = c10["eventos"]
+
+    assert eventos[0]["evento"] == "movimiento_inicial"
+    assert eventos[0]["direction"] == "forward"
+
+    assert eventos[1]["evento"] == "emergencia"
+    assert eventos[1]["direction"] == "stop"
+    assert eventos[1]["reason_code"] == "EMERGENCY_STOP"
+
+    # Un cuadro despejado por sí solo no rearma.
+    assert eventos[2]["evento"] == "sin_rearme"
+    assert eventos[2]["direction"] == "stop"
+    assert eventos[2]["reason_code"] == "EMERGENCY_LATCHED"
+
+    # El cuadro vencido tampoco puede completar el rearme.
+    assert eventos[3]["evento"] == "rearme_con_cuadro_vencido"
+    assert eventos[3]["direction"] == "stop"
+
+    # La percepción fresca libera el latch, pero todavía reconfirma la vía.
+    assert eventos[4]["evento"] == "rearme_fresco"
+    assert eventos[4]["direction"] == "stop"
+    assert eventos[4]["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+    assert eventos[5]["evento"] == "movimiento_reanudado"
+    assert eventos[5]["direction"] == "forward"
+
+    # Cerrar siempre deja STOP como último comando.
+    assert eventos[6]["evento"] == "shutdown"
+    assert eventos[6]["direction"] == "stop"
+    assert eventos[6]["reason_code"] == "APPLICATION_SHUTDOWN"

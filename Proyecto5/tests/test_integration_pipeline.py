@@ -500,8 +500,16 @@ def test_cli_stops_motion_if_the_trace_cannot_be_written(tmp_path, monkeypatch, 
 
     assert code == 1
     assert "integration_error stage=output" in caplog.text
+
+    # El fallo de escritura primero detiene el recorrido con failsafe.
+    assert any(
+        command.direction == "stop" and command.reason_code == FAILSAFE_REASON
+        for command in adapters[0].history
+    )
+
+    # Y el finally siempre deja el STOP de cierre como ?ltimo comando.
     assert adapters[0].last_command.direction == "stop"
-    assert adapters[0].last_command.reason_code == FAILSAFE_REASON
+    assert adapters[0].last_command.reason_code == "APPLICATION_SHUTDOWN"
 
 
 def test_physical_output_stays_disabled(tmp_path):
@@ -915,3 +923,306 @@ def test_future_frame_is_rejected_before_detector_and_policy(tmp_path):
     assert future.command["direction"] == "stop"
     assert future.errors[0]["stage"] == "stale"
     assert adapter.last_command.direction == "stop"
+
+
+def test_emergency_stop_is_latched_and_clear_frame_cannot_rearm(tmp_path):
+    image = image_file(tmp_path)
+    pipeline = make_pipeline(ScriptedSession([CLEAR] * 4))
+
+    # Primero confirmamos vía libre y avanzamos.
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    # La emergencia debe detener inmediatamente, sin necesitar otro frame.
+    emergency = pipeline.trigger_emergency()
+
+    assert emergency["direction"] == "stop"
+    assert emergency["speed"] == 0.0
+    assert emergency["reason_code"] == "EMERGENCY_STOP"
+    assert pipeline.emergency_latched is True
+
+    # Aunque llegue un cuadro despejado, la emergencia sigue enclavada.
+    trace = pipeline.process(frame_input(image, 3))
+
+    assert trace.command["direction"] == "stop"
+    assert trace.command["reason_code"] == "EMERGENCY_LATCHED"
+    assert pipeline.emergency_latched is True
+
+
+def test_rearm_requires_explicit_request_and_fresh_perception(tmp_path):
+    image = image_file(tmp_path)
+    now = {"ms": 0.0}
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        YoloxDetector(ScriptedSession([CLEAR] * 6)),
+        policy(),
+        adapter,
+    )
+
+    # Confirma vía libre y comienza a avanzar.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0)):
+        now["ms"] = capture_ms
+        trace = pipeline.process(frame_input(image, index, t_capture_ms=capture_ms))
+
+    assert trace.command["direction"] == "forward"
+
+    pipeline.trigger_emergency()
+    assert pipeline.emergency_latched is True
+
+    # Un frame despejado por sí solo NO rearma.
+    now["ms"] = 300.0
+    blocked = pipeline.process(frame_input(image, 3, t_capture_ms=300.0))
+
+    assert blocked.command["direction"] == "stop"
+    assert pipeline.emergency_latched is True
+
+    # El rearme debe pedirse explícitamente.
+    pipeline.request_rearm()
+
+    # Una percepción vieja tampoco puede completar el rearme.
+    now["ms"] = 1000.0
+    stale = pipeline.process(frame_input(image, 4, t_capture_ms=300.0))
+
+    assert stale.command["direction"] == "stop"
+    assert pipeline.emergency_latched is True
+
+    # Una percepción fresca válida completa el rearme,
+    # pero todavía debe reconfirmar la vía.
+    fresh = pipeline.process(frame_input(image, 5, t_capture_ms=1000.0))
+
+    assert pipeline.emergency_latched is False
+    assert fresh.command["direction"] == "stop"
+    assert fresh.decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+    # Todavía hacen falta dos cuadros más para volver a avanzar.
+    now["ms"] = 1100.0
+    second = pipeline.process(frame_input(image, 6, t_capture_ms=1100.0))
+
+    now["ms"] = 1200.0
+    third = pipeline.process(frame_input(image, 7, t_capture_ms=1200.0))
+
+    assert second.command["direction"] == "stop"
+    assert third.command["direction"] == "forward"
+
+
+def test_rearm_does_not_unlock_on_unreadable_image(tmp_path):
+    image = image_file(tmp_path)
+    pipeline = make_pipeline(ScriptedSession([CLEAR] * 4))
+
+    # Confirma vía y comienza a avanzar.
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    pipeline.trigger_emergency()
+    pipeline.request_rearm()
+
+    # La imagen ilegible no puede completar el rearme.
+    failed = pipeline.process(frame_input(tmp_path / "missing-rearm.png", 3))
+
+    assert failed.perception["status"] == "error"
+    assert failed.command["direction"] == "stop"
+    assert failed.command["reason_code"] == "EMERGENCY_LATCHED"
+    assert pipeline.emergency_latched is True
+
+    # Una percepción válida posterior sí puede completar el rearme,
+    # pero todavía queda detenido mientras reconfirma la vía.
+    recovered = pipeline.process(frame_input(image, 4))
+
+    assert pipeline.emergency_latched is False
+    assert recovered.command["direction"] == "stop"
+    assert recovered.decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+
+def test_shutdown_emits_final_stop_and_prevents_more_motion(tmp_path):
+    image = image_file(tmp_path)
+    pipeline = make_pipeline(ScriptedSession([CLEAR] * 4))
+
+    # Confirma vía libre y comienza a avanzar.
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    shutdown = pipeline.shutdown()
+
+    assert shutdown["direction"] == "stop"
+    assert shutdown["speed"] == 0.0
+    assert shutdown["reason_code"] == "APPLICATION_SHUTDOWN"
+    assert pipeline.adapter.last_command.direction == "stop"
+    assert pipeline.halted is True
+
+    # Tras el cierre, aunque llegue otro cuadro, no puede volver a moverse.
+    trace = pipeline.process(frame_input(image, 3))
+
+    assert trace.command["direction"] == "stop"
+
+
+def test_cli_emits_final_stop_on_normal_shutdown(tmp_path, monkeypatch):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(3)]
+    adapters = []
+
+    class RecordedAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", RecordedAdapter)
+    fake_weights(monkeypatch, FakeSession())
+
+    output = tmp_path / "traza.jsonl"
+
+    code = cli.main(cli_arguments(tmp_path, output))
+
+    assert code == 0
+    assert adapters
+
+    # Antes de cerrar, los 3 cuadros libres alcanzaron FORWARD.
+    assert any(command.direction == "forward" for command in adapters[0].history)
+
+    # El último comando de toda la aplicación debe ser el STOP de cierre.
+    final = adapters[0].last_command
+    assert final.direction == "stop"
+    assert final.speed == 0.0
+    assert final.reason_code == "APPLICATION_SHUTDOWN"
+
+
+def test_rearm_requires_a_frame_newer_than_the_one_before_emergency(tmp_path):
+    image = image_file(tmp_path)
+    pipeline = make_pipeline(ScriptedSession([CLEAR] * 5))
+
+    # La vía queda confirmada hasta t=200 ms.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0)):
+        trace = pipeline.process(frame_input(image, index, t_capture_ms=capture_ms))
+
+    assert trace.command["direction"] == "forward"
+
+    pipeline.trigger_emergency()
+    pipeline.request_rearm()
+
+    # La imagen es válida, pero pertenece al mismo instante que el último
+    # cuadro aceptado antes de la emergencia: no es percepción fresca.
+    old = pipeline.process(frame_input(image, 3, t_capture_ms=200.0))
+
+    assert old.command["direction"] == "stop"
+    assert old.command["reason_code"] == "EMERGENCY_LATCHED"
+    assert pipeline.emergency_latched is True
+
+    # Un cuadro realmente posterior sí puede comenzar el rearme seguro.
+    fresh = pipeline.process(frame_input(image, 4, t_capture_ms=300.0))
+
+    assert pipeline.emergency_latched is False
+    assert fresh.command["direction"] == "stop"
+    assert fresh.decision["reason_code"] == "PERCEPCION_NO_CONFIRMADA"
+
+
+def test_emergency_adapter_failure_cancels_motion_and_does_not_escape(tmp_path):
+    image = image_file(tmp_path)
+    adapter = FailingAdapter()
+    pipeline = Pipeline(YoloxDetector(ScriptedSession([CLEAR] * 3)), policy(), adapter)
+
+    # Hay movimiento activo antes de la emergencia.
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    adapter.broken = True
+
+    emergency = pipeline.trigger_emergency()
+
+    # Si ni siquiera puede emitirse el STOP, el recorrido se invalida
+    # y el movimiento anterior se cancela.
+    assert emergency["direction"] == "stop"
+    assert emergency["speed"] == 0.0
+    assert emergency["reason_code"] == STOP_NOT_EMITTED_REASON
+    assert pipeline.emergency_latched is True
+    assert pipeline.halted is True
+    assert adapter.last_command is None
+
+
+def test_shutdown_adapter_failure_cancels_motion_and_does_not_escape(tmp_path):
+    image = image_file(tmp_path)
+    adapter = FailingAdapter()
+    pipeline = Pipeline(YoloxDetector(ScriptedSession([CLEAR] * 3)), policy(), adapter)
+
+    assert run(pipeline, image, 3)[-1].command["direction"] == "forward"
+
+    adapter.broken = True
+
+    shutdown = pipeline.shutdown()
+
+    assert shutdown["direction"] == "stop"
+    assert shutdown["speed"] == 0.0
+    assert shutdown["reason_code"] == STOP_NOT_EMITTED_REASON
+    assert pipeline.halted is True
+    assert adapter.last_command is None
+
+
+@pytest.mark.parametrize("failure_type", [RuntimeError, KeyboardInterrupt])
+def test_cli_shutdown_runs_on_unexpected_failure_or_interrupt(tmp_path, monkeypatch, failure_type):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(4)]
+    adapters = []
+
+    class RecordedAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+    real_process = Pipeline.process
+    calls = {"count": 0}
+
+    def interrupted_process(self, frame):
+        # Los primeros 3 cuadros confirman la vía y dejan FORWARD activo.
+        if calls["count"] == 3:
+            raise failure_type("interrupción inesperada")
+        calls["count"] += 1
+        return real_process(self, frame)
+
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", RecordedAdapter)
+    monkeypatch.setattr(Pipeline, "process", interrupted_process)
+    fake_weights(monkeypatch, FakeSession())
+
+    output = tmp_path / "traza.jsonl"
+
+    with pytest.raises(failure_type):
+        cli.main(cli_arguments(tmp_path, output))
+
+    assert adapters
+    assert any(command.direction == "forward" for command in adapters[0].history)
+
+    # Aunque la excepción/interrupción se propague, el finally debe cerrar con STOP.
+    final = adapters[0].last_command
+    assert final.direction == "stop"
+    assert final.speed == 0.0
+    assert final.reason_code == "APPLICATION_SHUTDOWN"
+
+
+def test_cli_returns_error_when_final_shutdown_stop_is_not_emitted(tmp_path, monkeypatch):
+    image = image_file(tmp_path)
+    frames = [frame_input(image, i) for i in range(3)]
+    adapters = []
+
+    class ShutdownFailingAdapter(VirtualControlAdapter):
+        def __init__(self):
+            super().__init__()
+            adapters.append(self)
+
+        def apply(self, decision):
+            # El recorrido funciona normalmente; solo falla el STOP final.
+            if decision.frame_id == "shutdown":
+                raise RuntimeError("shutdown adapter failure")
+            return super().apply(decision)
+
+    monkeypatch.setattr(cli, "frames_from_manifest", lambda *_a, **_k: frames)
+    monkeypatch.setattr(cli, "VirtualControlAdapter", ShutdownFailingAdapter)
+    fake_weights(monkeypatch, FakeSession())
+
+    output = tmp_path / "traza.jsonl"
+
+    code = cli.main(cli_arguments(tmp_path, output))
+
+    assert adapters
+    assert any(command.direction == "forward" for command in adapters[0].history)
+
+    # El STOP final no pudo llegar al adaptador.
+    assert adapters[0].last_command is None
+
+    # El CLI no puede reportar éxito.
+    assert code == 1

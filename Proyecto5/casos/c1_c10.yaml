@@ -111,7 +111,7 @@ casos:
       vencido sin reiniciar el movimiento.
 
   - id: C9
-    tipo: pendiente
+    tipo: detector_failure
     nombre: Fallo del detector
     bloqueado_por: ["#6"]
     plazo_ms: 500
@@ -122,7 +122,7 @@ casos:
       despejada.
 
   - id: C10
-    tipo: pendiente
+    tipo: emergency
     nombre: Emergencia, rearme y cierre controlado
     bloqueado_por: ["#6"]
     plazo_ms: 500

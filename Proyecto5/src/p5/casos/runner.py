@@ -414,6 +414,333 @@ def _run_watchdog_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
     }
 
 
+def _run_detector_failure_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
+    """Reproduce C9 con fallos deterministas de inferencia e imagen ilegible."""
+    settings, config_sha256 = config
+
+    class ClearImage:
+        shape = (416, 416, 3)
+
+    class C9Detector:
+        @staticmethod
+        def read_image(source):
+            if "unreadable" in str(source):
+                raise DetectorError("imagen ilegible")
+            return ClearImage()
+
+        @staticmethod
+        def detect_image(_image, *, source="array"):
+            if "inference" in str(source):
+                raise DetectorError("fallo de inferencia")
+            return ()
+
+    adapter = VirtualControlAdapter()
+    pipeline = Pipeline(
+        C9Detector(),
+        PoliticaDecision(settings, config_sha256=config_sha256),
+        adapter,
+    )
+
+    decisions: list[dict[str, Any]] = []
+    failures: list[dict[str, Any]] = []
+
+    # Tres percepciones v?lidas confirman la v?a y alcanzan FORWARD.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0), start=1):
+        trace = pipeline.process(
+            FrameInput(
+                sequence_id="c9",
+                frame_id=f"c9-{index:04d}",
+                t_capture_ms=capture_ms,
+                image_size=(416, 416),
+                image_path=Path("c9-clear.synthetic"),
+            )
+        )
+        decisions.append(_frame_record(trace))
+
+    if adapter.last_command is None or adapter.last_command.direction != "forward":
+        failures.append(
+            {
+                "regla": "movimiento_inicial",
+                "motivo": "la pol?tica no alcanz? FORWARD antes de provocar el fallo",
+            }
+        )
+
+    # Fallo de inferencia: no debe dejar avance residual.
+    inference = pipeline.process(
+        FrameInput(
+            sequence_id="c9",
+            frame_id="c9-inference-failure",
+            t_capture_ms=300.0,
+            image_size=(416, 416),
+            image_path=Path("c9-inference.synthetic"),
+        )
+    )
+    decisions.append(_frame_record(inference))
+
+    # Imagen ilegible: tambi?n debe quedar en FAULT + STOP.
+    unreadable = pipeline.process(
+        FrameInput(
+            sequence_id="c9",
+            frame_id="c9-unreadable",
+            t_capture_ms=400.0,
+            image_size=(416, 416),
+            image_path=Path("c9-unreadable.synthetic"),
+        )
+    )
+    decisions.append(_frame_record(unreadable))
+
+    for name, trace in (
+        ("fallo_inferencia", inference),
+        ("imagen_ilegible", unreadable),
+    ):
+        stages = [error["stage"] for error in trace.errors]
+        if (
+            trace.perception["status"] != "error"
+            or trace.decision is None
+            or trace.decision["estado"] != "FAULT"
+            or trace.decision["reason_code"] != "ERROR_PERCEPCION"
+            or trace.command["direction"] != "stop"
+            or trace.command["speed"] != 0.0
+            or "detector" not in stages
+        ):
+            failures.append(
+                {
+                    "regla": name,
+                    "motivo": "el fallo del detector no termin? en FAULT + STOP",
+                }
+            )
+
+    if adapter.last_command is None or adapter.last_command.direction != "stop":
+        failures.append(
+            {
+                "regla": "avance_residual",
+                "motivo": "qued? un comando de movimiento despu?s del fallo",
+            }
+        )
+
+    return {
+        **_base_result(case),
+        "entrada": case["entrada"],
+        "esperado": case["esperado"],
+        "plazo_ms": case["plazo_ms"],
+        "resultado": FAILED if failures else PASSED,
+        "fallos": failures,
+        "decisiones": decisions,
+    }
+
+
+def _run_emergency_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
+    """Reproduce C10: emergencia enclavada, rearme fresco y cierre seguro."""
+    settings, config_sha256 = config
+    now = {"ms": 0.0}
+
+    class ClearImage:
+        shape = (416, 416, 3)
+
+    class ClearDetector:
+        @staticmethod
+        def read_image(_source):
+            return ClearImage()
+
+        @staticmethod
+        def detect_image(_image, *, source="array"):
+            return ()
+
+    adapter = VirtualControlAdapter(clock_ms=lambda: now["ms"])
+    pipeline = Pipeline(
+        ClearDetector(),
+        PoliticaDecision(settings, config_sha256=config_sha256),
+        adapter,
+    )
+
+    failures: list[dict[str, Any]] = []
+    decisions: list[dict[str, Any]] = []
+    events: list[dict[str, Any]] = []
+
+    def frame(frame_id: str, capture_ms: float) -> FrameInput:
+        return FrameInput(
+            sequence_id="c10",
+            frame_id=frame_id,
+            t_capture_ms=capture_ms,
+            image_size=(416, 416),
+            image_path=Path(f"{frame_id}.synthetic"),
+        )
+
+    # Tres cuadros frescos confirman la v?a.
+    for index, capture_ms in enumerate((0.0, 100.0, 200.0), start=1):
+        now["ms"] = capture_ms
+        trace = pipeline.process(frame(f"c10-{index:04d}", capture_ms))
+        decisions.append(_frame_record(trace))
+
+    moving = adapter.last_command
+    if moving is None or moving.direction != "forward":
+        failures.append(
+            {
+                "regla": "movimiento_inicial",
+                "motivo": "la pol?tica no alcanz? FORWARD antes de la emergencia",
+            }
+        )
+    else:
+        events.append(
+            {
+                "evento": "movimiento_inicial",
+                "direction": moving.direction,
+                "speed": moving.speed,
+                "reason_code": moving.reason_code,
+            }
+        )
+
+    # Emergencia: STOP inmediato y enclavado.
+    emergency = pipeline.trigger_emergency()
+    events.append(
+        {
+            "evento": "emergencia",
+            "direction": emergency["direction"],
+            "speed": emergency["speed"],
+            "reason_code": emergency["reason_code"],
+        }
+    )
+
+    if emergency["direction"] != "stop" or not pipeline.emergency_latched:
+        failures.append(
+            {
+                "regla": "emergencia",
+                "motivo": "la emergencia no produjo STOP enclavado",
+            }
+        )
+
+    # Un cuadro despejado no rearma autom?ticamente.
+    now["ms"] = 300.0
+    blocked = pipeline.process(frame("c10-sin-rearme", 300.0))
+    decisions.append(_frame_record(blocked))
+    events.append(
+        {
+            "evento": "sin_rearme",
+            "direction": blocked.command["direction"],
+            "speed": blocked.command["speed"],
+            "reason_code": blocked.command["reason_code"],
+        }
+    )
+
+    if blocked.command["direction"] != "stop" or not pipeline.emergency_latched:
+        failures.append(
+            {
+                "regla": "enclavamiento",
+                "motivo": "un cuadro despejado liber? la emergencia sin rearme expl?cito",
+            }
+        )
+
+    # Se solicita rearme, pero un cuadro vencido no puede completarlo.
+    pipeline.request_rearm()
+    now["ms"] = 1000.0
+
+    stale = pipeline.process(frame("c10-rearm-stale", 300.0))
+    decisions.append(_frame_record(stale))
+    events.append(
+        {
+            "evento": "rearme_con_cuadro_vencido",
+            "direction": stale.command["direction"],
+            "speed": stale.command["speed"],
+            "reason_code": stale.command["reason_code"],
+        }
+    )
+
+    if stale.command["direction"] != "stop" or not pipeline.emergency_latched:
+        failures.append(
+            {
+                "regla": "rearme_vencido",
+                "motivo": "un cuadro vencido complet? el rearme",
+            }
+        )
+
+    # Una percepci?n fresca v?lida s? libera el latch,
+    # pero la pol?tica debe volver a confirmar la v?a.
+    fresh = pipeline.process(frame("c10-rearm-fresh", 1000.0))
+    decisions.append(_frame_record(fresh))
+    events.append(
+        {
+            "evento": "rearme_fresco",
+            "direction": fresh.command["direction"],
+            "speed": fresh.command["speed"],
+            "reason_code": fresh.command["reason_code"],
+        }
+    )
+
+    if (
+        pipeline.emergency_latched
+        or fresh.command["direction"] != "stop"
+        or fresh.decision is None
+        or fresh.decision["reason_code"] != "PERCEPCION_NO_CONFIRMADA"
+    ):
+        failures.append(
+            {
+                "regla": "rearme_fresco",
+                "motivo": "la percepci?n fresca no produjo un rearme seguro con reconfirmaci?n",
+            }
+        )
+
+    # Hacen falta dos cuadros frescos m?s para volver a avanzar.
+    now["ms"] = 1100.0
+    second = pipeline.process(frame("c10-confirm-2", 1100.0))
+    decisions.append(_frame_record(second))
+
+    now["ms"] = 1200.0
+    third = pipeline.process(frame("c10-confirm-3", 1200.0))
+    decisions.append(_frame_record(third))
+
+    events.append(
+        {
+            "evento": "movimiento_reanudado",
+            "direction": third.command["direction"],
+            "speed": third.command["speed"],
+            "reason_code": third.command["reason_code"],
+        }
+    )
+
+    if second.command["direction"] != "stop" or third.command["direction"] != "forward":
+        failures.append(
+            {
+                "regla": "reconfirmacion",
+                "motivo": "el movimiento no respet? los cuadros requeridos para reconfirmar",
+            }
+        )
+
+    # Cierre controlado: el ?ltimo comando siempre debe ser STOP.
+    shutdown = pipeline.shutdown()
+    events.append(
+        {
+            "evento": "shutdown",
+            "direction": shutdown["direction"],
+            "speed": shutdown["speed"],
+            "reason_code": shutdown["reason_code"],
+        }
+    )
+
+    if (
+        shutdown["direction"] != "stop"
+        or shutdown["reason_code"] != "APPLICATION_SHUTDOWN"
+        or adapter.last_command is None
+        or adapter.last_command.direction != "stop"
+    ):
+        failures.append(
+            {
+                "regla": "shutdown",
+                "motivo": "el cierre no dej? STOP como comando final",
+            }
+        )
+
+    return {
+        **_base_result(case),
+        "entrada": case["entrada"],
+        "esperado": case["esperado"],
+        "plazo_ms": case["plazo_ms"],
+        "resultado": FAILED if failures else PASSED,
+        "fallos": failures,
+        "decisiones": decisions,
+        "eventos": events,
+    }
+
+
 def run_cases(
     data: dict[str, Any],
     rows: list[dict[str, Any]],
@@ -429,6 +756,10 @@ def run_cases(
             results.append(_run_synthetic_case(case, config))
         elif case["tipo"] == "watchdog":
             results.append(_run_watchdog_case(case, config))
+        elif case["tipo"] == "detector_failure":
+            results.append(_run_detector_failure_case(case, config))
+        elif case["tipo"] == "emergency":
+            results.append(_run_emergency_case(case, config))
         else:
             results.append(_pending_case(case))
 
