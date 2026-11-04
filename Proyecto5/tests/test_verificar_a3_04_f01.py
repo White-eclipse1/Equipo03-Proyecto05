@@ -41,6 +41,11 @@ def test_comparison_controls_exit_status_even_when_numeric_audit_passes(
         shutil.copyfile(ROOT / "evidencias/a3-metricas-python312" / name, evidence / name)
     metrics_path = evidence / "metricas.json"
     metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    # Esta copia es un fixture de comparacion, no una nueva ejecucion historica.
+    # HEAD existe tambien en un checkout superficial de CI; el commit de la
+    # evidencia original puede no estar disponible. Conservamos Git real y
+    # sus comprobaciones, sin exigir historial ajeno al alcance de estos casos.
+    metrics["ejecucion"]["commit"] = "HEAD"
     runtime = metrics["ejecucion"]["runtime"].removeprefix("Python ")
     monkeypatch.setattr(verifier.platform, "python_version", lambda: runtime)
     monkeypatch.setattr(
