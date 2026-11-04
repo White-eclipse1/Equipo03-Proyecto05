@@ -144,17 +144,21 @@ class YoloxDetector:
         if image.ndim != 3 or image.shape[2] != 3 or image.size == 0:
             raise _failure("preprocess", source, f"expected HxWx3 image, got {image.shape}")
 
+        tensor, ratio = self._preprocess(image, source)
+        raw = self._infer(tensor, source)
+        return self._postprocess(raw, ratio, image.shape[:2], source)
+
+    def _preprocess(self, image: np.ndarray, source: str) -> tuple[np.ndarray, float]:
         try:
-            tensor, ratio = preprocess(image, self._input_size)
+            return preprocess(image, self._input_size)
         except cv2.error as error:
             raise _failure("preprocess", source, error) from error
 
+    def _infer(self, tensor: np.ndarray, source: str) -> np.ndarray:
         try:
-            outputs = self._session.run(None, {self._input_name: tensor[np.newaxis]})
+            return self._session.run(None, {self._input_name: tensor[np.newaxis]})[0]
         except Exception as error:
             raise _failure("inference", source, error) from error
-
-        return self._postprocess(outputs[0], ratio, image.shape[:2], source)
 
     def _postprocess(
         self, raw: np.ndarray, ratio: float, image_size: tuple[int, int], source: str

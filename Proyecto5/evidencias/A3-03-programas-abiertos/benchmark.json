@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "tarea": "A3-03 (#18)",
+  "fecha": "2026-11-03T23:58:07-06:00",
+  "hardware": {
+    "cpu": "AMD Ryzen 5 5625U with Radeon Graphics",
+    "nucleos_logicos": 12,
+    "memoria_bytes": 16441667584,
+    "arquitectura": "AMD64",
+    "sistema_operativo": "Windows-11-10.0.26300-SP0"
+  },
+  "runtime": {
+    "python": "3.12.16",
+    "onnxruntime": "1.31.1",
+    "providers_sesion": [
+      "CPUExecutionProvider"
+    ],
+    "numpy": "2.5.4",
+    "opencv": "5.0.0.93",
+    "pydantic": "2.13.5"
+  },
+  "detector": {
+    "nombre": "YOLOX-Tiny",
+    "archivo": "yolox_tiny.onnx",
+    "sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "bytes": 20219662,
+    "ms_carga": 170.3475
+  },
+  "dataset": {
+    "nombre": "p5-eval-v1",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "cuadros": 128
+  },
+  "politica": {
+    "config_sha256": "23ce6df739935ad58dccc95908a2a817803a7db02078c7f0a81a09c8d69efb42"
+  },
+  "codigo": {
+    "commit": "dacaa56b8a3fb0e8b86396104ab15fc0ea17ae58",
+    "cambios_sin_commit": false
+  },
+  "medicion": {
+    "incluye": "Pipeline.process: leer y decodificar la imagen, preprocesar, inferir, posprocesar, decidir y generar el comando virtual",
+    "excluye": "carga del modelo (ms_carga aparte), captura de la camara, escritura de resultados y motores: no hace llamadas de red",
+    "reloj": "time.perf_counter_ns, en milisegundos",
+    "percentil": "interpolacion lineal, numpy.percentile por defecto",
+    "hilos": "opciones por defecto de onnxruntime, como la aplicacion",
+    "calentamientos": 10,
+    "repeticiones": 200
+  },
+  "salida_fisica": false,
+  "resumen": {
+    "calentamientos": 10,
+    "mediciones": 200,
+    "mediciones_validas": 200,
+    "mediciones_con_error": 0,
+    "cumple_minimos": true,
+    "etapas": {
+      "ms_total": {
+        "n": 200,
+        "p50": 51.19845,
+        "p95": 92.01824499999998,
+        "maximo": 173.262,
+        "minimo": 43.5402,
+        "media": 57.7292305
+      },
+      "ms_lectura": {
+        "n": 200,
+        "p50": 1.43645,
+        "p95": 2.0415499999999995,
+        "maximo": 3.7994,
+        "minimo": 0.9412,
+        "media": 1.5067905000000001
+      },
+      "ms_preprocesamiento": {
+        "n": 200,
+        "p50": 1.5563,
+        "p95": 2.7076499999999997,
+        "maximo": 6.7447,
+        "minimo": 1.0369,
+        "media": 1.7185645
+      },
+      "ms_inferencia": {
+        "n": 200,
+        "p50": 42.36555,
+        "p95": 81.096965,
+        "maximo": 153.6472,
+        "minimo": 36.6436,
+        "media": 48.130404
+      },
+      "ms_posprocesamiento": {
+        "n": 200,
+        "p50": 4.8563,
+        "p95": 8.9698,
+        "maximo": 24.5478,
+        "minimo": 3.1827,
+        "media": 5.459559999999999
+      },
+      "ms_politica": {
+        "n": 200,
+        "p50": 0.2131,
+        "p95": 0.38505999999999996,
+        "maximo": 0.675,
+        "minimo": 0.1119,
+        "media": 0.23100250000000003
+      },
+      "ms_control": {
+        "n": 200,
+        "p50": 0.026099999999999998,
+        "p95": 0.042574999999999974,
+        "maximo": 0.8193,
+        "minimo": 0.0129,
+        "media": 0.03136
+      }
+    }
+  },
+  "tiempos": {
+    "archivo": "tiempos.csv",
+    "sha256": "739ce7985ef93a201ce9b265872a760b7dd83874b39e16f0319b64f327b550ec",
+    "filas": 210
+  }
+}
