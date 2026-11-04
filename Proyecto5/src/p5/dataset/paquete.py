@@ -35,15 +35,17 @@ OBSTACLE_CLASSES = ("person", "bicycle", "car", "motorcycle", "bus", "truck", "c
 ZONES = {"izquierda": (0.0, 0.35), "centro": (0.35, 0.65), "derecha": (0.65, 1.0)}
 MIN_ZONE_COVERAGE = 0.15
 
-# Acciones admisibles por estado de la via. SLOW y STOP cubren las transiciones de la politica
-# (confirmar o liberar una zona tarda varios cuadros); los casos C1-C7 acotan cuando aplican.
-ALLOWED_ACTIONS = {
+# Acciones admisibles por estado de la via, sin contar los giros. SLOW y STOP cubren las
+# transiciones de la politica (confirmar una zona tarda varios cuadros); los casos C1-C7 acotan
+# cuando aplican.
+BASE_ACTIONS = {
     "libre": ("FORWARD", "SLOW", "STOP"),
     "lateral_izquierda": ("FORWARD", "SLOW", "STOP"),
     "lateral_derecha": ("FORWARD", "SLOW", "STOP"),
-    "centro": ("STOP", "SLOW", "EVADE_LEFT", "EVADE_RIGHT"),
-    "varios": ("STOP", "SLOW", "EVADE_LEFT", "EVADE_RIGHT"),
+    "centro": ("STOP", "SLOW"),
+    "varios": ("STOP", "SLOW"),
 }
+EVASIONS = {"izquierda": "EVADE_LEFT", "derecha": "EVADE_RIGHT"}
 
 
 def occupied_zones(box: list[float], image_width: int) -> set[str]:
@@ -57,11 +59,27 @@ def occupied_zones(box: list[float], image_width: int) -> set[str]:
     return zones
 
 
+def allowed_actions(road_state: str, objects: list[dict[str, Any]], image_width: int) -> list[str]:
+    """Acciones admisibles en un cuadro: un giro solo vale hacia una zona lateral libre.
+
+    Con objetos en la imagen, el giro tambien vale en un estado lateral porque la politica tarda
+    varios cuadros en liberar el centro y sigue evadiendo mientras la persona se aleja.
+    """
+    actions = list(BASE_ACTIONS[road_state])
+    if not objects:
+        return actions
+    occupied: set[str] = set()
+    for item in objects:
+        occupied |= occupied_zones(item["bbox_xyxy"], image_width)
+    actions.extend(action for zone, action in EVASIONS.items() if zone not in occupied)
+    return actions
+
+
 def annotation_errors(
     road_state: object, objects: object, image_width: int, image_height: int
 ) -> list[str]:
     """Revisa una anotacion: formato de cajas y coherencia entre geometria y estado de la via."""
-    if road_state not in ALLOWED_ACTIONS:
+    if road_state not in BASE_ACTIONS:
         return [f"road_state desconocido: {road_state!r}"]
     if not isinstance(objects, list):
         return ["objects debe ser una lista explicita, vacia si no hay objetos"]
@@ -254,7 +272,7 @@ def build_report(dataset: Path) -> Report:
                 "image_height": record["image_height"],
                 "road_state": road_state,
                 "annotations": objects,
-                "allowed_actions": list(ALLOWED_ACTIONS[road_state]),
+                "allowed_actions": allowed_actions(road_state, objects, record["image_width"]),
             }
         )
 

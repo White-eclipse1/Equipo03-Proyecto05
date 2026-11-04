@@ -98,15 +98,17 @@ python -m p5.dataset.anotar --dataset data/p5-eval-v1
 
 Abre http://127.0.0.1:8765. Las líneas punteadas marcan las zonas de la política. Etiqueta todos los objetos de las clases evaluadas y elige el estado de la vía:
 
-| road_state | Geometría exigida | Acciones admisibles |
+| road_state | Geometría exigida | Acciones admisibles, sin contar giros |
 |---|---|---|
 | `libre` | Sin objetos | FORWARD, SLOW, STOP |
 | `lateral_izquierda` | Solo la zona izquierda | FORWARD, SLOW, STOP |
 | `lateral_derecha` | Solo la zona derecha | FORWARD, SLOW, STOP |
-| `centro` | Al menos una caja en el centro | STOP, SLOW, EVADE_LEFT, EVADE_RIGHT |
-| `varios` | 2 o más objetos, con el centro y otra zona | STOP, SLOW, EVADE_LEFT, EVADE_RIGHT |
+| `centro` | Al menos una caja en el centro | STOP, SLOW |
+| `varios` | 2 o más objetos, con el centro y otra zona | STOP, SLOW |
 
-SLOW y STOP cubren las transiciones de la política, que tarda varios cuadros en confirmar o liberar una zona. Cuándo aplica cada acción lo acotan los casos C1–C7 de B3.
+**Giros:** si hay objetos en el cuadro, se agrega `EVADE_LEFT` cuando ninguna caja ocupa la zona izquierda, y `EVADE_RIGHT` cuando ninguna ocupa la derecha. Se calcula por cuadro con la misma regla de solape de la política. En un cuadro `libre` no se admiten giros.
+
+Los estados laterales admiten el giro hacia el lado libre porque la política tarda varios cuadros en liberar el centro y sigue evadiendo mientras la persona se aleja. SLOW y STOP cubren las demás transiciones. Cuándo aplica cada acción lo acotan los casos C1–C7 de B3.
 
 Las zonas y clases son copia de `Proyecto3/config/politica.yaml`. Si B1 las cambia, hay que actualizar `paquete.py` antes de congelar.
 
@@ -134,6 +136,7 @@ Después de congelar, `validate` también falla si `manifiesto.jsonl` ya no coin
 - **Firmware:** se agregaron `set_vflip` y `set_hmirror` porque la imagen salía girada 180°. Se comprobó con un objeto real a la izquierda del carro.
 - **Etiquetas:** hechas a mano con el anotador, sobre las 8 clases obstáculo de la política. En este conjunto solo hay `person`.
 - **Sin ajuste en el paquete:** todas las secuencias son de `evaluacion`. Las tomas de prueba `aj01` a `aj07` no se publican: `aj01` a `aj03` se borraron por salir giradas, y las demás no tienen etiquetas.
+- **Pendiente de #15:** falta un conjunto de ajuste identificado, así que ese ticket sigue abierto. No hay secuencias de ajuste que B1 pueda usar hoy. Mientras no existan, la configuración de la política debe quedar sin ajustes contra datos, y el equipo debe declararlo.
 
 ### Tomas repetidas
 
@@ -149,7 +152,11 @@ Durante la captura se corrieron YOLOX-Tiny y, en `seq06`, también la política,
 
 La colocación de las personas se decidió viendo lo que el detector reconocía: de pie frente a fondos oscuros falla más, y en este conjunto están sobre todo en lugares donde se les ve bien. **Por eso estas métricas no representan cualquier escena.** Tampoco hay personas de pie a corta distancia, con el cuerpo cortado, donde el detector casi no las reconoce.
 
-Después de congelar no se repiten tomas. La política no debe ajustarse con estos cuadros, y `seq06` ya muestra FORWARD en dos cuadros con la persona al centro.
+Después de congelar no se repiten tomas. La política no debe ajustarse con estos cuadros. Si B1 necesita ajustarla, hay que capturar y etiquetar secuencias nuevas, separadas de estas.
+
+Con la política actual y YOLOX-Tiny, 5 de 128 cuadros quedan fuera de `allowed_actions`: FORWARD en `seq06-0036` y `seq06-0038` con la persona al centro, y EVADE_RIGHT en 3 cuadros de `seq05` con una persona a la derecha. Con cajas perfectas no sale ninguno, así que vienen de los fallos del detector al combinarse con la política. Son resultados del sistema, no errores del paquete, y no se corrigieron cambiando las acciones admisibles.
+
+`base_commit` de `congelamiento.json` debe seguir en el historial de `main`, así que este PR se integra con un merge commit, no con squash.
 
 ## Formato para A3 y B3
 
