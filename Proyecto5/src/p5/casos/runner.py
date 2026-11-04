@@ -22,6 +22,9 @@ from p3.policy.casos import ejecutar_casos
 from p3.policy.config import ConfigPolitica, cargar_config
 from p3.policy.politica import PoliticaDecision
 
+from p5.casos.confidence import run_confidence_case
+from p5.casos.geometry import geometry_failures
+from p5.casos.temporal import run_temporal_control
 from p5.control.adapter import VirtualControlAdapter
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.yolox import (
@@ -105,6 +108,19 @@ def _command_matches(record: dict[str, Any]) -> bool:
 
 def _rule_failures(case: dict[str, Any], decisions: list[dict[str, Any]]) -> list[dict[str, Any]]:
     failures = []
+    expected_states = case.get("estados_en_orden", [])
+    progress = 0
+    for decision in decisions:
+        if progress < len(expected_states) and decision["estado"] == expected_states[progress]:
+            progress += 1
+    if progress != len(expected_states):
+        failures.append(
+            {
+                "regla": "estados_en_orden",
+                "esperados": expected_states,
+                "observados": [d["estado"] for d in decisions],
+            }
+        )
 
     def window(first: int, last: int) -> list[dict[str, Any]] | None:
         if first < 1 or last > len(decisions):
@@ -170,7 +186,17 @@ def run_real_case(
         "entrada": {"secuencia": case["secuencia"], "cuadros": len(sequence)},
         "esperado": {
             "acciones_por_cuadro": "allowed_actions del manifiesto",
-            **{key: case[key] for key in ("alguna", "reaccion") if key in case},
+            **{
+                key: case[key]
+                for key in (
+                    "alguna",
+                    "reaccion",
+                    "estados_en_orden",
+                    "direccion_min",
+                    "direccion_max",
+                )
+                if key in case
+            },
         },
     }
     if not sequence:
@@ -223,17 +249,29 @@ def run_real_case(
                 }
             )
 
+        failures.extend(
+            {**failure, **where} for failure in geometry_failures(record, row, settings)
+        )
+
     failures.extend(_rule_failures(case, decisions))
+    temporal_control = run_temporal_control(config) if case["id"] == "C7" else None
+    if temporal_control:
+        failures.extend(
+            {"origen": "control_temporal", **failure} for failure in temporal_control["fallos"]
+        )
     return {
         **result,
         "resultado": FAILED if failures else PASSED,
         "fallos": failures,
         "decisiones": decisions,
         "eventos_watchdog": watchdog_events,
+        "control_temporal": temporal_control,
     }
 
 
 def _run_synthetic_case(case: dict[str, Any], config: Config) -> dict[str, Any]:
+    if case.get("confidence_from_config"):
+        return run_confidence_case(case, config)
     settings, config_sha256 = config
     source = yaml.safe_load(Path(case["archivo"]).read_text(encoding="utf-8"))
     source["casos"] = [item for item in source["casos"] if item["id"] == case["caso_origen"]]
@@ -451,7 +489,16 @@ def _sha256(path: Path) -> str:
 def _current_commit() -> str | None:
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
+            [
+                "git",
+                "-c",
+                f"safe.directory={Path(__file__).resolve().parents[4].as_posix()}",
+                "rev-parse",
+                "HEAD",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
         )
     except (OSError, subprocess.CalledProcessError):
         return None
@@ -467,6 +514,18 @@ def _write_results(output: Path, report: dict[str, Any]) -> None:
         for case in report["casos"]:
             for decision in case["decisiones"]:
                 lines.write(json.dumps({"caso": case["id"], **decision}, ensure_ascii=False) + "\n")
+    with (output / "fallos.jsonl").open("w", encoding="utf-8", newline="\n") as lines:
+        for case in report["casos"]:
+            for failure in case["fallos"]:
+                lines.write(json.dumps({"caso": case["id"], **failure}, ensure_ascii=False) + "\n")
+    with (output / "controles_temporales.jsonl").open("w", encoding="utf-8", newline="\n") as lines:
+        for case in report["casos"]:
+            control = case.get("control_temporal")
+            if control:
+                for decision in control["decisiones"]:
+                    lines.write(
+                        json.dumps({"caso": case["id"], **decision}, ensure_ascii=False) + "\n"
+                    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -479,6 +538,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dataset", required=True, type=Path, help="Paquete congelado.")
     parser.add_argument("--weights", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path, help="Carpeta nueva.")
+    parser.add_argument(
+        "--only",
+        nargs="+",
+        choices=REQUIRED_CASES,
+        help="Ejecuta solo estos casos; el archivo debe seguir declarando C1-C10.",
+    )
     args = parser.parse_args(argv)
 
     if args.output.exists():
@@ -486,8 +551,24 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         data = load_cases(args.cases)
+        if args.only:
+            if len(set(args.only)) != len(args.only):
+                parser.error("--only no admite casos repetidos")
+            data["casos"] = [case for case in data["casos"] if case["id"] in args.only]
         rows = load_manifest(args.dataset / MANIFEST_FILE)
         config = cargar_config(args.config)
+        # Sellar entradas antes de cargar el detector: nunca derivar expectativas del resultado.
+        expectations = {
+            "fecha_previa_inferencia": datetime.now(UTC).isoformat(),
+            "casos_sha256": _sha256(args.cases),
+            "config_sha256": config[1],
+            "manifiesto_sha256": _sha256(args.dataset / MANIFEST_FILE),
+            "casos_ejecutados": [case["id"] for case in data["casos"]],
+        }
+        synthetic_sources = {case["archivo"] for case in data["casos"] if "archivo" in case}
+        expectations["fuentes_sinteticas_sha256"] = {
+            str(Path(path).name): _sha256(Path(path)) for path in sorted(synthetic_sources)
+        }
         detector = load_detector(args.weights)
         report = run_cases(data, rows, config, detector, args.dataset)
     except (DetectorError, OSError, ValueError, KeyError) as error:
@@ -498,6 +579,7 @@ def main(argv: list[str] | None = None) -> int:
         "run_id": uuid4().hex,
         "fecha": datetime.now(UTC).isoformat(timespec="seconds"),
         "commit": _current_commit(),
+        "detector": type(detector).__name__,
         "modo": "virtual",
         "salida": "comandos del adaptador virtual; C6 solo evalua decisiones de la politica",
         "salida_fisica": VirtualControlAdapter.physical_output_enabled,
@@ -510,6 +592,7 @@ def main(argv: list[str] | None = None) -> int:
         "nms_detector": DEFAULT_NMS_THRESHOLD,
         "runtime": f"Python {platform.python_version()}",
         "hardware": f"{platform.system()} {platform.machine()}, CPU",
+        "expectativas_previas": expectations,
     }
     _write_results(args.output, report)
 

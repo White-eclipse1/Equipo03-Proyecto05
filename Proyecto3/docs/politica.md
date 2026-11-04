@@ -157,7 +157,85 @@ Los casos están en `casos/politica_c1_c7.yaml`, con su justificación geométri
 | C6 | conf 0.40 → 0.55 en el centro | SLOW mientras es débil; STOP al confirmarse firme | PASA |
 | C7 | libre → obstáculo → 1 cuadro vacío → obstáculo → libre | STOP de 5 a 11; FORWARD tras 3 libres | PASA |
 
-**Pendiente (depende de B3-01 y A1):** correr C1–C5 y C7 sobre las secuencias reales con el detector real, como exige la Fase 3 de la evaluación. Para eso basta pasar las salidas del detector, ya en el contrato de arriba, a `PoliticaDecision.decidir_crudo`.
+Con las secuencias reales y el detector real, los casos los corre el runner de B3-02 (`Proyecto5/docs/B3-02_RUNNER.md`).
+
+## C5 y C7 con el detector real (análisis de B1)
+
+Con el detector real, C5 falla en `seq05` 8–10 (EVADE_RIGHT con una persona a la derecha). C7 falla en `seq06` 30/31 (sin BLOCKED en el plazo de 2 cuadros) y 36/38 (FORWARD con la persona al centro). **No se corrigieron cambiando la política ni las expectativas**, porque la causa principal es el detector. Este análisis documenta los fallos, pero **no cierra B1-03 (#3)**: su definición de terminado exige que C1–C7 pasen.
+
+**Reproducción**, desde `Proyecto5` en el commit `fe9f5d5` de `main`:
+
+```powershell
+.venv\Scripts\python -m p5.casos.runner --cases casos/c1_c10.yaml --config config/politica.yaml --dataset data/p5-eval-v1 --weights models/yolox_tiny.onnx --output resultados\c1-c10-detector-real
+```
+
+`resultados/` está en `.gitignore`. El runner no sobrescribe: si la carpeta ya existe, usa otro nombre. Sale con código 1 mientras C5 y C7 fallen y C9 y C10 sigan pendientes.
+
+| Dato | Valor |
+|---|---|
+| Modelo (`yolox_tiny.onnx`) | `427cc366…70b0f7` |
+| Manifiesto `p5-eval-v1` | `5dab9ee3…2ffeeb` |
+| `Proyecto5/config/politica.yaml` | `171b0632…716054`. Tiene los mismos valores que `Proyecto3/config/politica.yaml` y solo cambian los comentarios |
+| Umbral / NMS del detector | 0.10 / 0.45 |
+| Resultado | 6 pasan, 2 fallan (C5, C7), 2 pendientes |
+
+Las mismas acciones y razones salieron en tres corridas: dos en `f9b173a` con la configuración de Proyecto3 y una en `fe9f5d5` con la de Proyecto5. Las confianzas difieren desde el 7.º decimal por ONNX Runtime, lejos de cualquier umbral. Las trazas de C5 y C7 están en `reports/politica/c5-c7-detector-real/`.
+
+**Control con detector perfecto:** `test_expectations_are_consistent_with_a_perfect_detector` (Proyecto5) corre la misma política y la misma configuración con las etiquetas como detecciones, y C5 y C7 **pasan**. Las reglas de la política y las expectativas son consistentes entre sí.
+
+### C5: `seq05`, persona al centro y persona a la derecha en los 14 cuadros
+
+| Cuadro | Persona derecha (detector) | Derecha (racha ocupada, libre) | Acción |
+|---|---|---|---|
+| 1–2 | 0.85 y 0.78 *f* | OCUPADA en el 2 | STOP, `SIN_ZONA_LIBRE` |
+| 3 | 0.42 débil | OCUPADA (0, 0) | EVADE_LEFT |
+| 4 | 0.15 *i* | OCUPADA (0, 1) | EVADE_LEFT |
+| 5 | 0.83 *f* | OCUPADA (1, 0) | EVADE_LEFT |
+| 6 | 0.14 *i* | OCUPADA (0, 1) | EVADE_LEFT |
+| 7 | 0.12 *i* | OCUPADA (0, 2) | EVADE_LEFT |
+| 8 | sin detección | **LIBRE (0, 3)** | **EVADE_RIGHT** |
+| 9–10 | sin detección | LIBRE (0, 4–5) | **EVADE_RIGHT** |
+| 11–14 | firme en 11 y 14 | LIBRE; racha libre < 3, así que no sirve como destino | EVADE_LEFT |
+
+La persona del centro sale firme en los 14 cuadros, así que el centro siempre está OCUPADO. La de la derecha sale con 0.12–0.15 en los cuadros 4, 6 y 7, por debajo de `umbral_bajo`, y desaparece en los cuadros 8–10. Con 3 cuadros sin evidencia, la regla documentada libera la zona, y la evasión hacia un lateral LIBRE con 3 cuadros limpios queda permitida. **Causa: detector.** La política aplicó sus reglas tal como están escritas.
+
+### C7: `seq06`
+
+**Cuadro a cuadro** (`seq06`, persona anotada al centro de 30 a 44, x ≈ 0.28–0.46, y2/H ≈ 0.48, dentro de la banda). *f* = firme (≥ 0.50), *i* = ignorada (< 0.30):
+
+| Cuadro | Detector (person) | Centro (racha ocupada, libre) | Acción |
+|---|---|---|---|
+| 30 | 0.86 *f* izq+centro | LIBRE (1, 0) | SLOW, `CENTRO_POR_CONFIRMAR` |
+| 31 | 0.26 *i* centro | LIBRE (0, 1) | SLOW, `LATERAL_OCUPADO` |
+| 32 | 0.26 *i* | LIBRE (0, 2) | SLOW |
+| 33 | 0.69 *f* | LIBRE (1, 0) | SLOW, `CENTRO_POR_CONFIRMAR` |
+| 34 | sin detección | LIBRE (0, 1) | SLOW |
+| 35 | sin detección | LIBRE (0, 2) | SLOW |
+| 36 | 0.15 *i* | LIBRE (0, 3) | **FORWARD** |
+| 37 | 0.73 *f* | LIBRE (1, 0) | SLOW, `CENTRO_POR_CONFIRMAR` |
+| 38 | 0.11 *i*, caja en la izquierda | LIBRE (0, 1) | **FORWARD** |
+| 39 | 0.58 *f* | LIBRE (1, 0) | SLOW |
+| 40–44 | firme en 40, 41, 42 y 44 | OCUPADA | EVADE_RIGHT |
+
+Entre 30 y 39 el detector entrega a la persona como firme en **4 de 10 cuadros**, y nunca en dos cuadros seguidos.
+
+**Atribución:**
+
+- **30/31, causa en el detector:** el cuadro 31 llega con 0.26, que está por debajo de `umbral_bajo`. `cuadros_para_bloquear: 2` exige dos cuadros firmes seguidos, así que la vía queda en CAUTION (SLOW, nunca crucero) y no llega a BLOCKED.
+- **36, causa en el detector:** 34, 35 y 36 son tres cuadros sin la persona en el centro, y la regla documentada es que la zona se libera tras 3. Con esa entrada, ninguna política que vuelva a avanzar tras 3 cuadros libres, como pide la propia C7 al final de la secuencia, puede evitar este FORWARD.
+- **38, mixta:** el detector pierde a la persona; la única caja que entrega está en la izquierda. La política contribuye: como el centro nunca llegó a OCUPADA, una detección firme sin confirmar (la del 37) se olvida tras un solo cuadro vacío y se vuelve a crucero. Es una debilidad de la política. Con la regla «sin FORWARD hasta `cuadros_para_liberar` cuadros limpios en el centro desde la última detección firme», el 38 daría SLOW. El 36 seguiría fallando.
+
+### Qué sigue
+
+**Por qué no se ajustó aquí:** cambiar umbrales o rachas para pasar C5 y C7 sería **ajustar sobre las secuencias de evaluación** (ver la última viñeta de la sección siguiente). Cualquier ajuste se hace y se congela con `p5-ajuste-v1` y después se mide una sola vez en `p5-eval-v1`.
+
+Las trazas sugieren hipótesis para probar en `p5-ajuste-v1`. No están verificadas:
+
+- Bajar `umbral_bajo`. En los dos casos la persona perdida suele seguir detectada a 0.11–0.15, en su zona correcta. Como débil, sostendría la ocupación en C5 y frenaría la liberación en el 36 de C7. El costo es más falsos positivos.
+- Agregar la regla «sin FORWARD hasta `cuadros_para_liberar` cuadros limpios en el centro desde la última detección firme», para el 38 de C7.
+- 30/31 de C7 solo pasaría con `cuadros_para_bloquear: 1`, que reacciona a un solo cuadro y va contra la estabilidad que pide C7.
+
+La otra vía es mejorar la recuperación del detector en estas escenas (A1/A3).
 
 ## Desviaciones y límites conocidos
 

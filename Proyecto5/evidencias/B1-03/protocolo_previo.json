@@ -1,0 +1,28 @@
+{
+  "fecha_previa_inferencia": "2026-11-04T18:05:38.952699+00:00",
+  "commit_base": "fe9f5d5945acf690438b30a7f20ce9c33082ba18",
+  "expectativas_historicas_commit": "7d07559e696f28af116f1ae3512389f98322083e",
+  "expectativas": [
+    "C1 avance positivo",
+    "C2 bloqueo en plazo o evasion libre",
+    "C3 no girar izquierda ocupada",
+    "C4 no girar derecha ocupada",
+    "C5 considerar conjunto y no evadir a GT ocupado",
+    "C6 ignorada/debil/firme relativos a los umbrales sellados",
+    "C7 real recuperar movimiento y control sintetico CLEAR-BLOCKED-CLEAR"
+  ],
+  "archivos_sha256": {
+    "casos/c1_c10.yaml": "6744d306305a112171c92672c13c4936589673e8a8207f261a2f9c45da466c22",
+    "config/politica_b1_03.yaml": "f98ca624b8b6908d80d633224a9e7ef760e173a5035fa084da0017c03d0fa3b7",
+    "data/p5-eval-v1/manifiesto.jsonl": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "data/p5-ajuste-v1/manifiesto.jsonl": "b4029c40f0a483139ca74d858f12a9a518d65ab7af47674dd4924994ad8b453c",
+    "src/p5/casos/runner.py": "c9c73bcaee194dca1f0b21582b6a094957fdc7c1a9f34ba49b2be02fe5c4b2ad",
+    "src/p5/casos/geometry.py": "d730dc484774d0757f194b56276774fa3db20ea0c0631a29c86ac1c4eb608b0a",
+    "src/p5/casos/confidence.py": "373f457d7f9db5d40c503e9a60a045c711c69c9349cc4dac41bb3be4aab96800",
+    "src/p5/casos/temporal.py": "c422c17559ed412b42298f4818e517d7ebee87b96f4590682e297a4a2b2c430e",
+    "src/p5/casos/tune.py": "9620808007edef29ad1f967ddb66538e84f405c0f284213025ad531dc658b74f",
+    "evidencias/B1-03/ajuste_confianza/seleccion.json": "be1c8d9e269d3c927e4c7366a298b6b92e651e63051e08854240dbe9100e7f87"
+  },
+  "seleccion_solo_ajuste": true,
+  "retocar_perfil_despues_de_evaluacion": false
+}

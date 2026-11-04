@@ -76,13 +76,14 @@ casos:
 
   - id: C6
     tipo: sintetico
+    confidence_from_config: true
     nombre: Deteccion bajo umbral y despues sobre umbral
     archivo: ../../Proyecto3/casos/politica_c1_c7.yaml
     caso_origen: C6
-    estado_inicial: Politica recien creada, con la evasion deshabilitada
+    estado_inicial: Politica recien creada, usando el perfil configurado
     justificacion: >-
-      Se aisla con detecciones sinteticas para controlar la confianza: 0.40 es debil y baja la
-      velocidad, y 0.55 cruza el umbral y bloquea.
+      Se aisla con detecciones sinteticas: bajo umbral_bajo se ignora, entre ambos umbrales
+      produce precaucion, y exactamente umbral_alto confirma bloqueo en el plazo configurado.
 
   - id: C7
     tipo: real

@@ -52,6 +52,13 @@ Corre en CPU, sin red ni hardware: nunca llama a las rutas de motores.
 
 Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los diez. No sobrescribe una carpeta existente.
 
+Para validar únicamente B1-03 se puede añadir `--only C1 C2 C3 C4 C5 C6 C7`.
+En ese modo el código 0 exige que pasen todos los casos seleccionados, sin
+acreditar C8–C10. La [validación B1-03](B1-03_VALIDACION.md) conserva un resultado
+real de 6/7 con el perfil experimental seleccionado solo en ajuste; C7 sigue abierto.
+El runner también verifica destinos contra geometría independiente, genera
+`fallos.jsonl` y guarda el control C7 en `controles_temporales.jsonl`.
+
 ## Resultados
 
 | Archivo | Contenido |

@@ -1,0 +1,3 @@
+{"caso": "C7", "regla": "acciones", "cuadro": 38, "frame_id": "seq06-0038", "observada": "FORWARD", "permitidas": ["STOP", "SLOW", "EVADE_LEFT", "EVADE_RIGHT"], "reason_code": "VIA_LIBRE"}
+{"caso": "C7", "regla": "avance_hacia_centro_ocupado", "zonas_gt": ["centro"], "cuadro": 38, "frame_id": "seq06-0038"}
+{"caso": "C7", "regla": "reaccion", "desde": 30, "plazo_cuadros": 2, "acciones": ["STOP", "EVADE_LEFT", "EVADE_RIGHT"], "observadas": ["SLOW/CAUTION"]}

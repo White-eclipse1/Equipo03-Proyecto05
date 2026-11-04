@@ -1,0 +1,39 @@
+schema_version: 1
+clases_obstaculo:
+- person
+- bicycle
+- car
+- motorcycle
+- bus
+- truck
+- cat
+- dog
+zonas:
+  izquierda:
+  - 0.0
+  - 0.35
+  centro:
+  - 0.35
+  - 0.65
+  derecha:
+  - 0.65
+  - 1.0
+geometria:
+  banda_riesgo_y_min: 0.4
+  area_min: 0.005
+  cobertura_min_zona: 0.15
+confianza:
+  umbral_alto: 0.3
+  umbral_bajo: 0.1
+temporal:
+  cuadros_para_bloquear: 2
+  cuadros_para_liberar: 5
+  vigencia_comando_ms: 500
+comandos:
+  velocidad_crucero: 0.6
+  velocidad_precaucion: 0.3
+  velocidad_evasion: 0.2
+  direccion_evasion: 0.5
+evasion:
+  habilitada: true
+  lado_preferido: derecha
