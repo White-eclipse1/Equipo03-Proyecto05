@@ -1,0 +1,83 @@
+# Entradas sinteticas del contrato A -> B. Las expectativas no llegan al motor.
+schema_version: 1
+imagen: {ancho: 640, alto: 480}
+periodo_ms: 100
+cajas:
+  CENTRO: [260, 200, 380, 460]
+  IZQ: [20, 200, 180, 460]
+  DER: [470, 200, 620, 460]
+casos:
+  - id: C1
+    escenas:
+      - {repetir: 5, objetos: []}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 5], estado: CLEAR, accion: FORWARD, velocidad: 0.60}
+  - id: C2
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 3, objetos: [{caja: CENTRO}]}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 3], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [4, 4], estado: CAUTION, accion: SLOW}
+      - {cuadros: [5, 6], estado: BLOCKED, accion: EVADE_RIGHT}
+  - id: C3
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 3, objetos: [{caja: IZQ}]}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 3], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [4, 6], estado: CAUTION, accion: SLOW, direccion: 0.0}
+  - id: C4
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 3, objetos: [{caja: DER}]}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 3], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [4, 6], estado: CAUTION, accion: SLOW, direccion: 0.0}
+  - id: C5
+    escenas:
+      - {repetir: 3, objetos: []}
+      - repetir: 3
+        objetos:
+          - {caja: IZQ, conf: 0.99}
+          - {caja: CENTRO, conf: 0.60}
+          - {caja: DER, conf: 0.80}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 3], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [4, 4], estado: CAUTION, accion: SLOW}
+      - {cuadros: [5, 6], estado: BLOCKED, accion: STOP}
+  - id: C6
+    config: {evasion: {habilitada: false}}
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 2, objetos: [{caja: CENTRO, conf: 0.29}]}
+      - {repetir: 2, objetos: [{caja: CENTRO, conf: 0.30}]}
+      - {repetir: 2, objetos: [{caja: CENTRO, conf: 0.50}]}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 5], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [6, 7], estado: CAUTION, accion: SLOW, reason_code: CENTRO_DEBIL}
+      - {cuadros: [8, 8], estado: CAUTION, accion: SLOW, reason_code: CENTRO_POR_CONFIRMAR}
+      - {cuadros: [9, 9], estado: BLOCKED, accion: STOP}
+  - id: C7
+    config: {evasion: {habilitada: false}}
+    escenas:
+      - {repetir: 3, objetos: []}
+      - {repetir: 4, objetos: [{caja: CENTRO}]}
+      - {objetos: []}
+      - {objetos: [{caja: CENTRO}]}
+      - {repetir: 4, objetos: []}
+    esperado:
+      - {cuadros: [1, 2], estado: UNKNOWN, accion: STOP}
+      - {cuadros: [3, 3], estado: CLEAR, accion: FORWARD}
+      - {cuadros: [4, 4], estado: CAUTION, accion: SLOW}
+      - {cuadros: [5, 7], estado: BLOCKED, accion: STOP, reason_code: CENTRO_BLOQUEADO}
+      - {cuadros: [8, 8], estado: BLOCKED, accion: STOP, reason_code: CENTRO_HISTERESIS}
+      - {cuadros: [9, 9], estado: BLOCKED, accion: STOP, reason_code: CENTRO_BLOQUEADO}
+      - {cuadros: [10, 11], estado: BLOCKED, accion: STOP, reason_code: CENTRO_HISTERESIS}
+      - {cuadros: [12, 13], estado: CLEAR, accion: FORWARD, reason_code: VIA_LIBRE}
