@@ -296,9 +296,7 @@ def _run_watchdog_case(
     try:
         # Los tres primeros cuadros reales confirman la via; sus etiquetas no llegan al detector.
         for row in sequence[:3]:
-            trace = pipeline.process(
-                _frame_input(row, dataset), now_ms=float(row["t_capture_ms"])
-            )
+            trace = pipeline.process(_frame_input(row, dataset), now_ms=float(row["t_capture_ms"]))
             decisions.append({**_frame_record(trace), "evento": "cuadro_inicial"})
             if trace.errors:
                 failures.append({"regla": "recorrido", "errores": list(trace.errors)})
@@ -354,9 +352,7 @@ def _run_watchdog_case(
             return finish()
         directions = []
         for row in sequence[3:6]:
-            trace = pipeline.process(
-                _frame_input(row, dataset), now_ms=float(row["t_capture_ms"])
-            )
+            trace = pipeline.process(_frame_input(row, dataset), now_ms=float(row["t_capture_ms"]))
             decisions.append({**_frame_record(trace), "evento": "reconfirmacion"})
             commands.append(_c8_command("reconfirmacion", trace.command))
             directions.append(trace.command["direction"])
