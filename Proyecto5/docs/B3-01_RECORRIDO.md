@@ -203,11 +203,11 @@ Este PR no cambia la política ni sus umbrales. Decidir si ajustarlos correspond
 
 ## Límites conocidos
 
-- **Vigencia del comando:** `valido_hasta_ms` queda en la traza, pero no llega al adaptador, que todavía no detiene un comando vencido. Es de B2-02 (#5).
-- **Reloj:** `timestamp` usa el reloj de pared del adaptador. C8 necesita un reloj que se pueda avanzar en pruebas; también es de B2-02 (#5).
+- **Vigencia y watchdog:** el adaptador controla `valid_until_ms` y puede emitir STOP por `watchdog_timeout` sin esperar otro cuadro. C8 lo reproduce con un reloj controlado.
+- **Cuadros vencidos:** el recorrido rechaza percepción temporalmente obsoleta antes del detector y la política, y reinicia la confirmaci?n de vía.
 - **Identificación de la corrida:** la traza no incluye `run_id`, commit, SHA-256 del modelo y del manifiesto, umbrales ni runtime. Solo guarda `config_sha256` de la política. Queda para B3-03 (#9).
 - **Reinicio de la política:** el recorrido reescribe `memoria` de `PoliticaDecision` porque la política no expone un método para reiniciarse. Una prueba comprueba que el resultado coincide con el reinicio por error del detector, salvo `ultimo_t_ms`.
-- **Emergencia y cierre:** no hay emergencia enclavada, rearme ni STOP final al cerrar. Son de B2-03 (#6).
+- **Emergencia y cierre:** B2-03 incorpora STOP de emergencia enclavado, rearme explícito que exige percepción válida y posterior, reconfirmación de vía y STOP final al cerrar la aplicación. Si el STOP de emergencia o cierre no puede llegar al adaptador, se cancela el movimiento vigente y el recorrido queda detenido.
 - **Motores:** el adaptador es virtual. Nada de este recorrido llama a las rutas de motores del carro.
 - **Hardware:** se probó con imágenes capturadas por el carro, pero no en tiempo real ni en su hardware.
 - **Instalación:** `p3` solo queda importable con la instalación editable `pip install -e .`. Un wheel de P5 no lo incluye.

@@ -65,6 +65,10 @@ def main(argv: list[str] | None = None) -> int:
         logger.error("integration_error stage=output detail=%s", failure)
         return 1
 
+    # Cierre controlado: aun si el último cuadro dejó movimiento activo,
+    # la aplicación termina siempre con un STOP explícito.
+    pipeline.shutdown()
+
     print(f"frames={len(frames)} errors={failed} output={args.output}")
     return 1 if failed else 0
 

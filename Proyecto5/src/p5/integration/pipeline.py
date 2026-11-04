@@ -119,8 +119,101 @@ class Pipeline:
         self.adapter = adapter
         # Verdadero si un STOP no se pudo emitir: este recorrido ya no vuelve a moverse.
         self.halted = False
+        self._emergency_latched = False
+        self._rearm_requested = False
+
+    @property
+    def emergency_latched(self) -> bool:
+        return self._emergency_latched
+
+    def trigger_emergency(self) -> dict[str, Any]:
+        self._emergency_latched = True
+        self._rearm_requested = False
+        self._restart_confirmation_without_frame()
+        return self._system_stop(
+            frame_id="emergency",
+            decision_id="emergency",
+            reason_code="EMERGENCY_STOP",
+        )
+
+    def request_rearm(self) -> None:
+        """Solicita rearme; no libera la emergencia hasta una percepción fresca válida."""
+        if self._emergency_latched:
+            self._rearm_requested = True
+
+    def shutdown(self) -> dict[str, Any]:
+        """Emite un STOP final y deja el recorrido permanentemente detenido."""
+        self.halted = True
+        self._emergency_latched = False
+        self._rearm_requested = False
+        self._restart_confirmation_without_frame()
+        return self._system_stop(
+            frame_id="shutdown",
+            decision_id="shutdown",
+            reason_code="APPLICATION_SHUTDOWN",
+        )
+
+    def _system_stop(
+        self,
+        *,
+        frame_id: str,
+        decision_id: str,
+        reason_code: str,
+    ) -> dict[str, Any]:
+        """Emite un STOP fuera del procesamiento de un cuadro, con failsafe."""
+        try:
+            return asdict(
+                self.adapter.apply(
+                    ControlDecision(
+                        action=Action.STOP,
+                        requested_speed=0.0,
+                        frame_id=frame_id,
+                        decision_id=decision_id,
+                        reason_code=reason_code,
+                    )
+                )
+            )
+        except Exception as failure:
+            logger.error(
+                "integration_error stage=failsafe frame_id=%s detail=%s",
+                frame_id,
+                str(failure) or type(failure).__name__,
+            )
+            self.halted = True
+            self.adapter.cancel()
+            return {
+                "speed": 0.0,
+                "direction": "stop",
+                "steering": 0.0,
+                "timestamp": None,
+                "frame_id": frame_id,
+                "decision_id": decision_id,
+                "reason_code": STOP_NOT_EMITTED_REASON,
+            }
 
     def process(self, frame: FrameInput) -> FrameTrace:
+        if self._emergency_latched and not self._rearm_requested:
+            command = self._stop(frame, [], reason_code="EMERGENCY_LATCHED")
+            return FrameTrace(
+                sequence_id=frame.sequence_id,
+                frame_id=frame.frame_id,
+                t_capture_ms=frame.t_capture_ms,
+                image=str(frame.image_path),
+                perception={
+                    "sequence_id": frame.sequence_id,
+                    "frame_id": frame.frame_id,
+                    "t_capture_ms": frame.t_capture_ms,
+                    "image_width": frame.image_size[0],
+                    "image_height": frame.image_size[1],
+                    "status": "error",
+                    "detections": (),
+                    "error": "emergency latched",
+                },
+                decision=None,
+                command=command,
+                errors=({"stage": "emergency", "detail": "emergency latched"},),
+            )
+
         # Antes de aceptar un cuadro nuevo, vence cualquier movimiento anterior
         # que ya haya superado su vigencia.
         self.check_watchdog()
@@ -178,6 +271,44 @@ class Pipeline:
             )
 
         perception = self._perceive(frame, errors)
+
+        # Una solicitud explícita de rearme solo se completa después de
+        # recibir una percepción temporalmente fresca y válida.
+        if self._emergency_latched:
+            last_t_ms = self._policy.memoria.ultimo_t_ms
+            fresh_for_rearm = (
+                perception["status"] == "ok"
+                and isfinite(frame.t_capture_ms)
+                and (last_t_ms is None or frame.t_capture_ms > last_t_ms)
+            )
+
+            if not fresh_for_rearm:
+                _record(
+                    errors,
+                    "rearm",
+                    frame,
+                    "rearme rechazado: se requiere una percepción válida y posterior",
+                )
+                command = self._stop(
+                    frame,
+                    errors,
+                    reason_code="EMERGENCY_LATCHED",
+                )
+                return FrameTrace(
+                    sequence_id=frame.sequence_id,
+                    frame_id=frame.frame_id,
+                    t_capture_ms=frame.t_capture_ms,
+                    image=str(frame.image_path),
+                    perception=perception,
+                    decision=None,
+                    command=command,
+                    errors=tuple(errors),
+                )
+
+            self._emergency_latched = False
+            self._rearm_requested = False
+            self._restart_confirmation(frame)
+
         decision = self._decide(frame, perception, errors)
         command = self._command(frame, decision, errors)
         replaced: list[str] = []
