@@ -1,9 +1,9 @@
 """La verificacion F01 rechaza diferencias aunque la auditoria numerica pase."""
 
 import hashlib
+import importlib
 import json
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -16,7 +16,20 @@ ROOT = Path(__file__).resolve().parents[1]
     "changed",
     [None, "metricas.json", "metricas.csv", "predicciones.jsonl", "resultados_por_cuadro.jsonl"],
 )
-def test_comparison_controls_exit_status_even_when_numeric_audit_passes(tmp_path, changed):
+def test_comparison_controls_exit_status_even_when_numeric_audit_passes(
+    tmp_path, changed, monkeypatch
+):
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    verifier = importlib.import_module("verificar_a3_04_f01")
+    # Estos casos prueban comparaciones, no el entorno que produjo la evidencia.
+    # CI respeta los marcadores del lock (colorama solo se instala en Windows).
+    versions = {}
+    for line in (ROOT / "requirements.lock.txt").read_text(encoding="utf-8").splitlines():
+        requirement = line.split(";", 1)[0].strip()
+        if requirement and not requirement.startswith("#"):
+            name, version = requirement.split("==")
+            versions[name] = version
+    monkeypatch.setattr(verifier.importlib.metadata, "version", versions.__getitem__)
     evidence = tmp_path / "evidence"
     evidence.mkdir()
     for name in (
@@ -28,6 +41,11 @@ def test_comparison_controls_exit_status_even_when_numeric_audit_passes(tmp_path
         shutil.copyfile(ROOT / "evidencias/a3-metricas-python312" / name, evidence / name)
     metrics_path = evidence / "metricas.json"
     metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    runtime = metrics["ejecucion"]["runtime"].removeprefix("Python ")
+    monkeypatch.setattr(verifier.platform, "python_version", lambda: runtime)
+    monkeypatch.setattr(
+        verifier.platform, "python_version_tuple", lambda: tuple(runtime.split("."))
+    )
     if changed == "metricas.json":
         # Campo no numerico: el auditor de TP/FP/FN no debe ser quien lo rechace.
         metrics["diferencia_deliberada"] = True
@@ -42,23 +60,22 @@ def test_comparison_controls_exit_status_even_when_numeric_audit_passes(tmp_path
             ).hexdigest()
     metrics_path.write_text(json.dumps(metrics), encoding="utf-8")
     output = tmp_path / "comparison.json"
-    result = subprocess.run(
+    monkeypatch.setattr(
+        sys,
+        "argv",
         [
-            sys.executable,
             str(ROOT / "scripts/verificar_a3_04_f01.py"),
             "--evidence",
             str(evidence),
             "--output",
             str(output),
         ],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
     )
-    assert output.exists(), result.stderr
+    exit_code = verifier.main()
+    assert output.exists()
     report = json.loads(output.read_text(encoding="utf-8"))
     assert report["fallos_auditoria"] == []
-    assert result.returncode == (1 if changed else 0), result.stderr
+    assert exit_code == (1 if changed else 0)
     assert report["correcto"] is (changed is None)
     expected_key = (
         "metricas_identicas_sin_metadatos"
