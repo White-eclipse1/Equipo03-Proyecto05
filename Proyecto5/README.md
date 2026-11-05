@@ -8,6 +8,30 @@ imagen → detección → estado → decisión → comando
 
 **La reproducción está completa.** Desde una copia limpia, todos los pasos dan `ok` en Linux y en Windows, incluidos los 10 casos C1–C10. El resultado y los límites conocidos están en [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md).
 
+## Equipo
+
+Ocho personas, en dos grupos con un PM y tres integrantes cada uno. Los grupos acuerdan el contrato de [docs/A1-03_CONTRATO.md](docs/A1-03_CONTRATO.md).
+
+### Grupo A: Percepción y datos
+
+| Rol | Responsable | Responsabilidad |
+|---|---|---|
+| PM A | Mauricio Figueroa Guerrero (@White-eclipse1) | Coordina el grupo y acuerda el contrato con el grupo B |
+| A1 | Josué Godoy (@JGO-07) | Detector y runtime |
+| A2 | Diego Lemus (@D-Lemus) | Secuencias y anotaciones |
+| A3 | Omar Oswaldo Ramírez Arenas (@OmarCTMX) | Métricas de detección, benchmark y auditoría |
+
+### Grupo B: Control y verificación
+
+| Rol | Responsable | Responsabilidad |
+|---|---|---|
+| PM B | Santiago Ortiz Soto (@Sir-roboot) | Coordina el grupo y acuerda el contrato con el grupo A |
+| B1 | Andrés Quiroz Valdovinos (@AndresQuiVal) | Política temporal |
+| B2 | Luis Leal (@lluisvl) | Adaptador de control y paradas |
+| B3 | Ignacio Villaseñor (@Lanachiza) | Integración y pruebas |
+
+**Apoyos entre roles:** Diego Lemus implementó las métricas (#16 y #17) y el runner de casos (#8). Josué Godoy implementó el recorrido integrado (#7), el benchmark (#18) y la reproducción (#9). Los responsables de cada entrega están en sus tickets y documentos.
+
 ## Requisitos
 
 - Python 3.12 y Git.
@@ -134,7 +158,7 @@ La reproducción completa también lo resume en `cuadro_trazado.json`. El format
 | E1 | Repositorio y reproducción | Este README, [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md) y [evidencias/B3-03/](evidencias/B3-03/) |
 | E2 | Detector, procedencia y contrato | [docs/A1-01_DETECTOR.md](docs/A1-01_DETECTOR.md), [docs/A1-02_PROCEDENCIA.md](docs/A1-02_PROCEDENCIA.md) y [docs/A1-03_CONTRATO.md](docs/A1-03_CONTRATO.md) |
 | E3 | Dataset congelado | [docs/A2_DATASET.md](docs/A2_DATASET.md) y [data/](data/) |
-| E4 | Política y adaptador virtual | [docs/B1-01_POLITICA.md](docs/B1-01_POLITICA.md), [docs/B1-02_TEMPORAL.md](docs/B1-02_TEMPORAL.md), [docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md](docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md) y [docs/B2-02_WATCHDOG.md](docs/B2-02_WATCHDOG.md) |
+| E4 | Política y adaptador virtual | [docs/B1-01_POLITICA.md](docs/B1-01_POLITICA.md), [docs/B1-02_TEMPORAL.md](docs/B1-02_TEMPORAL.md), [docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md](docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md), [docs/B2-02_WATCHDOG.md](docs/B2-02_WATCHDOG.md) y [docs/B2_MAPEO_CARRO.md](docs/B2_MAPEO_CARRO.md) |
 | E5 | Casos C1–C10 | [docs/B3-02_RUNNER.md](docs/B3-02_RUNNER.md), [docs/B1-03_VALIDACION.md](docs/B1-03_VALIDACION.md) y [casos/c1_c10.yaml](casos/c1_c10.yaml) |
 | E6 | Métricas del detector | [docs/A3_METRICAS.md](docs/A3_METRICAS.md), [evidencias/a3-metricas-mediana3/](evidencias/a3-metricas-mediana3/), vigente; [evidencias/a3-metricas-v1/](evidencias/a3-metricas-v1/) y [evidencias/a3-metricas-python312/](evidencias/a3-metricas-python312/), sin filtro |
 | E7 | Benchmark | [docs/A3-03_BENCHMARK.md](docs/A3-03_BENCHMARK.md), [evidencias/A3-03-mediana3/](evidencias/A3-03-mediana3/), vigente, y [evidencias/A3-03/](evidencias/A3-03/), sin filtro |
