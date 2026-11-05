@@ -158,3 +158,21 @@ def test_a_person_only_counts_when_a_firm_person_box_overlaps_it():
 )
 def test_each_lost_person_gets_the_stage_that_explains_it(final, raw, stage):
     assert load_script("diagnostico_perdidas").classify(final, raw) == stage
+
+
+def test_current_evidence_measures_the_detector_with_the_filter():
+    root = SCRIPTS.parent
+    metrics = json.loads(
+        (root / "evidencias/a3-metricas-mediana3/metricas.json").read_text(encoding="utf-8")
+    )
+    benchmark = json.loads(
+        (root / "evidencias/A3-03-mediana3/benchmark.json").read_text(encoding="utf-8")
+    )
+
+    assert metrics["ejecucion"]["filtro_mediana_detector"] == DEFAULT_MEDIAN_KERNEL
+    assert metrics["ejecucion"]["origen"] == "detector"
+    assert benchmark["detector"]["filtro_mediana"] == DEFAULT_MEDIAN_KERNEL
+    assert metrics["ejecucion"]["commit"] == benchmark["codigo"]["commit"]
+    assert (metrics["micro"]["tp"], metrics["micro"]["fp"], metrics["micro"]["fn"]) == (83, 1, 8)
+    report = (root / "docs/A3_METRICAS.md").read_text(encoding="utf-8")
+    assert f"{metrics['micro']['f1']:.4f}" in report

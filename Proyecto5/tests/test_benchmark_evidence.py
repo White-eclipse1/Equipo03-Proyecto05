@@ -16,8 +16,8 @@ from p5.detector.weights import WEIGHTS_SHA256, WEIGHTS_SIZE
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "evidencias"
-OFFICIAL = EVIDENCE / "A3-03"
-RUNS = [OFFICIAL, EVIDENCE / "A3-03-programas-abiertos"]
+OFFICIAL = EVIDENCE / "A3-03-mediana3"
+RUNS = [OFFICIAL, EVIDENCE / "A3-03", EVIDENCE / "A3-03-programas-abiertos"]
 MANIFEST = ROOT / "data" / "p5-eval-v1" / "manifiesto.jsonl"
 DOC = ROOT / "docs" / "A3-03_BENCHMARK.md"
 POLICY = ROOT.parent / "Proyecto3" / "config" / "politica.yaml"

@@ -4,14 +4,14 @@ Ticket: #3. Continúa [B1-03_VALIDACION.md](B1-03_VALIDACION.md), que dejó pend
 
 ## Estado
 
-**La corrida acordada ya se hizo: pasan los 10 casos, y hay una reducción de velocidad falsa por revisar.** Ver [Resultado de la corrida](#resultado-de-la-corrida). Todavía no es la solución de #3: falta aceptar la revisión e integrar el filtro al detector real, con métricas y benchmark nuevos. #3 sigue abierto.
+**La corrida acordada ya se hizo: pasan los 10 casos, y hay una reducción de velocidad falsa por revisar.** Ver [Resultado de la corrida](#resultado-de-la-corrida). El filtro ya está integrado al detector real, con métricas y benchmark nuevos: ver [Integración](#integración). **#3 sigue abierto:** falta aceptar la revisión y repetir la reproducción de #9.
 
-No se cambiaron el modelo, los umbrales, la política, los datos ni las expectativas, y sin `--filtro-mediana` el detector se comporta igual que antes.
+No se cambiaron el modelo, los umbrales, la política, los datos ni las expectativas. Con `--filtro-mediana 0`, los casos corren sin el filtro.
 
 ## Conclusión
 
 - **Causa:** en casi todos los cuadros que fallan, el modelo no da evidencia de la persona. La pérdida no viene del umbral, de NMS ni de la clase ganadora.
-- **Propuesta:** aplicar un filtro de mediana 3×3 a la imagen antes del detector.
+- **Solución propuesta:** aplicar un filtro de mediana 3×3 a la imagen antes del detector.
 - **Resultado en `p5-ajuste-v1`:** las acciones no permitidas bajan de 13 a 0 con la misma política. Las personas firmes suben de 39 a 71 de 85.
 - **Falta:** comprobar si C5 y C7 pasan, y si el filtro detiene al carro con la vía libre. El paquete de ajuste no tiene cuadros libres.
 
@@ -83,7 +83,7 @@ Son seguros, pero el carro avanza menos en esos cuadros.
 4. **Muestra pequeña:** son 70 cuadros de 3 escenas, quizá del mismo edificio que la evaluación, y 24 variantes. El resultado de ajuste puede ser optimista.
 5. **Se miró `p5-eval-v1`:** este diagnóstico leyó los puntajes del detector actual en `seq05` y `seq06`, pero eso no eligió el filtro.
 6. **Medición anterior:** [B1-03_VALIDACION.md](B1-03_VALIDACION.md) ya hizo una medición única en eval con otra configuración de política. Esta sería una segunda, de un cambio distinto.
-7. **Alcance del filtro:** solo lo aplica el runner de casos, con `--filtro-mediana`, desde `src/p5/casos/filtro.py`. Las métricas, el benchmark y el recorrido siguen sin filtro, y la evidencia de A3 sigue siendo válida.
+7. **Alcance del filtro:** cuando se hizo la corrida, solo lo aplicaba el runner de casos. Ver [Integración](#integración).
 
 ## Condición para aprobarla como solución de #3
 
@@ -136,7 +136,7 @@ Estas son las 14 decisiones que cambian:
 **Límites:**
 - **`seq05` y `skateboard`:** el filtro también produce `skateboard` hasta 0.54 en `seq05` y 0.33 en `seq06`. Es una clase que la política ignora, así que no cambia decisiones, pero muestra que el filtro altera más que a las personas.
 - **Muestra:** son 43 cuadros libres en C1 y C7, de dos escenas. Una sola detección falsa en ellos no permite estimar una tasa.
-- **Sigue siendo el runner:** el filtro todavía no está en métricas, benchmark ni recorrido.
+- **Era el runner:** en esta corrida, el filtro solo estaba en el runner. Ver [Integración](#integración).
 
 Para repetir la comparación, desde `Proyecto5`:
 
@@ -147,6 +147,15 @@ Para repetir la comparación, desde `Proyecto5`:
 ```bash
 .venv/bin/python scripts/comparar_decisiones.py --con evidencias/B1-03-detector/c1-c10-mediana3/decisiones.jsonl --sin evidencias/B1-03-detector/c1-c10-sin-filtro/decisiones.jsonl
 ```
+
+## Integración
+
+El filtro pasó a `YoloxDetector`, encendido por defecto, en `39e72ad`. Ahora lo usan los casos, las métricas, el benchmark y el recorrido. `scripts/ajuste_detector.py` y `scripts/diagnostico_perdidas.py` siguen midiendo el modelo sin filtro, porque describen la decisión original.
+
+- **Mismas decisiones:** con el detector integrado, C1–C10 repite la corrida acordada: las 155 filas son iguales, salvo la hora de emisión del comando.
+- **Métricas:** F1 pasa de 0.8153 a 0.9486. Ver [A3_METRICAS.md](A3_METRICAS.md).
+- **Benchmark:** nueva medición oficial en [A3-03_BENCHMARK.md](A3-03_BENCHMARK.md).
+- **Evidencia anterior:** queda sin cambios como referencia. `verificar_a3_04_f01.py` sigue comparando la repetición con Python 3.12 contra esa evidencia sin filtro, y describe al detector anterior.
 
 ## Cómo repetirlo
 
@@ -178,10 +187,10 @@ Se corre una sola vez. La selección quedó congelada en `b95612f`, antes de med
 
 **Si C1–C7 pasan y la revisión de los tramos libres la acepta:**
 
-1. Aprobar la propuesta con esa evidencia.
-2. Mover el filtro a `src/p5/detector` y activarlo por defecto.
-3. Generar de nuevo la evidencia de métricas: `verificar_a3_04_f01.py` falla a propósito cuando cambia el detector, y las métricas actuales dejarían de describirlo.
-4. Repetir el benchmark y la reproducción de #9.
+1. Aprobar la propuesta con esa evidencia, incluida la decisión sobre `seq06-0025`.
+2. Mover el filtro a `src/p5/detector` y activarlo por defecto. Hecho.
+3. Generar de nuevo la evidencia de métricas. Hecho: `evidencias/a3-metricas-mediana3/`.
+4. Repetir el benchmark, hecho, y la reproducción de #9, pendiente.
 5. Revisar #3 con esa evidencia.
 
 **Si C5 o C7 siguen fallando:**
