@@ -13,9 +13,12 @@ Reproducir con un comando los diez casos que pide la evaluación, guardar cada r
 | C1–C5 y C7 | Secuencias de `p5-eval-v1` con el detector real | Se ejecutan |
 | C6 | Detecciones sintéticas del caso de B1 | Se ejecuta |
 | C8 | Corte de cuadros y cuadro vencido | Se ejecuta con reloj determinista y watchdog de B2 |
-| C9 y C10 | Fallo del detector, emergencia, rearme y cierre | **Pendiente de #6** |
+| C9 | Fallo de inferencia e imagen ilegible | Se ejecuta con detector sintético, política real y adaptador virtual |
+| C10 | Emergencia, rearme y cierre | Se ejecuta con detector sintético, reloj determinista, política real y adaptador virtual |
 
-Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política. #8 sigue abierto hasta ejecutar C8–C10.
+Los diez casos ya se ejecutan. C5 y C7 fallan con el detector real, y esos fallos se siguen en #3.
+
+Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política.
 
 ## Componentes
 
@@ -52,6 +55,8 @@ Corre en CPU, sin red ni hardware: nunca llama a las rutas de motores.
 
 Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los diez. No sobrescribe una carpeta existente.
 
+`--filtro-mediana` es opcional y está apagado por defecto. Solo es para la corrida acordada de #3, descrita en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
+
 ## Resultados
 
 | Archivo | Contenido |
@@ -80,13 +85,22 @@ Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `st
 | `reaccion` | Una de esas acciones con la vía en `BLOCKED`, dentro del plazo. `plazo_cuadros` incluye el cuadro `desde`: plazo 2 desde el cuadro 30 son los cuadros 30 y 31 | Que el STOP de arranque no cuente como reacción |
 | `direccion_min`, `direccion_max` | Límites de la dirección en toda la secuencia | Comprobar el signo en C3 y C4 |
 
+**C9 y C10 comprueban cada paso:**
+
+| Caso | Qué exige |
+|---|---|
+| C9 | Después de avanzar, un fallo de inferencia y una imagen ilegible registran el error y emiten STOP, sin avance residual |
+| C10 | STOP inmediato con la emergencia; sigue parado sin rearme y con un rearme sobre un cuadro vencido; solo reanuda con rearme, percepción fresca y la vía confirmada otra vez; STOP al cerrar |
+
 **Fallos de percepción:** si el detector falla, el recorrido marca el cuadro con `status: "error"` y emite STOP. Nunca se toma como escena vacía.
 
 **Comprobación de las expectativas:** las pruebas corren C1–C5 y C7 con las etiquetas como si fueran un detector perfecto, y todos pasan. Si uno fallara ahí, el error estaría en la expectativa, no en el sistema.
 
 ## Última corrida
 
-Con YOLOX-Tiny sobre `p5-eval-v1`: **6 pasan, 2 fallan y 2 pendientes.** Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
+Con YOLOX-Tiny sobre `p5-eval-v1`, sin filtro, en `62a1bf3`: **8 pasan, 2 fallan y 0 pendientes**, y el comando termina con código 1. Los resultados y las trazas de la corrida de referencia, en `8e76180`, están en [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/).
+
+Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
 
 | Caso | Cuadros | Observado | Por qué es un fallo |
 |---|---|---|---|
@@ -94,7 +108,7 @@ Con YOLOX-Tiny sobre `p5-eval-v1`: **6 pasan, 2 fallan y 2 pendientes.** Estos s
 | C7 | `seq06` 36 y 38 | `FORWARD` | Hay una persona al centro |
 | C7 | `seq06` 30 y 31 | Solo `SLOW`, sin `BLOCKED` | No confirma el bloqueo dentro del plazo de 2 cuadros |
 
-En C5 y C7 el detector pierde a la persona en cuadros alternos, y la política necesita 2 cuadros firmes seguidos para bloquear. Se debe ajustar con `p5-ajuste-v1`, no con estas secuencias.
+En C5 y C7 el detector pierde a la persona, y la política necesita 2 cuadros firmes seguidos para bloquear. Cualquier ajuste se define con `p5-ajuste-v1`, no con estas secuencias. El diagnóstico y la propuesta, todavía sin medir en evaluación, están en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
 
 ## Verificación
 
@@ -127,11 +141,8 @@ C1 sale como `FALLA` y el comando termina con código 1. Una prueba lo comprueba
 
 ## Límites conocidos
 
-- Las secuencias grabadas C1-C5 y C7 no interpretan el intervalo entre timestamps como silencio de una aplicaci?n en vivo. C8 prueba la expiraci?n temporal por separado mediante `Pipeline`, pol?tica real y un reloj determinista.
+- Las secuencias grabadas C1-C5 y C7 no interpretan el intervalo entre timestamps como silencio de una aplicación en vivo. C8 prueba la expiración temporal por separado mediante `Pipeline`, política real y un reloj determinista.
+- C8, C9 y C10 usan un detector sintético, así que comprueban la reacción del sistema, no la precisión del detector real.
 - Los plazos se miden en cuadros del recorrido, no en tiempo físico de frenado.
 - `seq01`, `seq03` y `seq04` no tienen un tramo que cambie de libre a ocupado, y C2 y C5 empiezan con la persona ya en su lugar.
 - Las expectativas se escribieron después de ver cómo se comporta el sistema en estas secuencias, durante la captura. Su base es la geometría de las etiquetas y las reglas de la política.
-
-## Pendiente
-
-- C9 y C10: #6.
