@@ -38,7 +38,7 @@ python -m pytest tests/test_integration_pipeline.py tests/test_casos_runner.py -
 
 ## 5. Fallos y limitaciones
 
-[DOCUMENTAR LOS FALLOS REALES O INDICAR QUE NO HUBO FALLOS.]
+No hubo fallos
 
 Esta ejecución utiliza las pruebas automatizadas y el adaptador virtual del proyecto.
 
@@ -61,6 +61,6 @@ Este archivo contiene los resultados de la ejecución, incluyendo pruebas aproba
 
 ## 7. Conclusión
 
-[ESCRIBIR CONCLUSIÓN SEGÚN LOS RESULTADOS REALES.]
+
 
 La evidencia corresponde exclusivamente a la ejecución identificada por el commit y el entorno documentados en este archivo.
