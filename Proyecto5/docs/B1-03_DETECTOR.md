@@ -13,7 +13,8 @@ No se cambiaron el modelo, los umbrales, la política, los datos ni las expectat
 - **Causa:** en casi todos los cuadros que fallan, el modelo no da evidencia de la persona. La pérdida no viene del umbral, de NMS ni de la clase ganadora.
 - **Propuesta:** aplicar un filtro de mediana 3×3 a la imagen antes del detector.
 - **Resultado en `p5-ajuste-v1`:** las acciones no permitidas bajan de 13 a 0 con la misma política. Las personas firmes suben de 39 a 71 de 85.
-- **Falta:** comprobar si C5 y C7 pasan, y si el filtro detiene al carro con la vía libre. El paquete de ajuste no tiene cuadros libres.
+- **Resultado en `p5-eval-v1`:** en la corrida única pasan C1–C10, C5 y C7 incluidos, y las acciones no permitidas bajan de 5 a 0. Aparece un SLOW falso de un cuadro en `seq06-0025`.
+- **Falta:** confirmar si se acepta ese SLOW. El paquete de ajuste no tiene cuadros libres, así que esto solo se pudo ver en la evaluación.
 
 ## Dónde se pierde
 
@@ -87,18 +88,25 @@ Son seguros, pero el carro avanza menos en esos cuadros.
 
 ## Condición para aprobarla como solución de #3
 
-Hace falta **la única corrida acordada en `p5-eval-v1`**, con el comando de [Medición en evaluación](#medición-en-evaluación). Sus resultados y trazas se guardan en `evidencias/B1-03-detector/c1-c10-mediana3/`: `resultados.json` y `decisiones.jsonl`, sin editar.
+**La única corrida acordada en `p5-eval-v1` ya se hizo, y no hay que repetirla.** Usó el comando de [Medición en evaluación](#medición-en-evaluación). Sus resultados y trazas están en [c1-c10-mediana3/](../evidencias/B1-03-detector/c1-c10-mediana3/): `resultados.json` y `decisiones.jsonl`, sin editar.
 
-| Qué revisar | Dónde | Sin filtro | Qué debe mostrar la corrida |
-|---|---|---|---|
-| C1 | `seq01`, 15 cuadros libres | 13 FORWARD y 2 STOP de arranque | Si el filtro detiene al carro sin obstáculo |
-| C5 | `seq05` | EVADE_RIGHT en 8, 9 y 10 | Ninguna evasión hacia la persona de la derecha |
-| C7, bloqueo | `seq06` 30–44 | Sin BLOCKED en 30–31; FORWARD en 36 y 38 | Bloqueo en el plazo y ningún FORWARD con la persona al centro |
-| Tramos libres de `seq06` | Cuadros 1–26 y 49–50 | 24 FORWARD y 2 STOP de arranque; 2 FORWARD | Si el filtro detiene al carro sin obstáculo |
+Lo que se acordó revisar, y lo que mostró:
 
-**Que C1 y C7 digan `PASA` no basta para la vía libre.** Sus reglas piden al menos un avance en el rango, y STOP siempre está permitido, así que un STOP de más no los hace fallar. Por eso hay que comparar esos tramos cuadro por cuadro en `decisiones.jsonl` contra [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/), y anotar cada diferencia con su detección.
+| Qué se revisó | Dónde | Sin filtro | Qué debía mostrar | Con filtro |
+|---|---|---|---|---|
+| C1 | `seq01`, 15 cuadros libres | 13 FORWARD y 2 STOP de arranque | Si el filtro detiene al carro sin obstáculo | Sin cambios |
+| C5 | `seq05` | EVADE_RIGHT en 8, 9 y 10 | Ninguna evasión hacia la persona de la derecha | Se cumple: 13 EVADE_LEFT y 2 STOP de arranque |
+| C7, bloqueo | `seq06` 30–44 | Sin BLOCKED en 30–31; FORWARD en 36 y 38 | Bloqueo en el plazo y ningún FORWARD con la persona al centro | Se cumple: bloquea en el cuadro 31 |
+| Tramos libres de `seq06` | Cuadros 1–26 y 49–50 | 24 FORWARD y 2 STOP de arranque; 2 FORWARD | Si el filtro detiene al carro sin obstáculo | No lo detiene, pero hay un SLOW falso en el cuadro 25 |
 
-Si la corrida no sale bien, no se repite con otros valores: se aplica [Qué sigue](#qué-sigue).
+**Que C1 y C7 digan `PASA` no basta para la vía libre.** Sus reglas piden al menos un avance en el rango, y STOP siempre está permitido, así que un STOP de más no los hace fallar. Por eso esos tramos se compararon cuadro por cuadro en `decisiones.jsonl` contra [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/), y cada diferencia quedó anotada con su detección en [Resultado de la corrida](#resultado-de-la-corrida).
+
+**Para aprobarla como solución de #3 falta:**
+1. Que Andrés y Omar confirmen si aceptan el SLOW falso de `seq06-0025`.
+2. Integrar el filtro al detector real, con métricas y benchmark nuevos.
+3. La reproducción final de #9.
+
+Cualquier cambio posterior se elige otra vez con `p5-ajuste-v1`: esta corrida no se repite con otros valores.
 
 ## Resultado de la corrida
 
@@ -166,7 +174,7 @@ Desde `Proyecto5`, con la preparación del README.
 
 ### Medición en evaluación
 
-Se corre una sola vez. La selección quedó congelada en `b95612f`, antes de medir:
+Ya se corrió, una sola vez, y no hay que repetirla. La selección quedó congelada en `b95612f`, antes de medir. Este fue el comando:
 
 ```powershell
 .venv\Scripts\python -m p5.casos.runner --cases casos\c1_c10.yaml --config config\politica.yaml --dataset data\p5-eval-v1 --weights models\yolox_tiny.onnx --filtro-mediana 3 --output resultados\c1-c10-mediana3
