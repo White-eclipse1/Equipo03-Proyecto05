@@ -1,0 +1,44 @@
+{
+  "commit_pr_ejecutado": "3e276bf8bc75774881119aca571c4a57caad5e1a",
+  "verificador_identico_al_commit": true,
+  "casos": [
+    {
+      "output": "data\\p5-eval-v1\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "data\\p5-ajuste-v1\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "evidencias\\a3-metricas-v1\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "evidencias\\A3-04\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "evidencias\\a3-metricas-python312\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "evidencias\\A3-04-F02\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    },
+    {
+      "output": "resultados\\..\\data\\p5-eval-v1\\f02-output-prohibido",
+      "codigo_salida": 2,
+      "salida_no_creada": true
+    }
+  ],
+  "inventario_antes_sha256": "dfab20b6dfb67b9174057fe0dff29c8434303230cbaf4820ac67ac6b26b4d7a1",
+  "inventario_despues_sha256": "dfab20b6dfb67b9174057fe0dff29c8434303230cbaf4820ac67ac6b26b4d7a1",
+  "ninguna_entrada_modificada": true
+}
