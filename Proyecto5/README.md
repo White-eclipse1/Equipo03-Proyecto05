@@ -30,7 +30,7 @@ Ocho personas, en dos grupos con un PM y tres integrantes cada uno. Los grupos a
 | B2 | Luis Leal (@lluisvl) | Adaptador de control y paradas |
 | B3 | Ignacio (@Lanachiza) | Integración y pruebas |
 
-**Por confirmar antes de la entrega:** qué PM va con cada grupo, el nombre completo de Omar y el apellido de Ignacio. Estos datos salieron de los tickets y los perfiles de GitHub.
+**Por confirmar antes de la entrega:** el nombre completo de Omar y el apellido de Ignacio. Estos datos salieron de los tickets y los perfiles de GitHub.
 
 **Apoyos entre roles:** Diego Lemus implementó las métricas (#16 y #17) y el runner de casos (#8). Josué Godoy implementó el recorrido integrado (#7), el benchmark (#18) y la reproducción (#9). Los responsables de cada entrega están en sus tickets y documentos.
 
