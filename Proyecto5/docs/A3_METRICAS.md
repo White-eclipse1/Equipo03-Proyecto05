@@ -80,9 +80,36 @@ No necesita el detector ni los pesos: parte de las predicciones guardadas.
 | `metricas.json` | Totales, resultados por clase, clases sin soporte y datos de la ejecución: commit, hashes y entorno |
 | `metricas.csv` | La misma tabla de métricas, global y por clase |
 
-## Resultado sobre `p5-eval-v1`
+## Resultado vigente, con el filtro de mediana
 
-Evidencia en `evidencias/a3-metricas-v1/`. Se midió con el commit `0cf6dd9`, que ya fijaba el umbral, y no se repitió con otro.
+Evidencia en [evidencias/a3-metricas-mediana3/](../evidencias/a3-metricas-mediana3/), medida una vez con el commit `39e72ad`, Python 3.12.16 y dependencias fijadas. El detector aplica el filtro de mediana 3×3 de [B1-03_DETECTOR.md](B1-03_DETECTOR.md). Son los mismos modelo, umbrales, datos y reglas.
+
+| Cuadros | TP | FP | FN | Precision | Recall | F1 micro |
+|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 83 | 1 | 8 | 0.9881 | 0.9121 | **0.9486** |
+
+| Secuencia | Objetos | TP | FP | FN | Recall |
+|---|---:|---:|---:|---:|---:|
+| seq01 | 0 | 0 | 0 | 0 | Sin objetos |
+| seq02 | 15 | 15 | 0 | 0 | 1.000 |
+| seq03 | 12 | 12 | 0 | 0 | 1.000 |
+| seq04 | 12 | 10 | 0 | 2 | 0.833 |
+| seq05 | 30 | 29 | 0 | 1 | 0.967 |
+| seq06 | 22 | 17 | 1 | 5 | 0.773 |
+
+**Lo que muestra:** con el filtro, el detector pierde a menos personas: de 27 pasa a 8. Bajo los mismos criterios, `floor(12 × 0.9486) / 2` da 5.5 en el criterio 1.4.
+
+**Comprobado:** un recálculo con un script aparte, que no importa `p5.metrics`, da los mismos TP, FP y FN por cuadro, por clase y en total. Ese script no está en el repositorio.
+
+**Límites de esta cifra:**
+- **Se miró la evaluación:** el filtro se eligió con `p5-ajuste-v1`, pero antes se revisaron los puntajes de `seq05` y `seq06` para diagnosticar la pérdida, y el conjunto ya se había visto al colocar a las personas.
+- **Más detecciones de otras clases:** pasan de 85 a 95, sobre todo `skateboard`. No cuentan en esta métrica.
+- **El `truck` falso de `seq06-0025`:** con 0.44 queda bajo el umbral de 0.50, así que no es un FP aquí, pero la política lo trata como detección débil y reduce la velocidad.
+- **El par de `seq06-0028`:** su caja sigue justo por debajo de IoU 0.50, y es la observación abierta en #41.
+
+## Resultado anterior, sin filtro
+
+Se conserva sin cambios. Evidencia en `evidencias/a3-metricas-v1/`. Se midió con el commit `0cf6dd9`, que ya fijaba el umbral, y no se repitió con otro.
 
 | Cuadros | TP | FP | FN | Precision | Recall | F1 micro |
 |---:|---:|---:|---:|---:|---:|---:|

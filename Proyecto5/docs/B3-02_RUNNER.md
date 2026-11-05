@@ -16,7 +16,7 @@ Reproducir con un comando los diez casos que pide la evaluación, guardar cada r
 | C9 | Fallo de inferencia e imagen ilegible | Se ejecuta con detector sintético, política real y adaptador virtual |
 | C10 | Emergencia, rearme y cierre | Se ejecuta con detector sintético, reloj determinista, política real y adaptador virtual |
 
-Los diez casos ya se ejecutan. C5 y C7 fallan con el detector real, y esos fallos se siguen en #3.
+Los diez casos ya se ejecutan y pasan con el detector real y su filtro de mediana. #3 sigue abierto hasta revisar esa evidencia y repetir la reproducción de #9.
 
 Las secuencias reales corren por el mismo recorrido de la aplicación, `Pipeline` de B3-01: detector, política y adaptador virtual. C6 solo evalúa decisiones de la política.
 
@@ -55,7 +55,7 @@ Corre en CPU, sin red ni hardware: nunca llama a las rutas de motores.
 
 Sale con código 1 si un caso falla o sigue pendiente, y con 0 solo si pasan los diez. No sobrescribe una carpeta existente.
 
-`--filtro-mediana` es opcional y está apagado por defecto. Solo es para la corrida acordada de #3, descrita en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
+`--filtro-mediana` vale 3 por defecto, igual que el detector, y 0 lo apaga. Está descrito en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
 
 ## Resultados
 
@@ -98,9 +98,13 @@ Si el STOP de respaldo tampoco se puede emitir, el recorrido lo registra con `st
 
 ## Última corrida
 
-Con YOLOX-Tiny sobre `p5-eval-v1`, sin filtro, en `62a1bf3`: **8 pasan, 2 fallan y 0 pendientes**, y el comando termina con código 1. Los resultados y las trazas de la corrida de referencia, en `8e76180`, están en [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/).
+Con YOLOX-Tiny y el filtro de mediana sobre `p5-eval-v1`, en `62a1bf3`: **10 pasan, 0 fallan y 0 pendientes**, y el comando termina con código 0. Los resultados y las trazas están en [c1-c10-mediana3/](../evidencias/B1-03-detector/c1-c10-mediana3/). Pasar no prueba que no haya frenadas falsas: la revisión cuadro por cuadro, con una reducción falsa en `seq06-0025`, está en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
 
-Estos son fallos reales del sistema, y no deben corregirse cambiando las expectativas:
+### Sin filtro
+
+Con `--filtro-mediana 0`, en `62a1bf3`: **8 pasan, 2 fallan y 0 pendientes**, y el comando termina con código 1. Los resultados y las trazas de la corrida de referencia, en `8e76180`, están en [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/).
+
+Estos fueron los fallos reales que resolvió el filtro, sin cambiar las expectativas:
 
 | Caso | Cuadros | Observado | Por qué es un fallo |
 |---|---|---|---|
@@ -108,7 +112,7 @@ Estos son fallos reales del sistema, y no deben corregirse cambiando las expecta
 | C7 | `seq06` 36 y 38 | `FORWARD` | Hay una persona al centro |
 | C7 | `seq06` 30 y 31 | Solo `SLOW`, sin `BLOCKED` | No confirma el bloqueo dentro del plazo de 2 cuadros |
 
-En C5 y C7 el detector pierde a la persona, y la política necesita 2 cuadros firmes seguidos para bloquear. Cualquier ajuste se define con `p5-ajuste-v1`, no con estas secuencias. El diagnóstico y la propuesta, todavía sin medir en evaluación, están en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
+En C5 y C7 el detector pierde a la persona, y la política necesita 2 cuadros firmes seguidos para bloquear. Cualquier ajuste se define con `p5-ajuste-v1`, no con estas secuencias. El diagnóstico está en [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
 
 ## Verificación
 

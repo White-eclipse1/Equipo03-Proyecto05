@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 CPU_PROVIDER = "CPUExecutionProvider"
 DEFAULT_SCORE_THRESHOLD = 0.10
 DEFAULT_NMS_THRESHOLD = 0.45
+# Filtro de mediana antes del modelo. Se eligio con p5-ajuste-v1: ver docs/B1-03_DETECTOR.md.
+DEFAULT_MEDIAN_KERNEL = 3
+NO_MEDIAN_FILTER = 0
 
 _STRIDES = (8, 16, 32)
 _PAD_VALUE = 114
@@ -95,11 +98,14 @@ class YoloxDetector:
         *,
         score_threshold: float = DEFAULT_SCORE_THRESHOLD,
         nms_threshold: float = DEFAULT_NMS_THRESHOLD,
+        median_kernel: int = DEFAULT_MEDIAN_KERNEL,
     ) -> None:
         if not 0.0 <= score_threshold <= 1.0:
             raise ValueError("score_threshold must be between 0.0 and 1.0")
         if not 0.0 <= nms_threshold <= 1.0:
             raise ValueError("nms_threshold must be between 0.0 and 1.0")
+        if median_kernel != NO_MEDIAN_FILTER and (median_kernel < 3 or median_kernel % 2 == 0):
+            raise ValueError("median_kernel must be 0 or an odd number from 3")
 
         providers = session.get_providers()
         if providers != [CPU_PROVIDER]:
@@ -111,6 +117,7 @@ class YoloxDetector:
         self._input_size = self._parse_input_size(model_input.shape)
         self._score_threshold = score_threshold
         self._nms_threshold = nms_threshold
+        self.median_kernel = median_kernel
 
     @classmethod
     def from_weights(
@@ -119,6 +126,7 @@ class YoloxDetector:
         *,
         score_threshold: float = DEFAULT_SCORE_THRESHOLD,
         nms_threshold: float = DEFAULT_NMS_THRESHOLD,
+        median_kernel: int = DEFAULT_MEDIAN_KERNEL,
     ) -> Self:
         path = Path(weights)
         if not path.is_file():
@@ -127,7 +135,12 @@ class YoloxDetector:
             session = onnxruntime.InferenceSession(str(path), providers=[CPU_PROVIDER])
         except Exception as error:
             raise _failure("load", str(path), error) from error
-        return cls(session, score_threshold=score_threshold, nms_threshold=nms_threshold)
+        return cls(
+            session,
+            score_threshold=score_threshold,
+            nms_threshold=nms_threshold,
+            median_kernel=median_kernel,
+        )
 
     def detect_file(self, path: str | Path) -> DetectionResult:
         image = self.read_image(str(path))
@@ -150,6 +163,8 @@ class YoloxDetector:
 
     def _preprocess(self, image: np.ndarray, source: str) -> tuple[np.ndarray, float]:
         try:
+            if self.median_kernel != NO_MEDIAN_FILTER:
+                image = cv2.medianBlur(image, self.median_kernel)
             return preprocess(image, self._input_size)
         except cv2.error as error:
             raise _failure("preprocess", source, error) from error

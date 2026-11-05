@@ -160,8 +160,8 @@ La reproducción completa también lo resume en `cuadro_trazado.json`. El format
 | E3 | Dataset congelado | [docs/A2_DATASET.md](docs/A2_DATASET.md) y [data/](data/) |
 | E4 | Política y adaptador virtual | [docs/B1-01_POLITICA.md](docs/B1-01_POLITICA.md), [docs/B1-02_TEMPORAL.md](docs/B1-02_TEMPORAL.md), [docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md](docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md), [docs/B2-02_WATCHDOG.md](docs/B2-02_WATCHDOG.md) y [docs/B2_MAPEO_CARRO.md](docs/B2_MAPEO_CARRO.md) |
 | E5 | Casos C1–C10 | [docs/B3-02_RUNNER.md](docs/B3-02_RUNNER.md), [docs/B1-03_VALIDACION.md](docs/B1-03_VALIDACION.md) y [casos/c1_c10.yaml](casos/c1_c10.yaml) |
-| E6 | Métricas del detector | [docs/A3_METRICAS.md](docs/A3_METRICAS.md), [evidencias/a3-metricas-v1/](evidencias/a3-metricas-v1/) y [evidencias/a3-metricas-python312/](evidencias/a3-metricas-python312/) |
-| E7 | Benchmark | [docs/A3-03_BENCHMARK.md](docs/A3-03_BENCHMARK.md) y [evidencias/A3-03/](evidencias/A3-03/) |
+| E6 | Métricas del detector | [docs/A3_METRICAS.md](docs/A3_METRICAS.md), [evidencias/a3-metricas-mediana3/](evidencias/a3-metricas-mediana3/), vigente; [evidencias/a3-metricas-v1/](evidencias/a3-metricas-v1/) y [evidencias/a3-metricas-python312/](evidencias/a3-metricas-python312/), sin filtro |
+| E7 | Benchmark | [docs/A3-03_BENCHMARK.md](docs/A3-03_BENCHMARK.md), [evidencias/A3-03-mediana3/](evidencias/A3-03-mediana3/), vigente, y [evidencias/A3-03/](evidencias/A3-03/), sin filtro |
 | Auditoría | Revisión independiente de datos, métricas y benchmark | [docs/A3-04_AUDITORIA.md](docs/A3-04_AUDITORIA.md) |
 
 ## Seguridad

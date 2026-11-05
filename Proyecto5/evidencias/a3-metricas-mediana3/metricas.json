@@ -1,0 +1,134 @@
+{
+  "iou_umbral": 0.5,
+  "umbral_confianza": 0.5,
+  "clases_evaluadas": [
+    "person",
+    "bicycle",
+    "car",
+    "motorcycle",
+    "bus",
+    "truck",
+    "cat",
+    "dog"
+  ],
+  "cuadros": 128,
+  "cuadros_con_objetos": 76,
+  "cuadros_negativos": 52,
+  "cuadros_con_error": [],
+  "micro": {
+    "support": 91,
+    "tp": 83,
+    "fp": 1,
+    "fn": 8,
+    "precision": 0.9880952380952381,
+    "recall": 0.9120879120879121,
+    "f1": 0.9485714285714286
+  },
+  "por_clase": {
+    "person": {
+      "support": 91,
+      "tp": 83,
+      "fp": 1,
+      "fn": 8,
+      "precision": 0.9880952380952381,
+      "recall": 0.9120879120879121,
+      "f1": 0.9485714285714286
+    },
+    "bicycle": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "car": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "motorcycle": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "bus": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "truck": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "cat": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "dog": {
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "clases_sin_soporte": [
+    "bicycle",
+    "car",
+    "motorcycle",
+    "bus",
+    "truck",
+    "cat",
+    "dog"
+  ],
+  "detecciones_bajo_umbral": 33,
+  "detecciones_de_otras_clases": {
+    "backpack": 16,
+    "bench": 1,
+    "cell phone": 1,
+    "frisbee": 17,
+    "refrigerator": 20,
+    "skateboard": 27,
+    "tv": 13
+  },
+  "ejecucion": {
+    "run_id": "61ee31cbbf894770a78528f1b0f50c2e",
+    "fecha": "2026-11-05T02:22:48+00:00",
+    "commit": "39e72adf850a90205fb4c5acb9a1f8b637db9d1a",
+    "origen": "detector",
+    "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "predicciones_sha256": "9d986376efe5bcc7a3cc11d66f1944ee324a13359aca48036ca6a8815c2ba2dc",
+    "umbral_detector": 0.1,
+    "nms_detector": 0.45,
+    "filtro_mediana_detector": 3,
+    "runtime": "Python 3.12.16",
+    "hardware": "Windows AMD64, CPU"
+  }
+}

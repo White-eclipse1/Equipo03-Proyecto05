@@ -4,6 +4,7 @@ import logging
 import sys
 
 from p5.detector.yolox import (
+    DEFAULT_MEDIAN_KERNEL,
     DEFAULT_NMS_THRESHOLD,
     DEFAULT_SCORE_THRESHOLD,
     DetectorError,
@@ -20,6 +21,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--image", required=True, help="Ruta de la imagen completa.")
     parser.add_argument("--score-threshold", type=float, default=DEFAULT_SCORE_THRESHOLD)
     parser.add_argument("--nms-threshold", type=float, default=DEFAULT_NMS_THRESHOLD)
+    parser.add_argument(
+        "--filtro-mediana",
+        type=int,
+        default=DEFAULT_MEDIAN_KERNEL,
+        help="Tamano del filtro de mediana antes del modelo; 0 lo apaga.",
+    )
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, stream=sys.stderr)
@@ -29,6 +36,7 @@ def main(argv: list[str] | None = None) -> int:
             args.weights,
             score_threshold=args.score_threshold,
             nms_threshold=args.nms_threshold,
+            median_kernel=args.filtro_mediana,
         )
         result = detector.detect_file(args.image)
     except (DetectorError, ValueError):

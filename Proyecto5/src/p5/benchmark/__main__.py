@@ -229,6 +229,7 @@ def main(argv: list[str] | None = None) -> int:
             "sha256": WEIGHTS_SHA256,
             "bytes": WEIGHTS_SIZE,
             "ms_carga": load_ms,
+            "filtro_mediana": detector.median_kernel,
         },
         "dataset": {
             "nombre": args.manifest.resolve().parent.name,
@@ -238,7 +239,8 @@ def main(argv: list[str] | None = None) -> int:
         "politica": {"config_sha256": config_sha256},
         "codigo": conditions["codigo"],
         "medicion": {
-            "incluye": "Pipeline.process: leer y decodificar la imagen, preprocesar, inferir, "
+            "incluye": "Pipeline.process: leer y decodificar la imagen, preprocesar con el "
+            "filtro de mediana, inferir, "
             "posprocesar, decidir y generar el comando virtual",
             "excluye": "carga del modelo (ms_carga aparte), captura de la camara, escritura de "
             "resultados y motores: no hace llamadas de red",

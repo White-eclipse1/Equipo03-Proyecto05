@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "tarea": "A3-03 (#18)",
+  "fecha": "2026-11-04T20:22:37-06:00",
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i9-12900H",
+    "nucleos_logicos": 20,
+    "memoria_bytes": 16831504384,
+    "arquitectura": "AMD64",
+    "sistema_operativo": "Windows-11-10.0.26300-SP0"
+  },
+  "runtime": {
+    "python": "3.12.16",
+    "onnxruntime": "1.31.1",
+    "providers_sesion": [
+      "CPUExecutionProvider"
+    ],
+    "numpy": "2.5.4",
+    "opencv": "5.0.0.93",
+    "pydantic": "2.13.5"
+  },
+  "detector": {
+    "nombre": "YOLOX-Tiny",
+    "archivo": "yolox_tiny.onnx",
+    "sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+    "bytes": 20219662,
+    "ms_carga": 85.7788,
+    "filtro_mediana": 3
+  },
+  "dataset": {
+    "nombre": "p5-eval-v1",
+    "manifiesto_sha256": "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb",
+    "cuadros": 128
+  },
+  "politica": {
+    "config_sha256": "171b063298ee732afa05ac19939ef6c9e431ae3ca824ef50b509788d62716054"
+  },
+  "codigo": {
+    "commit": "39e72adf850a90205fb4c5acb9a1f8b637db9d1a",
+    "cambios_sin_commit": false
+  },
+  "medicion": {
+    "incluye": "Pipeline.process: leer y decodificar la imagen, preprocesar con el filtro de mediana, inferir, posprocesar, decidir y generar el comando virtual",
+    "excluye": "carga del modelo (ms_carga aparte), captura de la camara, escritura de resultados y motores: no hace llamadas de red",
+    "reloj": "time.perf_counter_ns, en milisegundos",
+    "percentil": "interpolacion lineal, numpy.percentile por defecto",
+    "hilos": "opciones por defecto de onnxruntime, como la aplicacion",
+    "calentamientos": 10,
+    "repeticiones": 200
+  },
+  "salida_fisica": false,
+  "resumen": {
+    "calentamientos": 10,
+    "calentamientos_validos": 10,
+    "mediciones": 200,
+    "mediciones_validas": 200,
+    "mediciones_con_error": 0,
+    "cumple_minimos": true,
+    "etapas": {
+      "ms_total": {
+        "n": 200,
+        "p50": 27.2222,
+        "p95": 30.374995000000002,
+        "maximo": 33.6902,
+        "minimo": 25.331,
+        "media": 27.6515885
+      },
+      "ms_lectura": {
+        "n": 200,
+        "p50": 1.2225000000000001,
+        "p95": 1.79392,
+        "maximo": 2.1928,
+        "minimo": 1.0128,
+        "media": 1.3364680000000002
+      },
+      "ms_preprocesamiento": {
+        "n": 200,
+        "p50": 1.37675,
+        "p95": 1.8523799999999997,
+        "maximo": 2.4171,
+        "minimo": 1.113,
+        "media": 1.4484535
+      },
+      "ms_inferencia": {
+        "n": 200,
+        "p50": 19.9941,
+        "p95": 21.96207,
+        "maximo": 25.471,
+        "minimo": 19.0323,
+        "media": 20.2317575
+      },
+      "ms_posprocesamiento": {
+        "n": 200,
+        "p50": 3.8307,
+        "p95": 5.297204999999999,
+        "maximo": 5.8569,
+        "minimo": 3.2722,
+        "media": 4.086364499999999
+      },
+      "ms_politica": {
+        "n": 200,
+        "p50": 0.14400000000000002,
+        "p95": 0.193905,
+        "maximo": 0.2744,
+        "minimo": 0.0888,
+        "media": 0.1453365
+      },
+      "ms_control": {
+        "n": 200,
+        "p50": 0.018349999999999998,
+        "p95": 0.0227,
+        "maximo": 0.0475,
+        "minimo": 0.0073,
+        "media": 0.017958500000000002
+      }
+    }
+  },
+  "tiempos": {
+    "archivo": "tiempos.csv",
+    "sha256": "4f256f30ebf9ab49151218298d8c136bb743310e977ac3760c5b716b18328a07",
+    "filas": 210
+  }
+}

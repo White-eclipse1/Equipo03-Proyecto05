@@ -95,12 +95,13 @@ Las 80 clases de COCO, en src/p5/detector/coco_classes.py. Incluyen todas las cl
 
 ## Preprocesamiento
 
-Igual al demo oficial de YOLOX:
+Igual al demo oficial de YOLOX, más un filtro de mediana:
 
 1. Decodifica la imagen a BGR de 3 canales. OpenCV aplica la orientación EXIF.
-2. Redimensiona sin deformar con interpolación lineal, para caber en 416x416.
-3. Rellena con el valor 114 abajo y a la derecha.
-4. Pasa a CHW y float32, con valores 0-255. No usa media ni desviación.
+2. Aplica un filtro de mediana 3×3, que no está en el demo. Se eligió con `p5-ajuste-v1`: ver [B1-03_DETECTOR.md](B1-03_DETECTOR.md). `median_kernel=0` lo apaga, y los comandos `p5.detector` y `p5.casos.runner` aceptan `--filtro-mediana 0`.
+3. Redimensiona sin deformar con interpolación lineal, para caber en 416x416.
+4. Rellena con el valor 114 abajo y a la derecha.
+5. Pasa a CHW y float32, con valores 0-255. No usa media ni desviación.
 
 ## Posprocesamiento
 

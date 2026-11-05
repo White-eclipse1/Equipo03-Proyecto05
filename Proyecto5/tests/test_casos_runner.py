@@ -522,10 +522,40 @@ def test_cli_runs_the_real_detector_over_the_frozen_dataset(tmp_path):
         ]
     )
 
+    assert code == 0
+    report = json.loads((target / "resultados.json").read_text(encoding="utf-8"))
+    assert report["ejecucion"]["filtro_mediana_detector"] == 3
+    assert result_by_id(report, "C1")["decisiones"][0]["frame_id"] == "seq01-0001"
+    assert result_by_id(report, "C5")["resultado"] == "PASA"
+    assert result_by_id(report, "C7")["resultado"] == "PASA"
+    assert result_by_id(report, "C8")["resultado"] == "PASA"
+
+
+@pytest.mark.skipif(not WEIGHTS, reason="P5_DETECTOR_WEIGHTS not set")
+def test_cli_without_the_median_filter_keeps_the_known_failures(tmp_path):
+    target = tmp_path / "salida"
+
+    code = runner.main(
+        [
+            "--cases",
+            str(CASES),
+            "--config",
+            str(CONFIG),
+            "--dataset",
+            str(DATASET),
+            "--weights",
+            WEIGHTS,
+            "--filtro-mediana",
+            "0",
+            "--output",
+            str(target),
+        ]
+    )
+
     assert code == 1
     report = json.loads((target / "resultados.json").read_text(encoding="utf-8"))
-    assert result_by_id(report, "C1")["decisiones"][0]["frame_id"] == "seq01-0001"
-    assert result_by_id(report, "C8")["resultado"] == "PASA"
+    assert result_by_id(report, "C5")["resultado"] == "FALLA"
+    assert result_by_id(report, "C7")["resultado"] == "FALLA"
 
 
 def test_c8_watchdog_is_reproducible(rows, config):
