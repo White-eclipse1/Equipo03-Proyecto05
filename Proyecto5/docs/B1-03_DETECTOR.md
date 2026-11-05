@@ -4,7 +4,9 @@ Ticket: #3. Continúa [B1-03_VALIDACION.md](B1-03_VALIDACION.md), que dejó pend
 
 ## Estado
 
-**Es una propuesta, todavía sin medir en `p5-eval-v1`.** #3 sigue abierto. No se cambiaron el modelo, los umbrales, la política, los datos ni las expectativas, y sin `--filtro-mediana` el detector se comporta igual que antes.
+**Es una propuesta, no la solución de #3.** Todavía no está medida en `p5-eval-v1`, y #3 sigue abierto. Para aprobarla como solución hace falta la evidencia de [la corrida acordada](#condición-para-aprobarla-como-solución-de-3).
+
+No se cambiaron el modelo, los umbrales, la política, los datos ni las expectativas, y sin `--filtro-mediana` el detector se comporta igual que antes.
 
 ## Conclusión
 
@@ -83,6 +85,21 @@ Son seguros, pero el carro avanza menos en esos cuadros.
 6. **Medición anterior:** [B1-03_VALIDACION.md](B1-03_VALIDACION.md) ya hizo una medición única en eval con otra configuración de política. Esta sería una segunda, de un cambio distinto.
 7. **Alcance del filtro:** solo lo aplica el runner de casos, con `--filtro-mediana`, desde `src/p5/casos/filtro.py`. Las métricas, el benchmark y el recorrido siguen sin filtro, y la evidencia de A3 sigue siendo válida.
 
+## Condición para aprobarla como solución de #3
+
+Hace falta **la única corrida acordada en `p5-eval-v1`**, con el comando de [Medición en evaluación](#medición-en-evaluación). Sus resultados y trazas se guardan en `evidencias/B1-03-detector/c1-c10-mediana3/`: `resultados.json` y `decisiones.jsonl`, sin editar.
+
+| Qué revisar | Dónde | Sin filtro | Qué debe mostrar la corrida |
+|---|---|---|---|
+| C1 | `seq01`, 15 cuadros libres | 13 FORWARD y 2 STOP de arranque | Si el filtro detiene al carro sin obstáculo |
+| C5 | `seq05` | EVADE_RIGHT en 8, 9 y 10 | Ninguna evasión hacia la persona de la derecha |
+| C7, bloqueo | `seq06` 30–44 | Sin BLOCKED en 30–31; FORWARD en 36 y 38 | Bloqueo en el plazo y ningún FORWARD con la persona al centro |
+| Tramos libres de `seq06` | Cuadros 1–26 y 49–50 | 24 FORWARD y 2 STOP de arranque; 2 FORWARD | Si el filtro detiene al carro sin obstáculo |
+
+**Que C1 y C7 digan `PASA` no basta para la vía libre.** Sus reglas piden al menos un avance en el rango, y STOP siempre está permitido, así que un STOP de más no los hace fallar. Por eso hay que comparar esos tramos cuadro por cuadro en `decisiones.jsonl` contra [c1-c10-sin-filtro/](../evidencias/B1-03-detector/c1-c10-sin-filtro/), y anotar cada diferencia con su detección.
+
+Si la corrida no sale bien, no se repite con otros valores: se aplica [Qué sigue](#qué-sigue).
+
 ## Cómo repetirlo
 
 Desde `Proyecto5`, con la preparación del README.
@@ -101,7 +118,7 @@ Desde `Proyecto5`, con la preparación del README.
 
 ### Medición en evaluación
 
-Se corre una sola vez, después de publicar esta selección en un commit:
+Se corre una sola vez. La selección quedó congelada en `b95612f`, antes de medir:
 
 ```powershell
 .venv\Scripts\python -m p5.casos.runner --cases casos\c1_c10.yaml --config config\politica.yaml --dataset data\p5-eval-v1 --weights models\yolox_tiny.onnx --filtro-mediana 3 --output resultados\c1-c10-mediana3
@@ -111,12 +128,13 @@ Se corre una sola vez, después de publicar esta selección en un commit:
 
 ## Qué sigue
 
-**Si C1–C7 pasan:**
+**Si C1–C7 pasan y la revisión de los tramos libres la acepta:**
 
-1. Mover el filtro a `src/p5/detector` y activarlo por defecto.
-2. Generar de nuevo la evidencia de métricas: `verificar_a3_04_f01.py` falla a propósito cuando cambia el detector, y las métricas actuales dejarían de describirlo.
-3. Repetir el benchmark y la reproducción de #9.
-4. Revisar #3 con esa evidencia.
+1. Aprobar la propuesta con esa evidencia.
+2. Mover el filtro a `src/p5/detector` y activarlo por defecto.
+3. Generar de nuevo la evidencia de métricas: `verificar_a3_04_f01.py` falla a propósito cuando cambia el detector, y las métricas actuales dejarían de describirlo.
+4. Repetir el benchmark y la reproducción de #9.
+5. Revisar #3 con esa evidencia.
 
 **Si C5 o C7 siguen fallando:**
 
