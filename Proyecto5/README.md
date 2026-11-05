@@ -6,7 +6,7 @@ imagen → detección → estado → decisión → comando
 
 ## Estado de la entrega
 
-**La reproducción todavía no está completa.** Los comandos corren, pero faltan casos por cumplir. Consulta [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md) para ver el último resultado y lo que falta.
+**La reproducción está completa.** Desde una copia limpia, todos los pasos dan `ok` en Linux y en Windows, incluidos los 10 casos C1–C10. El resultado y los límites conocidos están en [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md).
 
 ## Equipo
 
@@ -131,7 +131,7 @@ export P5_DETECTOR_WEIGHTS=models/yolox_tiny.onnx
 .venv/bin/python -m ruff format --check .
 ```
 
-Los comandos de casos y de reproducción terminan con código 1 mientras algún caso falle o siga pendiente. Es el resultado esperado hoy, no un error de instalación.
+Los comandos de casos y de reproducción terminan con código 1 si algún caso falla o queda pendiente.
 
 ## Seguir un cuadro
 
@@ -155,7 +155,7 @@ La reproducción completa también lo resume en `cuadro_trazado.json`. El format
 
 | Entregable | Contenido | Dónde |
 |---|---|---|
-| E1 | Repositorio y reproducción | Este README y [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md) |
+| E1 | Repositorio y reproducción | Este README, [docs/B3-03_REPRODUCCION.md](docs/B3-03_REPRODUCCION.md) y [evidencias/B3-03/](evidencias/B3-03/) |
 | E2 | Detector, procedencia y contrato | [docs/A1-01_DETECTOR.md](docs/A1-01_DETECTOR.md), [docs/A1-02_PROCEDENCIA.md](docs/A1-02_PROCEDENCIA.md) y [docs/A1-03_CONTRATO.md](docs/A1-03_CONTRATO.md) |
 | E3 | Dataset congelado | [docs/A2_DATASET.md](docs/A2_DATASET.md) y [data/](data/) |
 | E4 | Política y adaptador virtual | [docs/B1-01_POLITICA.md](docs/B1-01_POLITICA.md), [docs/B1-02_TEMPORAL.md](docs/B1-02_TEMPORAL.md), [docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md](docs/B2-01_VIRTUAL_CONTROL_ADAPTER.md), [docs/B2-02_WATCHDOG.md](docs/B2-02_WATCHDOG.md) y [docs/B2_MAPEO_CARRO.md](docs/B2_MAPEO_CARRO.md) |

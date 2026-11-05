@@ -6,19 +6,20 @@ Ticket: #9. Entregables: E1–E7.
 
 Demostrar que otra persona puede recuperar y ejecutar el proyecto sin intervención del equipo.
 
-**Estado: en curso.** La guía y el comando de reproducción ya funcionan desde una copia limpia, y C1–C10 corre completo. El ticket no se puede cerrar porque C5 y C7 todavía no pasan.
+**Estado: reproducción completa.** Desde una copia limpia de `main` en `2265d60`, todos los pasos dan `ok` en Linux y en Windows, incluidos los 10 casos C1–C10.
 
 ## Componentes
 
 - [README.md](../README.md): preparación, comandos y entregables.
 - scripts/reproducir.py: corre todos los comandos y resume el resultado.
-- tests/test_reproduccion.py: comprueba el resumen, la guía y que el código no abra conexiones de más.
+- tests/test_reproduccion.py: comprueba el resumen, la guía, la evidencia y que el código no abra conexiones de más.
+- evidencias/B3-03/: resumen de cada corrida y el cuadro trazado.
 
 Los comandos están en el README.
 
-## Último resultado
+## Resultado final
 
-Sobre `main` en `8e76180`, con #39 y #43 ya fusionados, más los archivos de este ticket, con Python 3.12.16 y dependencias fijadas.
+Sobre `2265d60`, sin cambios locales, con Python 3.12.16 y dependencias fijadas.
 
 | Paso | Linux, sin red | Windows |
 |---|---|---|
@@ -27,58 +28,44 @@ Sobre `main` en `8e76180`, con #39 y #43 ya fusionados, más los archivos de est
 | Inferencia | ok | ok |
 | Recorrido y traza de un cuadro | ok | ok |
 | Decisiones C1–C7, detecciones sintéticas | ok, 7 de 7 | ok, 7 de 7 |
-| **C1–C10** | **incompleto:** 8 pasan, 2 fallan y 0 pendientes | **incompleto:** igual |
-| Métricas | ok: 64 TP, 2 FP y 27 FN | ok: mismos conteos |
+| C1–C10 | ok: 10 pasan, 0 fallan y 0 pendientes | ok: igual |
+| Métricas | ok: 83 TP, 1 FP y 8 FN | ok: mismos conteos |
 | Benchmark | ok: 200 de 200 válidas | ok: 200 de 200 válidas |
-| Pruebas | 494 pasan | 494 pasan |
+| Pruebas | 530 pasan | 530 pasan |
 
 - **Linux:** contenedor `python:3.12`. La preparación usó la red, y todo lo demás corrió con `--network none`.
 - **Windows:** clon limpio con los comandos de PowerShell del README, usando la alternativa a `py -3.12` que indica la guía.
-- **Benchmark:** estas corridas solo comprueban que el comando funciona. Sus tiempos no son evidencia.
+- **Benchmark:** estas corridas solo comprueban que el comando funciona. Sus tiempos no son evidencia; la medición oficial está en [A3-03_BENCHMARK.md](A3-03_BENCHMARK.md).
+- **Este documento:** el commit que agrega esta evidencia no cambia código, datos ni configuración.
 
 ### Traza de un cuadro
 
-`seq02-0003` → person, backpack y person → BLOCKED → EVADE_LEFT → `left`, velocidad 0.2 y giro −0.5, con el mismo `frame_id` en cada etapa.
-
-### Casos que no pasan
-
-| Caso | Estado | Cuadros | Qué ocurre | Depende de |
-|---|---|---|---|---|
-| C5 | Falla | seq05 8, 9 y 10 | EVADE_RIGHT con una persona a la derecha | #3 |
-| C7 | Falla | seq06 36 y 38 | FORWARD con una persona al centro | #3 |
-| C7 | Falla | seq06 30 y 31 | No confirma el bloqueo dentro del plazo de 2 cuadros | #3 |
-
-C9 y C10 ya se ejecutan y pasan. No se cambiaron expectativas, umbrales ni datos para hacer pasar estos casos.
-
-[B1-03_VALIDACION.md](B1-03_VALIDACION.md) probó un ajuste de la política y decidió no adoptarlo. El diagnóstico del detector y su propuesta están en `docs/B1-03_DETECTOR.md`, en la rama `feat/a1-filtro-mediana`. Esta reproducción no incluye esa propuesta.
+`seq02-0003` → person, backpack y car → BLOCKED → EVADE_LEFT → `left`, velocidad 0.2 y giro −0.5, con el mismo `frame_id` en cada etapa.
 
 ## Criterios del ticket
 
-| Criterio | Estado |
-|---|---|
-| Copia limpia del repositorio | Hecho, en Linux y Windows |
-| Instalación con dependencias fijadas | Hecho |
-| El detector se recupera y su hash se verifica | Hecho |
-| El dataset se recupera | Hecho: viene en el repositorio y se valida |
-| Comandos de inferencia, recorrido, métricas y benchmark | Hecho |
-| Comando C1–C10 | **Corre completo, pero C5 y C7 aún no pasan** |
-| Motores desactivados por defecto | Hecho |
-| Sin AWS ni servicios externos después de la preparación | Hecho: probado sin red en Linux |
-| Trazar un cuadro de principio a fin | Hecho |
-| README con todos los comandos | Hecho |
-| Sin secretos en el repositorio | gitleaks del CI, en cada push |
-| Resultados en una carpeta configurable | Hecho |
-
-## Lo que falta para cerrar
-
-1. **#3:** resolver C5 y C7 con `p5-ajuste-v1`, sin tocar `p5-eval-v1` ni las expectativas.
-2. **#8:** C1–C10 ya corre completo, y falta su revisión.
-3. **Medición final del benchmark:** la evidencia oficial cita `dacaa56`, anterior al watchdog de #5, a `config/politica.yaml` y a #6. Hay que repetirla cuando termine #3.
-4. **Reproducción final:** volver a correr esta guía sobre esa versión de `main`, y actualizar este documento y el estado del README.
+| Criterio | Estado | Cómo se comprobó |
+|---|---|---|
+| Copia limpia del repositorio | Hecho | Clones limpios en Linux y Windows |
+| Instalación con dependencias fijadas | Hecho | `requirements.lock.txt` |
+| El detector se recupera y su hash se verifica | Hecho | Descarga real y `--verify-only` |
+| El dataset se recupera | Hecho | Viene en el repositorio y se valida |
+| Comandos de inferencia, recorrido y C1–C10 | Hecho | `reproducir.py` |
+| Comandos de métricas y benchmark | Hecho | `reproducir.py` |
+| Motores desactivados por defecto | Hecho | `salida_fisica: false` y una prueba |
+| Sin AWS | Hecho | Una prueba revisa las conexiones del código |
+| Sin servicios externos después de la preparación | Hecho | Linux con `--network none` |
+| Trazar un cuadro de principio a fin | Hecho | evidencias/B3-03/linux/cuadro_trazado.json |
+| README con todos los comandos | Hecho | Se ejecutaron tal cual, y una prueba compara PowerShell con Linux |
+| Sin secretos en el repositorio | Hecho | gitleaks del CI en `2265d60` |
+| Resultados en una carpeta configurable | Hecho | `--output`, sin reemplazar resultados anteriores |
 
 ## Límites conocidos
 
 - **Carro:** esta guía usa imágenes ya capturadas. No se probó con la cámara en vivo, ni se ha medido el ritmo real de `/stream`.
-- **Hardware de la demostración:** falta confirmarlo. El benchmark oficial se midió en un laptop.
+- **Hardware de la demostración:** falta confirmarlo. La medición oficial se hizo en un laptop con Intel i9-12900H.
+- **Filtro de mediana:** los 10 casos pasan con el filtro 3×3, activo por defecto. Con `--filtro-mediana 0`, C5 y C7 fallan.
+- **Limitación aceptada:** en `seq06-0025` aparece un `truck` falso que causa un SLOW con la vía libre. El PR 50 lo aceptó como limitación documentada.
+- **F1:** 0.9486 puede ser optimista, porque se revisaron puntajes de la evaluación durante el diagnóstico. Ver [B1-03_DETECTOR.md](B1-03_DETECTOR.md).
 - **Sin red:** solo se probó en Linux. En Windows hubo conexión disponible durante la corrida.
 - **Política:** Proyecto3/config/politica.yaml y config/politica.yaml tienen los mismos valores, pero distinto hash. Los comandos usan `config/politica.yaml`.
