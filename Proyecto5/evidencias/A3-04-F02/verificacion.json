@@ -1,6 +1,14 @@
 {
   "seguimiento": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/41",
   "commit_base": "2dbcb0f5c93004abb0c083817aafcf3859ff2c51",
+  "commit_pr_ejecutado": "3e276bf8bc75774881119aca571c4a57caad5e1a",
+  "entradas_sin_diferencias_base_vs_pr": true,
+  "entradas_sin_cambios_locales_vs_pr": true,
+  "rutas_git_comparadas": [
+    "data/p5-eval-v1",
+    "evidencias/a3-metricas-v1",
+    "evidencias/A3-04"
+  ],
   "runtime": "Python 3.12.16",
   "frame_id": "seq06-0028",
   "imagen_sha256": "5da0547cb85368a716c08f9fb6e73ffd8cf1b076370eeeb06e52a6c56ae8d589",
@@ -198,9 +206,9 @@
   "revision_y_criterio_sha256": {
     "docs/CRITERIO_ANOTACION.md": "827ee7259030b3e0522720c95c5a1e467b31784e41640ec35efd5c6ef1e60ab5",
     "docs/A2_DATASET.md": "f4294248b968e60fd7d01dd141e1e1bfb718cbe042c87ba13e0eba4b319aa9c6",
-    "evidencias/A3-04-F02/REVISION.md": "a7b4e53fe72fafc4169da9b33421e5277e8a32895e02712676b48785896f60d3"
+    "evidencias/A3-04-F02/REVISION.md": "81df5d32853bb22b2e5feb71604e5092d3b04d87b4129fbfe2d8b248864aa225"
   },
-  "verificador_sha256": "1ba76660b71e674ccd726dbf9c7fdd0c4c55e58e2254450731b6c2b4844233b5",
+  "verificador_sha256": "8f263a5f0b74f672e07c9089705faf1fbf9f1636bf075a4639437a9e940d6ad5",
   "inventario_sha256": "dce7d522b5ec4816ce2f1f46d8e6230a57007fd59a0f39f33263847fccc168f0",
   "auditoria_numerica_correcta": true,
   "alcance": "Integridad y aritmetica; la inspeccion visual se documenta en REVISION.md"
