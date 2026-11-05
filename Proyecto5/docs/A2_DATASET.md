@@ -92,6 +92,12 @@ Crea `data/p5-eval-v1/secuencias.json`. Toda secuencia pertenece a un solo split
 
 ## Paso 5: anotar
 
+El [criterio QA de cajas visibles](CRITERIO_ANOTACION.md) explicita holgura,
+oclusión y truncamiento para las revisiones posteriores. Se registró al revisar
+F02; no se atribuye retroactivamente a la anotación original de v1 ni cambia
+su congelamiento. La [segunda revisión de seq06-0028](../evidencias/A3-04-F02/REVISION.md)
+documenta una discrepancia superior y mantiene v1 intacto.
+
 ```bash
 python -m p5.dataset.anotar --dataset data/p5-eval-v1
 ```
