@@ -26,7 +26,7 @@ def _is_number(value: object) -> bool:
     return isinstance(value, int | float) and not isinstance(value, bool) and isfinite(value)
 
 
-def _unsafe_reason(command: ControlCommand, now_ms: float | None) -> str | None:
+def _unsafe_reason(command: ControlCommand, now_ms: float) -> str | None:
     if command.direction not in MOTION_ROUTES:
         return "direccion_invalida"
     if not _is_number(command.speed) or not 0.0 < command.speed <= MAX_SPEED:
@@ -38,8 +38,6 @@ def _unsafe_reason(command: ControlCommand, now_ms: float | None) -> str | None:
         return "giro_invalido"
     if not _is_number(command.valid_until_ms):
         return "sin_vigencia"
-    if now_ms is None:
-        return None
     if not _is_number(now_ms):
         return "reloj_invalido"
     if now_ms >= command.valid_until_ms:
@@ -47,8 +45,11 @@ def _unsafe_reason(command: ControlCommand, now_ms: float | None) -> str | None:
     return None
 
 
-def route_for(command: ControlCommand, *, now_ms: float | None = None) -> RouteDecision:
-    """Ruta de un comando. Con `now_ms`, en el reloj de la secuencia, tambien revisa si vencio."""
+def route_for(command: ControlCommand, *, now_ms: float) -> RouteDecision:
+    """Ruta de un comando en el instante `now_ms`, en el reloj de la secuencia.
+
+    `now_ms` es obligatorio: ninguna ruta de movimiento sale sin comprobar la vigencia.
+    """
     if command.direction == "stop":
         return RouteDecision(STOP_ROUTE, "comando")
     reason = _unsafe_reason(command, now_ms)

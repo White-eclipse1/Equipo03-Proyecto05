@@ -13,6 +13,7 @@ from p5.control.models import Action, ControlCommand, ControlDecision
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "evidencias" / "B1-03-detector" / "c1-c10-sin-filtro" / "decisiones.jsonl"
 FIRMWARE_ROUTES = {"/go", "/left", "/right", "/stop"}
+NOW_MS = 100.0
 
 
 def motion(**changes):
@@ -34,7 +35,7 @@ def motion(**changes):
     [("forward", 0.0, "/go"), ("left", -0.5, "/left"), ("right", 0.5, "/right")],
 )
 def test_valid_motion_uses_its_route(direction, steering, route):
-    decision = route_for(motion(direction=direction, steering=steering))
+    decision = route_for(motion(direction=direction, steering=steering), now_ms=NOW_MS)
 
     assert (decision.route, decision.reason) == (route, "comando")
 
@@ -50,7 +51,7 @@ def test_stop_always_uses_the_stop_route():
         )
     )
 
-    assert route_for(command).route == STOP_ROUTE
+    assert route_for(command, now_ms=NOW_MS).route == STOP_ROUTE
     assert route_for(command, now_ms=float("nan")).route == STOP_ROUTE
 
 
@@ -75,14 +76,14 @@ def test_stop_always_uses_the_stop_route():
     ],
 )
 def test_invalid_values_stop_the_car(changes, reason):
-    decision = route_for(motion(**changes))
+    decision = route_for(motion(**changes), now_ms=NOW_MS)
 
     assert (decision.route, decision.reason) == (STOP_ROUTE, reason)
 
 
 @pytest.mark.parametrize("speed", [0.01, 1.0])
 def test_speed_limits_are_accepted(speed):
-    assert route_for(motion(speed=speed)).route == "/go"
+    assert route_for(motion(speed=speed), now_ms=NOW_MS).route == "/go"
 
 
 @pytest.mark.parametrize(
@@ -93,12 +94,24 @@ def test_speed_limits_are_accepted(speed):
         (801.0, STOP_ROUTE, "vencido"),
         (float("nan"), STOP_ROUTE, "reloj_invalido"),
         (float("inf"), STOP_ROUTE, "reloj_invalido"),
+        (None, STOP_ROUTE, "reloj_invalido"),
     ],
 )
 def test_an_expired_command_or_invalid_clock_stops_the_car(now_ms, route, reason):
     decision = route_for(motion(), now_ms=now_ms)
 
     assert (decision.route, decision.reason) == (route, reason)
+
+
+def test_the_clock_cannot_be_left_out():
+    with pytest.raises(TypeError, match="now_ms"):
+        route_for(motion())
+
+
+def test_document_says_the_physical_turn_direction_is_not_verified():
+    document = (ROOT / "docs" / "B2_MAPEO_CARRO.md").read_text(encoding="utf-8")
+
+    assert "sentido físico de los giros sigue sin verificar" in document
 
 
 def test_the_reverse_route_is_never_used():
@@ -116,9 +129,14 @@ def test_mapping_does_not_change_the_command():
 
 def test_every_recorded_real_command_has_a_route():
     rows = [json.loads(line) for line in REFERENCE.read_text(encoding="utf-8").splitlines()]
-    commands = [ControlCommand(**row["comando"]) for row in rows if row.get("comando")]
+    recorded = [row for row in rows if row.get("comando") and "t_capture_ms" in row]
+    commands = [ControlCommand(**row["comando"]) for row in recorded]
 
-    decisions = [route_for(command) for command in commands]
+    # Cada comando se comprueba en el instante de su cuadro, cuando todavia estaba vigente.
+    decisions = [
+        route_for(command, now_ms=row["t_capture_ms"])
+        for command, row in zip(commands, recorded, strict=True)
+    ]
 
     assert commands
     assert {decision.reason for decision in decisions} == {"comando"}
