@@ -1,5 +1,7 @@
 # Proyecto 3 — Clasificador de imágenes integrado al portal
 
+> **Proyecto 5 (detección y decisión de movimiento):** la guía de reproducción y los entregables están en [`Proyecto5/README.md`](Proyecto5/README.md).
+
 > **Proyecto 4 (modelo optimizado en edge):** la ficha de entrega, los accesos y las evidencias están en [`Proyecto4/README.md`](Proyecto4/README.md). El portal desplegado con la sección Capturas Edge es https://54-80-197-58.sslip.io.
 
 Clasificador multiclase de un objeto por imagen, entrenado con recortes de las cajas COCO del release aprobado del Proyecto 2 e integrado en el mismo portal.
