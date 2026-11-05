@@ -23,11 +23,16 @@ class RouteDecision:
 
 
 def _is_number(value: object) -> bool:
-    return isinstance(value, int | float) and not isinstance(value, bool) and isfinite(value)
+    if isinstance(value, bool) or not isinstance(value, int | float):
+        return False
+    try:
+        return isfinite(value)
+    except (OverflowError, TypeError, ValueError):
+        return False
 
 
 def _unsafe_reason(command: ControlCommand, now_ms: float) -> str | None:
-    if command.direction not in MOTION_ROUTES:
+    if not isinstance(command.direction, str) or command.direction not in MOTION_ROUTES:
         return "direccion_invalida"
     if not _is_number(command.speed) or not 0.0 < command.speed <= MAX_SPEED:
         return "velocidad_invalida"
