@@ -37,7 +37,7 @@ Las velocidades de movimiento deben ser finitas y estar dentro del rango 0.0 a 1
 ## Motores físicos
 
 El adaptador es virtual y physical_output_enabled permanece en False.
-No existe activación de motores físicos en B2-01.
+No existe activación de motores físicos en B2-01. El mapeo hacia las rutas del carro, sin activarlas, está en [B2_MAPEO_CARRO.md](B2_MAPEO_CARRO.md).
 
 ## Registro
 
