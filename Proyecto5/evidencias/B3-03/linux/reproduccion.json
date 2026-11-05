@@ -1,0 +1,77 @@
+{
+  "estado": "ok",
+  "commit": "2265d6000e9896641df18b2091cf1fd513017cbb",
+  "python": "3.12.16",
+  "pasos": [
+    {
+      "paso": "detector_hash",
+      "criterio": "El detector se recupera y su hash se verifica",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "dataset_evaluacion",
+      "criterio": "El dataset de evaluacion esta completo y congelado",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "dataset_ajuste",
+      "criterio": "El dataset de ajuste esta completo y no se cruza con evaluacion",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "inferencia",
+      "criterio": "Comando de inference",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "recorrido",
+      "criterio": "Comando E2E y trazabilidad: cuadro -> detecciones -> estado -> decision -> comando",
+      "estado": "ok",
+      "detalle": "seq02-0003 -> ['person', 'backpack', 'car'] -> BLOCKED -> EVADE_LEFT -> left",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "politica",
+      "criterio": "Decisiones C1-C7 con detecciones sinteticas",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "casos",
+      "criterio": "Comando C1-C10",
+      "estado": "ok",
+      "detalle": "10 pasan, 0 fallan, 0 pendientes",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "metricas",
+      "criterio": "Comando de metricas",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "benchmark",
+      "criterio": "Comando de benchmark",
+      "estado": "ok",
+      "detalle": "200 mediciones validas; p50 66.5 ms, p95 133.3 ms",
+      "codigo_salida": 0
+    },
+    {
+      "paso": "pruebas",
+      "criterio": "Pruebas del proyecto con pesos reales",
+      "estado": "ok",
+      "detalle": "codigo de salida 0",
+      "codigo_salida": 0
+    }
+  ]
+}

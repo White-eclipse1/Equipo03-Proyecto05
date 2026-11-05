@@ -15,6 +15,7 @@ from p5.control.adapter import VirtualControlAdapter
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "reproducir.py"
 README = ROOT / "README.md"
+FINAL_COMMIT = "2265d60"
 SPEC = importlib.util.spec_from_file_location("reproducir", SCRIPT)
 reproducir = importlib.util.module_from_spec(SPEC)
 sys.modules["reproducir"] = reproducir
@@ -347,3 +348,37 @@ def test_no_generated_result_is_versioned():
         pytest.skip("copia sin repositorio de git, por ejemplo un ZIP")
 
     assert tracked == ""
+
+
+@pytest.mark.parametrize("system", ["linux", "windows"])
+def test_final_evidence_is_a_complete_reproduction_of_one_commit(system):
+    folder = ROOT / "evidencias" / "B3-03" / system
+    report = json.loads((folder / "reproduccion.json").read_text(encoding="utf-8"))
+    steps = {row["paso"]: row for row in report["pasos"]}
+
+    assert report["estado"] == reproducir.OK
+    assert report["commit"].startswith(FINAL_COMMIT)
+    assert report["python"].startswith("3.12.")
+    assert set(steps) == {item.name for item in reproducir.build_steps(Path("x"), Path("y"))}
+    assert {row["estado"] for row in report["pasos"]} == {reproducir.OK}
+    assert steps["casos"]["detalle"] == "10 pasan, 0 fallan, 0 pendientes"
+
+    chain = json.loads((folder / "cuadro_trazado.json").read_text(encoding="utf-8"))
+    assert chain["cuadro"] == reproducir.TRACE_FRAME
+    assert chain["detecciones"]
+    assert chain["comando"]
+
+
+def test_final_evidence_does_not_expose_local_paths():
+    for path in (ROOT / "evidencias" / "B3-03").rglob("*.json"):
+        text = path.read_text(encoding="utf-8")
+        assert "Users" not in text, path
+        assert "/home/" not in text, path
+
+
+def test_status_documents_cite_the_reproduced_commit():
+    document = (ROOT / "docs" / "B3-03_REPRODUCCION.md").read_text(encoding="utf-8")
+
+    assert FINAL_COMMIT in document
+    assert "10 pasan, 0 fallan y 0 pendientes" in document
+    assert "reproducción está completa" in README.read_text(encoding="utf-8")
