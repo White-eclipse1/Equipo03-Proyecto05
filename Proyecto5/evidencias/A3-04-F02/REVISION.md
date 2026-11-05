@@ -61,9 +61,12 @@ El recálculo independiente da IoU `0.47284356754785883`: con confianza e IoU
 de corte 0.50 sigue siendo **0 TP, 1 FP y 1 FN**. No se ensayaron cajas
 alternativas ni umbrales para cambiar ese resultado.
 
-`verificacion.json` registra commit, runtime, hashes de entradas y del criterio,
+`verificacion.json` registra el commit base original y el commit ejecutado del PR,
+runtime, hashes de entradas y del criterio,
 inventario de los 128 cuadros y hashes del paquete antes y después del auditor.
-También contrasta sus archivos con los blobs del commit base. `recalculo/`
+Compara explícitamente las entradas protegidas entre ambos commits con
+`git diff --exit-code BASE PR`, y separadamente el árbol local contra el commit
+del PR. Ambas comprobaciones se repiten después del auditor. `recalculo/`
 contiene la nueva ejecución del auditor existente, incluida la lámina.
 La comprobación automática acredita integridad y aritmética; la decisión
 visual corresponde a la inspección descrita arriba.
@@ -83,3 +86,10 @@ El manifiesto esperado sigue siendo
 `5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb`.
 La carpeta de salida debe ser nueva. El entorno local se llama `.venv312`;
 puede usarse `.venv` si contiene esas mismas versiones.
+
+El verificador rechaza `--output` dentro de `data/` o `evidencias/`, incluyendo
+sus subcarpetas y rutas con `..`, antes de crear archivos o ejecutar el auditor.
+Las salidas reproducidas deben ir en `resultados/` u otra carpeta externa a
+esas entradas. Las pruebas de F02 incluyen rechazos de salida y repositorios
+Git temporales donde un cambio ya comprometido deja limpio el árbol local;
+ese cambio debe seguir siendo detectado frente a la base.

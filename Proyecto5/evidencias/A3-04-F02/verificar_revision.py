@@ -12,11 +12,30 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 from auditar_a3_04 import digest, indexed, inventory, overlap, read_json, read_lines  # noqa: E402
 
+# Base registrada por la primera revision; no se sustituye por HEAD al repetirla.
+BASE_COMMIT = "2dbcb0f5c93004abb0c083817aafcf3859ff2c51"
+
+
+def check_git_inputs(git, base, pr_commit, paths, cwd):
+    """Comprueba cambios ya comprometidos y cambios locales por separado."""
+    for revisions in ((base, pr_commit), (pr_commit,)):
+        subprocess.run(
+            [*git, "diff", "--exit-code", *revisions, "--", *paths],
+            cwd=cwd,
+            capture_output=True,
+            check=True,
+        )
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True, help="Carpeta nueva.")
     args = parser.parse_args()
+    args.output = args.output.resolve()
+    # Resolver .. y enlaces antes de cualquier mkdir o ejecucion del auditor.
+    for protected in (ROOT / "data", ROOT / "evidencias"):
+        if args.output.is_relative_to(protected.resolve()):
+            parser.error(f"--output no puede estar dentro de {protected}")
     if args.output.exists():
         parser.error("la salida debe ser nueva")
     dataset = ROOT / "data/p5-eval-v1"
@@ -34,13 +53,15 @@ def main():
     commit = subprocess.run(
         [*git, "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
     ).stdout.strip()
-    immutable = ["data/p5-eval-v1", "evidencias/a3-metricas-v1", "evidencias/A3-04"]
-    subprocess.run(
-        [*git, "diff", "--exit-code", "HEAD", "--", *immutable],
+    base = subprocess.run(
+        [*git, "rev-parse", "--verify", f"{BASE_COMMIT}^{{commit}}"],
         cwd=ROOT,
         capture_output=True,
+        text=True,
         check=True,
-    )
+    ).stdout.strip()
+    immutable = ["data/p5-eval-v1", "evidencias/a3-metricas-v1", "evidencias/A3-04"]
+    check_git_inputs(git, base, commit, immutable, ROOT)
     manifest = dataset / "manifiesto.jsonl"
     expected = "5dab9ee3f65cad0a1b31695d6d81c7a50c81fe3934f07572e53f64dc7e2ffeeb"
     assert digest(manifest) == expected, "cambio el manifiesto congelado"
@@ -81,15 +102,14 @@ def main():
         )
     }
     assert inputs == after, "cambiaron las entradas durante la verificacion"
-    subprocess.run(
-        [*git, "diff", "--exit-code", "HEAD", "--", *immutable],
-        cwd=ROOT,
-        capture_output=True,
-        check=True,
-    )
+    check_git_inputs(git, base, commit, immutable, ROOT)
     report = {
         "seguimiento": "https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/41",
-        "commit_base": commit,
+        "commit_base": base,
+        "commit_pr_ejecutado": commit,
+        "entradas_sin_diferencias_base_vs_pr": True,
+        "entradas_sin_cambios_locales_vs_pr": True,
+        "rutas_git_comparadas": immutable,
         "runtime": f"Python {platform.python_version()}",
         "frame_id": frame_id,
         "imagen_sha256": row["sha256"],
