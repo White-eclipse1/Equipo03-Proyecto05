@@ -388,7 +388,9 @@ def test_results_link_decisions_with_frames_and_state(rows, config):
 
 
 def run_main_with_fake_detector(monkeypatch, tmp_path, rows, cases=CASES, output="salida"):
-    monkeypatch.setattr(runner, "load_detector", lambda weights: perfect_detector(rows))
+    monkeypatch.setattr(
+        runner, "load_detector", lambda weights, median_kernel: perfect_detector(rows)
+    )
     weights = tmp_path / "pesos.onnx"
     weights.write_bytes(b"pesos")
     target = tmp_path / output

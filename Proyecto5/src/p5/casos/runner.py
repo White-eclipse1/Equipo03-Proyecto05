@@ -22,6 +22,7 @@ from p3.policy.casos import ejecutar_casos
 from p3.policy.config import ConfigPolitica, cargar_config
 from p3.policy.politica import PoliticaDecision
 
+from p5.casos.filtro import NO_MEDIAN_FILTER, MedianFilterDetector
 from p5.control.adapter import VirtualControlAdapter
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.yolox import (
@@ -61,8 +62,13 @@ def load_cases(path: Path) -> dict[str, Any]:
     return data
 
 
-def load_detector(weights: Path) -> YoloxDetector:
-    return YoloxDetector.from_weights(weights)
+def load_detector(
+    weights: Path, median_kernel: int = NO_MEDIAN_FILTER
+) -> YoloxDetector | MedianFilterDetector:
+    detector = YoloxDetector.from_weights(weights)
+    if median_kernel == NO_MEDIAN_FILTER:
+        return detector
+    return MedianFilterDetector(detector, median_kernel)
 
 
 def _frame_input(row: dict[str, Any], dataset: Path) -> FrameInput:
@@ -810,6 +816,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dataset", required=True, type=Path, help="Paquete congelado.")
     parser.add_argument("--weights", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path, help="Carpeta nueva.")
+    parser.add_argument(
+        "--filtro-mediana",
+        type=int,
+        default=NO_MEDIAN_FILTER,
+        help="Tamano del filtro de mediana antes del detector; 0 lo apaga.",
+    )
     args = parser.parse_args(argv)
 
     if args.output.exists():
@@ -819,7 +831,7 @@ def main(argv: list[str] | None = None) -> int:
         data = load_cases(args.cases)
         rows = load_manifest(args.dataset / MANIFEST_FILE)
         config = cargar_config(args.config)
-        detector = load_detector(args.weights)
+        detector = load_detector(args.weights, args.filtro_mediana)
         report = run_cases(data, rows, config, detector, args.dataset)
     except (DetectorError, OSError, ValueError, KeyError) as error:
         print(f"no se pudieron correr los casos: {error}", file=sys.stderr)
@@ -839,6 +851,7 @@ def main(argv: list[str] | None = None) -> int:
         "config_sha256": config[1],
         "umbral_detector": DEFAULT_SCORE_THRESHOLD,
         "nms_detector": DEFAULT_NMS_THRESHOLD,
+        "filtro_mediana_detector": args.filtro_mediana,
         "runtime": f"Python {platform.python_version()}",
         "hardware": f"{platform.system()} {platform.machine()}, CPU",
     }
