@@ -9,9 +9,13 @@ import numpy as np
 import pytest
 
 from p5.casos import runner
-from p5.casos.filtro import MedianFilterDetector
 from p5.detector.frame import detect_frame
-from p5.detector.yolox import DetectorError, YoloxDetector
+from p5.detector.yolox import (
+    DEFAULT_MEDIAN_KERNEL,
+    NO_MEDIAN_FILTER,
+    DetectorError,
+    YoloxDetector,
+)
 
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 GRID_CELLS = 3549
@@ -45,39 +49,63 @@ def noisy_image():
     return generator.integers(0, 256, (296, 400, 3), dtype=np.uint8)
 
 
-def test_the_runner_does_not_filter_by_default(monkeypatch):
-    plain = YoloxDetector(FakeSession())
-    monkeypatch.setattr(runner.YoloxDetector, "from_weights", lambda weights: plain)
-    assert runner.load_detector(Path("pesos.onnx")) is plain
-    assert isinstance(runner.load_detector(Path("pesos.onnx"), 3), MedianFilterDetector)
+def test_the_detector_filters_by_default_and_the_filter_can_be_turned_off():
+    assert DEFAULT_MEDIAN_KERNEL == 3
+    assert YoloxDetector(FakeSession()).median_kernel == 3
+    assert YoloxDetector(FakeSession(), median_kernel=NO_MEDIAN_FILTER).median_kernel == 0
+
+
+def test_the_runner_uses_the_kernel_it_is_given(monkeypatch):
+    seen = {}
+
+    def from_weights(weights, *, median_kernel):
+        seen[weights] = median_kernel
+        return YoloxDetector(FakeSession(), median_kernel=median_kernel)
+
+    monkeypatch.setattr(runner.YoloxDetector, "from_weights", from_weights)
+    assert runner.load_detector(Path("pesos.onnx")).median_kernel == 3
+    assert runner.load_detector(Path("sin.onnx"), 0).median_kernel == 0
+    assert seen == {Path("pesos.onnx"): 3, Path("sin.onnx"): 0}
 
 
 def test_the_median_filter_reaches_the_model():
     session = FakeSession()
     image = noisy_image()
-    MedianFilterDetector(YoloxDetector(session), 3).detect_image(image)
+    YoloxDetector(session).detect_image(image)
     expected = FakeSession()
-    YoloxDetector(expected).detect_image(cv2.medianBlur(image, 3))
+    YoloxDetector(expected, median_kernel=NO_MEDIAN_FILTER).detect_image(cv2.medianBlur(image, 3))
     assert np.array_equal(session.tensors[0], expected.tensors[0])
 
 
-@pytest.mark.parametrize("kernel", [-1, 0, 1, 2, 4])
+def test_without_the_filter_the_model_receives_the_original_image():
+    session = FakeSession()
+    filtered = FakeSession()
+    image = noisy_image()
+    YoloxDetector(session, median_kernel=NO_MEDIAN_FILTER).detect_image(image)
+    YoloxDetector(filtered).detect_image(image)
+    assert not np.array_equal(session.tensors[0], filtered.tensors[0])
+
+
+@pytest.mark.parametrize("kernel", [-1, 1, 2, 4])
 def test_invalid_median_kernels_are_rejected(kernel):
-    with pytest.raises(ValueError, match="impar"):
-        MedianFilterDetector(YoloxDetector(FakeSession()), kernel)
+    with pytest.raises(ValueError, match="median_kernel"):
+        YoloxDetector(FakeSession(), median_kernel=kernel)
 
 
-def test_a_failing_filter_is_a_detector_failure_and_not_an_empty_scene():
-    detector = MedianFilterDetector(YoloxDetector(FakeSession()), 3)
-    with pytest.raises(DetectorError, match="median filter"):
-        detector.detect_image(np.zeros((0, 0, 3), dtype=np.uint8))
+def test_a_failing_filter_is_a_detector_failure_and_not_an_empty_scene(monkeypatch):
+    def broken(_image, _kernel):
+        raise cv2.error("sin filtro")
+
+    monkeypatch.setattr(cv2, "medianBlur", broken)
+    with pytest.raises(DetectorError, match="preprocess failed"):
+        YoloxDetector(FakeSession()).detect_image(noisy_image())
 
 
 def test_the_filter_keeps_what_the_frame_contract_needs(tmp_path):
     path = tmp_path / "cuadro.png"
     cv2.imwrite(str(path), noisy_image())
     frame = detect_frame(
-        MedianFilterDetector(YoloxDetector(FakeSession()), 3),
+        YoloxDetector(FakeSession()),
         path,
         sequence_id="s",
         frame_id="s-1",
@@ -130,3 +158,21 @@ def test_a_person_only_counts_when_a_firm_person_box_overlaps_it():
 )
 def test_each_lost_person_gets_the_stage_that_explains_it(final, raw, stage):
     assert load_script("diagnostico_perdidas").classify(final, raw) == stage
+
+
+def test_current_evidence_measures_the_detector_with_the_filter():
+    root = SCRIPTS.parent
+    metrics = json.loads(
+        (root / "evidencias/a3-metricas-mediana3/metricas.json").read_text(encoding="utf-8")
+    )
+    benchmark = json.loads(
+        (root / "evidencias/A3-03-mediana3/benchmark.json").read_text(encoding="utf-8")
+    )
+
+    assert metrics["ejecucion"]["filtro_mediana_detector"] == DEFAULT_MEDIAN_KERNEL
+    assert metrics["ejecucion"]["origen"] == "detector"
+    assert benchmark["detector"]["filtro_mediana"] == DEFAULT_MEDIAN_KERNEL
+    assert metrics["ejecucion"]["commit"] == benchmark["codigo"]["commit"]
+    assert (metrics["micro"]["tp"], metrics["micro"]["fp"], metrics["micro"]["fn"]) == (83, 1, 8)
+    report = (root / "docs/A3_METRICAS.md").read_text(encoding="utf-8")
+    assert f"{metrics['micro']['f1']:.4f}" in report
