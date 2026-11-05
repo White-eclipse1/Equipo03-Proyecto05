@@ -93,6 +93,26 @@ def test_failed_or_pending_cases_leave_the_reproduction_incomplete(tmp_path, fai
     assert f"{pending} pendientes" in detail
 
 
+@pytest.mark.parametrize("code", [1, 2, -1])
+def test_a_runner_error_is_a_failure_even_if_the_results_say_correct(tmp_path, code):
+    report = cases_report(tmp_path / "r.json", correct=True)
+
+    state, detail = reproducir.check_cases(report)(code)
+
+    assert state == reproducir.FAILED
+    assert f"codigo de salida {code}" in detail
+
+
+@pytest.mark.parametrize("code", [2, -1])
+def test_an_unexpected_exit_code_is_not_reported_as_failed_cases(tmp_path, code):
+    report = cases_report(tmp_path / "r.json", correct=False, passed=8, failed=2)
+
+    state, detail = reproducir.check_cases(report)(code)
+
+    assert state == reproducir.FAILED
+    assert f"codigo de salida {code}" in detail
+
+
 def test_cases_with_physical_output_are_a_failure(tmp_path):
     report = cases_report(tmp_path / "r.json", correct=True, physical=True)
 

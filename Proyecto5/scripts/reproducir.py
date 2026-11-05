@@ -27,6 +27,7 @@ TRACE_FRAME = "seq02-0003"
 OK = "ok"
 FAILED = "falla"
 INCOMPLETE = "incompleto"
+CASES_NOT_MET = 1
 
 
 @dataclass(frozen=True)
@@ -44,13 +45,17 @@ def _module(name: str, *arguments: object) -> tuple[str, ...]:
 
 
 def check_cases(results: Path) -> Callable[[int], tuple[str, str]]:
-    def check(_code: int) -> tuple[str, str]:
+    def check(code: int) -> tuple[str, str]:
         report = json.loads(results.read_text(encoding="utf-8"))
         detail = (
             f"{report['pasan']} pasan, {report['fallan']} fallan, {report['pendientes']} pendientes"
         )
         if report["ejecucion"]["salida_fisica"] is not False:
             return FAILED, f"salida fisica activa; {detail}"
+        # El runner sale con 1 solo cuando un caso falla o sigue pendiente. Cualquier otra salida
+        # distinta de 0 es un error, aunque el archivo diga que todo esta correcto.
+        if code != 0 and (report["correcto"] or code != CASES_NOT_MET):
+            return FAILED, f"codigo de salida {code}; {detail}"
         return (OK if report["correcto"] else INCOMPLETE), detail
 
     return check
