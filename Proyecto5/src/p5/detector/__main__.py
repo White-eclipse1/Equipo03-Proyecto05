@@ -36,6 +36,7 @@ def main(argv: list[str] | None = None) -> int:
             args.weights,
             score_threshold=args.score_threshold,
             nms_threshold=args.nms_threshold,
+            median_kernel=args.filtro_mediana,
         )
         result = detector.detect_file(args.image)
     except (DetectorError, ValueError):

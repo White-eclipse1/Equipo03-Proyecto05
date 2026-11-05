@@ -103,7 +103,7 @@ Lo que se acordó revisar, y lo que mostró:
 
 **Para aprobarla como solución de #3 falta:**
 1. Que Andrés y Omar confirmen si aceptan el SLOW falso de `seq06-0025`.
-2. Integrar el filtro al detector real, con métricas y benchmark nuevos.
+2. Revisar la integración del filtro al detector real, con métricas y benchmark nuevos. Ver [Integración](#integración).
 3. La reproducción final de #9.
 
 Cualquier cambio posterior se elige otra vez con `p5-ajuste-v1`: esta corrida no se repite con otros valores.
@@ -163,6 +163,7 @@ El filtro pasó a `YoloxDetector`, encendido por defecto, en `39e72ad`. Ahora lo
 - **Mismas decisiones:** con el detector integrado, C1–C10 repite la corrida acordada: las 155 filas son iguales, salvo la hora de emisión del comando.
 - **Métricas:** F1 pasa de 0.8153 a 0.9486. Ver [A3_METRICAS.md](A3_METRICAS.md).
 - **Benchmark:** nueva medición oficial en [A3-03_BENCHMARK.md](A3-03_BENCHMARK.md).
+- **Corrección posterior:** `python -m p5.detector --filtro-mediana 0` no apagaba el filtro en `39e72ad`. Se corrigió solo ese comando, que no interviene en los casos, las métricas ni el benchmark, así que su evidencia sigue siendo válida.
 - **Evidencia anterior:** queda sin cambios como referencia. `verificar_a3_04_f01.py` sigue comparando la repetición con Python 3.12 contra esa evidencia sin filtro, y describe al detector anterior.
 
 ## Cómo repetirlo

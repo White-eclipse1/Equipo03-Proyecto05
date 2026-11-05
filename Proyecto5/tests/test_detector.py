@@ -308,9 +308,58 @@ def test_cli_prints_json_and_uses_the_given_paths(tmp_path, monkeypatch, capsys)
 
     payload = json.loads(capsys.readouterr().out)
     assert code == 0
-    assert received == {"weights": "w.onnx", "score_threshold": 0.4, "nms_threshold": 0.45}
+    assert received == {
+        "weights": "w.onnx",
+        "score_threshold": 0.4,
+        "nms_threshold": 0.45,
+        "median_kernel": 3,
+    }
     assert payload["image_path"] == str(path)
     assert payload["detections"][0]["class_name"] == "person"
+
+
+def cli_tensor(tmp_path, monkeypatch, capsys, *extra):
+    """Corre el comando con una sesion simulada y devuelve lo que recibio el modelo."""
+    weights = tmp_path / "w.onnx"
+    weights.write_bytes(b"pesos")
+    path = tmp_path / "frame.png"
+    pixels = np.random.default_rng(0).integers(0, 256, (120, 160, 3), dtype=np.uint8)
+    cv2.imwrite(str(path), pixels)
+    session = FakeSession()
+    monkeypatch.setattr(yolox.onnxruntime, "InferenceSession", lambda *_a, **_k: session)
+
+    code = cli.main(["--weights", str(weights), "--image", str(path), *extra])
+
+    assert code == 0
+    assert json.loads(capsys.readouterr().out)["detections"] == []
+    return session.tensors[0], pixels
+
+
+def test_cli_with_filter_zero_sends_the_original_image_to_the_model(tmp_path, monkeypatch, capsys):
+    tensor, pixels = cli_tensor(tmp_path, monkeypatch, capsys, "--filtro-mediana", "0")
+
+    expected, _ratio = preprocess(pixels, INPUT_SIZE)
+    assert np.array_equal(tensor[0], expected)
+
+
+def test_cli_filters_the_image_by_default(tmp_path, monkeypatch, capsys):
+    tensor, pixels = cli_tensor(tmp_path, monkeypatch, capsys)
+
+    filtered, _ratio = preprocess(cv2.medianBlur(pixels, 3), INPUT_SIZE)
+    original, _ratio = preprocess(pixels, INPUT_SIZE)
+    assert np.array_equal(tensor[0], filtered)
+    assert not np.array_equal(tensor[0], original)
+
+
+def test_cli_rejects_an_invalid_filter_without_printing_json(tmp_path, monkeypatch, capsys):
+    weights = tmp_path / "w.onnx"
+    weights.write_bytes(b"pesos")
+    monkeypatch.setattr(yolox.onnxruntime, "InferenceSession", lambda *_a, **_k: FakeSession())
+
+    code = cli.main(["--weights", str(weights), "--image", "frame.png", "--filtro-mediana", "4"])
+
+    assert code == 1
+    assert capsys.readouterr().out == ""
 
 
 def test_cli_returns_non_zero_and_prints_no_json_on_error(tmp_path, capsys):
