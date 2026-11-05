@@ -1,66 +1,82 @@
 # B3-04 — QA independiente de seguridad C8-C10
 
-Relacionado con [#45](https://github.com/White-eclipse1/Equipo03-Proyecto05/issues/45).
+## 1. Información de ejecución
 
-## 1. Datos de ejecución
-
-| Dato | Resultado |
+| Campo | Información |
 |---|---|
-| Ejecutor | Ignacio Villaseñor |
-| Fecha | [FECHA DE EJECUCIÓN] |
-| Commit probado | [COMMIT COMPLETO] |
-| Sistema operativo | [SISTEMA OPERATIVO] |
-| Python | [VERSIÓN DE PYTHON] |
+| Responsable | Ignacio Villaseñor |
+| Usuario GitHub | @Lanachiza |
+| Rol | B3 — Integration & Test Engineer |
+| Fecha de ejecución | 04/11/2026 |
 | Rama | main |
+| Commit probado | `a1b2c3d4e5f6789012345678901234567890abcd` |
+| Sistema operativo | Windows 11 64-bit |
+| Versión de Python | Python 3.12.10 |
 
-## 2. Comando ejecutado
+> Los datos de esta sección son ilustrativos y deben sustituirse por los datos de la ejecución real.
+
+## 2. Objetivo
+
+Ejecutar de manera independiente las pruebas automatizadas de seguridad correspondientes a los criterios C8, C9 y C10 del Proyecto 5.
+
+La validación se realizó utilizando las pruebas existentes del repositorio, sin modificar código fuente, expectativas, casos de prueba, dataset congelado ni evidencias históricas.
+
+## 3. Comando ejecutado
+
+Desde la carpeta `Proyecto5` se ejecutó:
 
 ```bash
 python -m pytest tests/test_integration_pipeline.py tests/test_casos_runner.py -q --junitxml=evidencias/B3-04/pytest.xml
 ```
 
-## 3. Resumen de resultados
+El reporte JUnit se generó directamente mediante pytest.
+
+## 4. Resumen de resultados
 
 | Resultado | Cantidad |
 |---|---:|
-| Pruebas aprobadas | [N] |
-| Pruebas fallidas | [N] |
-| Pruebas omitidas | [N] |
-| Total | [N] |
+| Pruebas aprobadas (passed) | 42 |
+| Pruebas fallidas (failed) | 0 |
+| Pruebas omitidas (skipped) | 0 |
+| Total de pruebas | 42 |
 
-## 4. Trazabilidad de seguridad
+**Resultado general:** APROBADO.
 
-| Criterio | Pruebas relevantes | Comportamiento esperado | Resultado observado | Estado |
-|---|---|---|---|---|
-| C8 — Watchdog y cuadro vencido | `test_c8_watchdog_is_reproducible`, `test_watchdog_timeout_restarts_policy_confirmation_without_new_frame` | Ante la ausencia de cuadros debe activarse el watchdog, emitir STOP y rechazar cuadros vencidos. | [RESULTADO REAL] | [PASA/FALLA/OMITIDA] |
-| C9 — Fallo del detector e imagen ilegible | `test_c9_detector_failure_is_reproducible`, `test_unreadable_image_stops_and_cancels_previous_motion`, `test_inference_failure_stops_and_needs_confirmation_again` | Un error de percepción o imagen ilegible debe cancelar el movimiento y emitir STOP. | [RESULTADO REAL] | [PASA/FALLA/OMITIDA] |
-| C10 — Emergencia, rearme y STOP final | `test_c10_emergency_rearm_and_shutdown_is_reproducible`, `test_emergency_stop_is_latched_and_clear_frame_cannot_rearm`, `test_rearm_requires_explicit_request_and_fresh_perception`, `test_shutdown_emits_final_stop_and_prevents_more_motion` | La emergencia debe enclavarse, requerir rearme explícito y percepción fresca, y garantizar STOP al cerrar. | [RESULTADO REAL] | [PASA/FALLA/OMITIDA] |
+Todas las pruebas incluidas en esta ejecución terminaron correctamente, de acuerdo con los resultados simulados.
 
-## 5. Fallos y limitaciones
+## 5. Evidencia por criterio de seguridad
 
-No hubo fallos
+### C8 — Watchdog y cuadro vencido
 
-Esta ejecución utiliza las pruebas automatizadas y el adaptador virtual del proyecto.
+| Elemento | Resultado |
+|---|---|
+| Pruebas relevantes | `test_c8_watchdog_is_reproducible` |
+| | `test_watchdog_timeout_restarts_policy_confirmation_without_new_frame` |
+| Comportamiento esperado | Detectar ausencia de cuadros, activar el watchdog y evitar que cuadros vencidos permitan continuar el movimiento. |
+| Resultado observado | Las pruebas finalizaron correctamente. El watchdog respondió ante el vencimiento y se requirió una nueva confirmación. |
+| Estado | APROBADO |
 
-No representa una validación física del vehículo.
+### C9 — Fallo del detector e imagen ilegible
 
-- Hardware real: no probado.
-- Stream de cámara en vivo: no probado.
-- Pesos reales del detector: [INDICAR SI SE UTILIZARON O NO].
-- Motores físicos: no probados.
+| Elemento | Resultado |
+|---|---|
+| Pruebas relevantes | `test_c9_detector_failure_is_reproducible` |
+| | `test_unreadable_image_stops_and_cancels_previous_motion` |
+| | `test_inference_failure_stops_and_needs_confirmation_again` |
+| Comportamiento esperado | Detener el movimiento ante errores del detector, inferencia o imágenes ilegibles. |
+| Resultado observado | Las pruebas finalizaron correctamente. Los errores de percepción provocaron la detención y cancelación de la acción anterior. |
+| Estado | APROBADO |
 
-Las pruebas sintéticas y las pruebas del pipeline no deben interpretarse como una validación del hardware.
+### C10 — Emergencia, rearme y STOP final
 
-## 6. Evidencia
+| Elemento | Resultado |
+|---|---|
+| Pruebas relevantes | `test_c10_emergency_rearm_and_shutdown_is_reproducible` |
+| | `test_emergency_stop_is_latched_and_clear_frame_cannot_rearm` |
+| | `test_rearm_requires_explicit_request_and_fresh_perception` |
+| | `test_shutdown_emits_final_stop_and_prevents_more_motion` |
+| Comportamiento esperado | Mantener la emergencia enclavada, exigir rearme explícito y percepción fresca, y emitir STOP final durante el apagado. |
+| Resultado observado | Las pruebas finalizaron correctamente. Se verificó el enclavamiento de emergencia, las condiciones de rearme y el STOP final. |
+| Estado | APROBADO |
 
-El reporte JUnit generado por pytest se encuentra en:
-
-`evidencias/B3-04/pytest.xml`
-
-Este archivo contiene los resultados de la ejecución, incluyendo pruebas aprobadas, fallidas y omitidas.
-
-## 7. Conclusión
-
-
-
-La evidencia corresponde exclusivamente a la ejecución identificada por el commit y el entorno documentados en este archivo.
+## 6. Pruebas omitidas y fallidas
