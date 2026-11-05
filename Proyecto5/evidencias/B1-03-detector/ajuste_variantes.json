@@ -1,0 +1,2420 @@
+{
+  "dataset": "data/p5-ajuste-v1",
+  "manifiesto_sha256": "b4029c40f0a483139ca74d858f12a9a518d65ab7af47674dd4924994ad8b453c",
+  "modelo_sha256": "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7",
+  "config_sha256": "171b063298ee732afa05ac19939ef6c9e431ae3ca824ef50b509788d62716054",
+  "criterio": "min no_permitidas, luego min inferencias por cuadro, luego min sin_avance",
+  "seleccion": "mediana_3",
+  "variantes": {
+    "base": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 13,
+      "sin_avance": 0,
+      "personas_firmes": 39,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "voltear": {
+      "inferencias_por_cuadro": 2,
+      "no_permitidas": 13,
+      "sin_avance": 0,
+      "personas_firmes": 44,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_k3": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 4,
+      "personas_firmes": 61,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_0.5": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 12,
+      "sin_avance": 0,
+      "personas_firmes": 44,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_0.6": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 8,
+      "sin_avance": 4,
+      "personas_firmes": 51,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_0.8": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 4,
+      "personas_firmes": 63,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_1.0": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 4,
+      "personas_firmes": 70,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_1.2": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 4,
+      "sin_avance": 4,
+      "personas_firmes": 70,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_1.5": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 5,
+      "personas_firmes": 70,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_2.0": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 5,
+      "personas_firmes": 61,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_3.0": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 12,
+      "sin_avance": 1,
+      "personas_firmes": 24,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0005",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aju01-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aju01-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "bilateral": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 7,
+      "sin_avance": 3,
+      "personas_firmes": 49,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "caja_3": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 6,
+      "sin_avance": 4,
+      "personas_firmes": 63,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "mediana_3": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 0,
+      "sin_avance": 7,
+      "personas_firmes": 71,
+      "personas_anotadas": 85,
+      "detalle": []
+    },
+    "mediana_5": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 0,
+      "sin_avance": 11,
+      "personas_firmes": 81,
+      "personas_anotadas": 85,
+      "detalle": []
+    },
+    "clahe": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 15,
+      "sin_avance": 0,
+      "personas_firmes": 31,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0005",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gamma_0.7": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 18,
+      "sin_avance": 0,
+      "personas_firmes": 24,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0005",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0013",
+          "accion": "EVADE_RIGHT",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "EVASION_DERECHA"
+        },
+        {
+          "frame_id": "aj05-0014",
+          "accion": "EVADE_RIGHT",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "EVASION_DERECHA"
+        },
+        {
+          "frame_id": "aj05-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0022",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "borde_superior_40": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 15,
+      "sin_avance": 3,
+      "personas_firmes": 32,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj05-0022",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "recorte_superior_60": {
+      "inferencias_por_cuadro": 1,
+      "no_permitidas": 13,
+      "sin_avance": 0,
+      "personas_firmes": 38,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "mosaico_240": {
+      "inferencias_por_cuadro": 4,
+      "no_permitidas": 13,
+      "sin_avance": 0,
+      "personas_firmes": 39,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "desplazar_4": {
+      "inferencias_por_cuadro": 4,
+      "no_permitidas": 11,
+      "sin_avance": 0,
+      "personas_firmes": 41,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "voltear_y_mosaico": {
+      "inferencias_por_cuadro": 5,
+      "no_permitidas": 13,
+      "sin_avance": 0,
+      "personas_firmes": 44,
+      "personas_anotadas": 85,
+      "detalle": [
+        {
+          "frame_id": "aj05-0021",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0003",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0004",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0006",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0007",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0008",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0009",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0010",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0011",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0012",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0013",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0014",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        },
+        {
+          "frame_id": "aj06-0015",
+          "accion": "FORWARD",
+          "permitidas": [
+            "STOP",
+            "SLOW",
+            "EVADE_LEFT",
+            "EVADE_RIGHT"
+          ],
+          "reason_code": "VIA_LIBRE"
+        }
+      ]
+    },
+    "gauss_0.8_voltear": {
+      "inferencias_por_cuadro": 2,
+      "no_permitidas": 0,
+      "sin_avance": 4,
+      "personas_firmes": 69,
+      "personas_anotadas": 85,
+      "detalle": []
+    },
+    "gauss_1.0_voltear": {
+      "inferencias_por_cuadro": 2,
+      "no_permitidas": 0,
+      "sin_avance": 2,
+      "personas_firmes": 73,
+      "personas_anotadas": 85,
+      "detalle": []
+    }
+  },
+  "politica_con_la_seleccion": {
+    "actual": {
+      "no_permitidas": 0,
+      "sin_avance": 7
+    },
+    "mejor_de_la_rejilla": {
+      "umbral_bajo": 0.3,
+      "cuadros_para_bloquear": 2,
+      "cuadros_para_liberar": 3,
+      "no_permitidas": 0,
+      "sin_avance": 7
+    }
+  }
+}
