@@ -17,7 +17,7 @@ import numpy as np
 from p3.policy.config import cargar_config
 
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
-from p5.detector.yolox import YoloxDetector, _nms
+from p5.detector.yolox import NO_MEDIAN_FILTER, YoloxDetector, _nms
 from p5.policy.ajuste import check_tuning_package, score, tune
 
 NMS = 0.45
@@ -201,7 +201,7 @@ def main(argv: list[str] | None = None) -> int:
         row = json.loads(line)
         objects[row["frame_id"]] = row["objects"]
 
-    detector = YoloxDetector.from_weights(args.weights)
+    detector = YoloxDetector.from_weights(args.weights, median_kernel=NO_MEDIAN_FILTER)
     images = {
         row["frame_id"]: detector.read_image(str(args.dataset / row["image"])) for row in rows
     }

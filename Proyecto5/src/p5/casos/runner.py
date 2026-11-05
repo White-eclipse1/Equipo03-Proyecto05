@@ -22,10 +22,10 @@ from p3.policy.casos import ejecutar_casos
 from p3.policy.config import ConfigPolitica, cargar_config
 from p3.policy.politica import PoliticaDecision
 
-from p5.casos.filtro import NO_MEDIAN_FILTER, MedianFilterDetector
 from p5.control.adapter import VirtualControlAdapter
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.yolox import (
+    DEFAULT_MEDIAN_KERNEL,
     DEFAULT_NMS_THRESHOLD,
     DEFAULT_SCORE_THRESHOLD,
     DetectorError,
@@ -62,13 +62,8 @@ def load_cases(path: Path) -> dict[str, Any]:
     return data
 
 
-def load_detector(
-    weights: Path, median_kernel: int = NO_MEDIAN_FILTER
-) -> YoloxDetector | MedianFilterDetector:
-    detector = YoloxDetector.from_weights(weights)
-    if median_kernel == NO_MEDIAN_FILTER:
-        return detector
-    return MedianFilterDetector(detector, median_kernel)
+def load_detector(weights: Path, median_kernel: int = DEFAULT_MEDIAN_KERNEL) -> YoloxDetector:
+    return YoloxDetector.from_weights(weights, median_kernel=median_kernel)
 
 
 def _frame_input(row: dict[str, Any], dataset: Path) -> FrameInput:
@@ -819,8 +814,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--filtro-mediana",
         type=int,
-        default=NO_MEDIAN_FILTER,
-        help="Tamano del filtro de mediana antes del detector; 0 lo apaga.",
+        default=DEFAULT_MEDIAN_KERNEL,
+        help="Tamano del filtro de mediana antes del modelo; 0 lo apaga.",
     )
     args = parser.parse_args(argv)
 

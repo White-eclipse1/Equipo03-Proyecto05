@@ -16,6 +16,7 @@ from uuid import uuid4
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.frame import detect_frame
 from p5.detector.yolox import (
+    DEFAULT_MEDIAN_KERNEL,
     DEFAULT_NMS_THRESHOLD,
     DEFAULT_SCORE_THRESHOLD,
     DetectorError,
@@ -156,6 +157,7 @@ def main(argv: list[str] | None = None) -> int:
         "predicciones_sha256": _sha256(predictions_path),
         "umbral_detector": DEFAULT_SCORE_THRESHOLD,
         "nms_detector": DEFAULT_NMS_THRESHOLD,
+        "filtro_mediana_detector": DEFAULT_MEDIAN_KERNEL if args.weights else None,
         "runtime": f"Python {platform.python_version()}",
         "hardware": f"{platform.system()} {platform.machine()}, CPU",
     }

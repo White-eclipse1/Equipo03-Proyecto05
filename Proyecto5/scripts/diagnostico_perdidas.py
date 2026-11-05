@@ -1,6 +1,6 @@
 """Muestra en que etapa del detector se pierde cada persona anotada (B1-03).
 
-Usa el detector de produccion, sin filtro ni variantes, asi que no ajusta nada: solo describe.
+Usa el modelo sin filtro ni variantes, asi que no ajusta nada: solo describe la perdida original.
 Por persona anotada, compara la salida final con el puntaje crudo del modelo antes del umbral,
 de la clase ganadora y de NMS. Ver `docs/B1-03_DETECTOR.md`.
 """
@@ -15,7 +15,7 @@ import numpy as np
 
 from p5.dataset.paquete import MANIFEST_FILE, load_manifest
 from p5.detector.coco_classes import COCO_CLASSES
-from p5.detector.yolox import DEFAULT_SCORE_THRESHOLD, YoloxDetector, _decode
+from p5.detector.yolox import DEFAULT_SCORE_THRESHOLD, NO_MEDIAN_FILTER, YoloxDetector, _decode
 
 PERSON = COCO_CLASSES.index("person")
 MIN_IOU = 0.5
@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
         row = json.loads(line)
         annotations[row["frame_id"]] = row["objects"]
 
-    detector = YoloxDetector.from_weights(args.weights)
+    detector = YoloxDetector.from_weights(args.weights, median_kernel=NO_MEDIAN_FILTER)
     results = []
     for row in load_manifest(args.dataset / MANIFEST_FILE):
         if row["sequence_id"] not in wanted:
