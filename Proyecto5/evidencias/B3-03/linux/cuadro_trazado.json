@@ -1,0 +1,13 @@
+{
+  "cuadro": "seq02-0003",
+  "detecciones": [
+    "person",
+    "backpack",
+    "car"
+  ],
+  "estado": "BLOCKED",
+  "decision": "EVADE_LEFT",
+  "comando": "left",
+  "velocidad": 0.2,
+  "giro": -0.5
+}
